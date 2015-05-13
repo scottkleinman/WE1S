@@ -1,7 +1,9 @@
 #Draft for New Schema Using MongoDB for Storage
 
 ##Syntax
-A database record can have an unlimited number of keyword-value pairs, hereafter referred to as “fields”, which are enclosed in curly brackets:
+MongoDB stores data as JSON objects populated with keyword-value pairs. Each JSON object is called a "collection", and the keyword-value pairs are called "documents". In order to avoid confusion, I avoid these terms and refer to a "collection" as a **record** and a "document" as a **"field"**.
+
+A database record can have an unlimited number of fields, which are enclosed in curly brackets:
 
 ```javascript
 { "keyword": "value",
@@ -9,7 +11,7 @@ A database record can have an unlimited number of keyword-value pairs, hereafter
 }
 ```
 
-Fields are inherently unordered so, to give them sequence, they may be placed in a list, designated by curly brackets:
+Fields are inherently unordered so, to give them sequence, they may be placed in a list, designated by square brackets:
 
 ```javascript
 {[
@@ -18,20 +20,21 @@ Fields are inherently unordered so, to give them sequence, they may be placed in
 ]}
 ```
 
-For multiple fields it may be useful to construct a more elaborate structure:
+For multiple fields it may be useful to construct a more elaborate structure employing a keyword for sequence:
 
 ```javascript
 {"keyword": [
-  {"seq": 1 },
-  {"keyword": "value"}
-],
+              {"seq": 1 },
+              {"keyword": "value"}
+            ],
  "keyword": [
-  {"seq": 2 },
-  {"keyword": "value"}
-]}
+              {"seq": 2 },
+              {"keyword": "value"}
+            ]
+}
 ```
 
-This last example demonstrates how fields can be embedded in fields. In this case, the value of they “keyword” field is a list of fields, one of which identifies the sequence and one of which defines some other content.
+This last example demonstrates how fields can be embedded within fields (MongoDB refers to these as "embedded documents"). In this case, the value of they "keyword" field is a list of fields, one of which identifies the sequence and one of which defines some other content.
 
 ##Required Fields for All Records
 The WE1S schema defines what fields are required or optional in different types of records.
