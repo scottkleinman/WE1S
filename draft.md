@@ -1,7 +1,7 @@
 #Draft for New Schema Using MongoDB for Storage
 
 ##Syntax
-MongoDB stores data as JSON objects populated with keyword-value pairs. Each JSON object is called a "collection", and the keyword-value pairs are called "documents". In order to avoid confusion, I avoid these terms and refer to a "collection" as a **record** and a "document" as a **"field"**.
+MongoDB stores data as JSON objects populated with keyword-value pairs. Each JSON object is called a "collection", and the keyword-value pairs are called "documents". In order to avoid confusion, I avoid these terms and refer to a "collection" as a **record** and a "document" as a **field**.
 
 A database record can have an unlimited number of fields, which are enclosed in curly brackets:
 
