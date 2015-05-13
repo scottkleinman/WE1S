@@ -134,3 +134,5 @@ Then another `upsert_field()` function would allow you to add keyword-value pair
 ```
 
 The `upsert_record()` function could be repeated indefinitely to add new fields to the record’s manifest whenever needed. The information is not validated, and there is no prompt for what fields may be required or optional, but these functions would make constructing records with manifest information relatively painless.
+
+If you've made it this far, check out the [draft schema documentation](https://github.com/scottkleinman/WE1S/blob/master/DraftSchema.md) next.
