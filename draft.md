@@ -40,19 +40,19 @@ This last example demonstrates how fields can be embedded within fields (MongoDB
 The WE1S schema defines what fields are required or optional in different types of records.
 
 ###_id
-This is required by MongoDB, which will generate a value based on the date if no value is supplied. Ideally, WE1S staff should create the _id value to be used in the creation of path values. An _id need not be unique, but it should be highly improbable to get the same _id along the same path.
+This is required by MongoDB, which will generate a value based on the date if no value is supplied. Ideally, WE1S staff should create the `_id` value to be used in the creation of path values. An `_id` need not be unique, but it should be highly improbable to get the same `_id` along the same path.
 
 ###namespace
-This is the WE1S namespace and version number (something like “WE1Sv1.0”). It should be auto-generated.
+This is the WE1S namespace and version number (something like `WE1Sv1.0`). It should be auto-generated.
 
 ###path
-This is the path in the tree structure that defines hierarchical relationships between database records. Path values are constructed by listing nodes in the tree structure delimited by commas. Each node is represented by its _id value: e.g. ,Corpus,NewYorkTimes,2014,. Some root nodes (like Corpus) have pre-defined values. The value of path within a record is typically to its parent node. In other fields, a path including a record _id will reference another individual record.
+This is the path in the tree structure that defines hierarchical relationships between database records. Path values are constructed by listing nodes in the tree structure delimited by commas. Each node is represented by its `_id` value: e.g. `,Corpus,NewYorkTimes,2014,`. Some root nodes (like Corpus) have pre-defined values. The value of path within a record is typically to its parent node. In other fields, a path including a record `_id` will reference another individual record.
 
 ##Global Fields
 Global fields are fields that can occur in any record. For this reason, they are not listed in the options for specific record types unless they are required.
 
 ###title
-This is substantially the same as _id, but it is not required. Since _id is used to construct paths, it may not take a form that can be used as a “pretty” title. A suitable value can be placed in a title field for this purpose. See also the label field.
+This is substantially the same as `_id`, but it is not required. Since `_id` is used to construct paths, it may not take a form that can be used as a "pretty" title. A suitable value can be placed in a title field for this purpose. See also the label field.
 
 ###label
 Similar to the title field, but this can be used to supply a value that can be used in creating a graph or other output where a shortened identifier may be useful.
@@ -65,6 +65,7 @@ A list of fields that can contain an extended prose commentary about the record�
 
 ```javascript
 {"notes": ["This is some commentary about the record"]}
+
 {"notes": [
   {"note": "This is the first note." },
   {"note": "This is the second note." }
@@ -75,7 +76,10 @@ A list of fields that can contain an extended prose commentary about the record�
 In some cases, it may be necessary to designate group responsibility for authorship, processing steps, and the like. In these cases the keyword group can be used. For example:
 
 ```javascript
-{"editors": {"group": "UCSB"}}
+{"editors": [
+              {"group": "UCSB"}
+			]
+}
 ```
 
 ###Record Types
