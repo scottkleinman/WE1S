@@ -120,3 +120,5 @@ Regardless, the manifest for the first process would then look like this:
 }
 ```
 Note that a process independent of a specific `Collection` must have an `authors` field. It also seems reasonable to me to require the date of authorship.
+
+If these seems a little complicated, most likely, the relatively simple descriptions found in examples 1, 4, and 6 will be used.
