@@ -1,21 +1,17 @@
-#WhatEvery1Says Workflow Management Overview (Draft)
-
-## Contents
-[Introduction](#introduction)
+#Report on MongoDB
 
 ##Introduction
 
-WhatEvery1Says Project (WE1S) is a research project to analyse public discourse about the humanities. As a humanities "big data" project involving collaborators at multiple campuses, the project the following requirements: 
+This document serves as something of a report on MongoDB, a thought experiment, and a proposal for modeling our data. 
+It assumes that our requirements are:
 
 1. A data storage system
 2. A system for storing metadata that helps us keep track of the relationships between stored data and workflow (hereafter, the manifest system)
 3. A web-based interface for creating, updating, and deleting information from the above systems.
 
-The data storage system should ideally be a database, rather than a file storage system so that we do not have to maintain a complex hierarchy of directory structures and file paths dependent on a particular server location; instead, content can be distrubuted and pointed to from manifest documents. It is also ideal for each database record to function as a manifest. In other words, each database record is a node in which either data or metadata, or both, can be embedded. Lastly, it would be best if the system were compatible with the YAML schema or its JSON subset in order to facilitate human readability, parsing, and interoperability with a variety of tools.
+Here are some further considerations. The data storage system should ideally be a database, rather than a file storage system so that we do not have to maintain a complex hierarchy of directory structures and file paths. If we need to maintain files in a physical location outside the database, we should point to a GitHub repository form a manifest. It is also ideal for each database record to function as a manifest In other words, each database record is a node in which either data or metadata, or both, can be embedded. Lastly, it would be best if the system were compatible with the YAML schema or its JSON subset in order to facilitate human readability, parsing, and interoperability with a variety of tools.
 
-##Technology Overview
-The current proposal recommends JSON Schema for modelling manifests and the MongoDB NoSQL database for storage. Web forms can be generated from and validated against JSON schema, and the resulting data can be formatted for storage in MongoDB's JSON-like format. Content can be parsed easily into human-readable YAML or parsed directly by processing scripts for automated processes.
-
+##Data Modelling with MongoDB
 MongoDB is very well suited to these considerations. A MongoDB record is a single JSON object called a “collection”. Each collection consists of a set of keyword-value pairs called “documents”. These terms are confusing in the context of WE1S, so, in the discussion below, I will use the term “record” for MongoDB’s “collection”, and I will refer to keywords and their values, or sometimes “fields”, rather than “documents”. A MongoDB record looks like the following:
 
 ###Example 1:
@@ -67,7 +63,7 @@ Manifest:
 		  
 The path field contains a sequence of nodes indicating that this record belongs in the *New York Times* section of the entire Corpus, that it is a subset involving a Humanities query (the exact nature of which will be in the manifest information, and that this record belongs to the raw data from that subset. Commas are used instead of the traditional slashes for a file path because slashes are often used as delimiters in regex pattern matching and would therefore need to be escaped. With the above information, a query can be limited only to those objects matching this path value. Since it is a string, there are no formatting restrictions (other than the issue with slashes) as there would be for a file path.
 
-###A WhatEvery1Says Data Model in MongoDB
+##A WhatEvery1Says Data Model in MongoDB
 With this in mind, the following tree structure represents the organization of nodes for the Corpus portion of the database:
 
 ###Figure 1:
@@ -96,7 +92,7 @@ Manifest information about Publications and Processes can be embedded in nodes o
 
 ![Figure 2](https://github.com/scottkleinman/WE1S/blob/master/figure2.JPG?raw=true "Figure 2")
 
-This is a fairly simple structure. In most cases, there will only be a manifest with metadata about the Publication. For the sake of illustration, a Related Files path is given for the storage of documentation related to the publication. However, this is probably an appropriate place to exploit MongoDB’s “embedded documents” feature and simply embed these files in the Publication record. Processes and Packages will also likely need only a single hierarchical level. If a Process relates only to a single Collection or Publication, it can be embedded in that record.
+This is a fairly simple structure. In most cases, there will only be a manifesto with metadata about the Publication. For the sake of illustration, a Related Files path is given for the storage of documentation related to the publication. However, this is probably an appropriate place to exploit MongoDB’s “embedded documents” feature and simply embed these files in the Publication record. Processes and Packages will also likely need only a single hierarchical level. If a Process relates only to a single Collection or Publication, it can be embedded in that record.
 
 Hence it is likely that only Scripts will require a more elaborate tree structure, for which the following diagram provides a model.
 
@@ -106,19 +102,37 @@ Hence it is likely that only Scripts will require a more elaborate tree structur
 
 The Analysis and Visualization nodes will have children like the Collecting and Preprocessing nodes. The Script nodes are individual script manifests in which the script file itself is embedded as a JSON object. I am assuming that encoding as JSON/BSON will not break the scripts.
 
-##Manifest Creation and Access
-Script-based processes can easily write output in JSON format and insert it directly into the database. Python has a very good connector package called Pymongo. This can also be integrated into a web framework. A simple Python example is Flask. This will enable web-based entry of manifests.  
+##Further Comments about MongoDB
+MongoDB does present some challenges. Most of the examples in the documentation are geared towards using the built-in Javascript shell, which quickly grows tiresome. Running MongoDB in an iPython notebook involves importing Pymongo. That itself is easy, but issuing database queries can be tricky at first. Many of the examples in the documentation don’t work properly if you cut and paste since Pymongo, unlike the MongoDB shell, seems to require strict JSON formatting (keywords must be in quotation marks). The documentation of these sorts of differences is not very good, and I had to do a lot of Googling to discover, for instance, that the Pymongo equivalent of null is “none”. 
+
+But I did get there in the end, so, presumably, using Pymongo will get easier once you become familiar with the procedures and presumably define some functions to automate common procedures. As a test, I stuck my code in a function in Lexos, which runs of the Python Flask framework. It read my manifest data and piped it into the Lexos interface without a hitch. Since Django is very similar to Flask, I don’t anticipate any difficulties. Note that I am not talking about running a CMS off of MongoDB, just having the CMS query information from the MongoDB database for display.
+
+I am primarily thinking of the proposed system as a means of keeping track of data and workflow for research purposes, not as a means of making data and provenance queryable by the public. In general, MongoDB is not the best system for complex data queries because it lacks the database joins of which most relational databases are capable. How much of a problem this would be depends on the data and the type of queries you expect to run. Aggregating data in the application’s code, rather than in the database query, can have an impact on performance, but in most cases it is possible to achieve the same result. There is a body of thought that a document storage system like MongoDB can be a stepping stone to eventually move the data into a relational database with a more rigid schema.
+
+##Recording WhatEvery1Says Manifests in MongoDB
 
 Since MongoDB is effectively schema-less, any manifest field can be inserted in any record. In practice, we have a need to restrict fields to certain types of records and to prompt WhatEvery1Says editors with what type of information is required or optional in a given record. Hence, although our database does not need a schema (other than the general model outlined above), our manifests do. Since YAML does not have a schema language, and MongoDB stores data as JSON objects, it makes sense to use JSON Schema.
 
-This provides the opportunity to employ a number of tools that allow the creation and validation of web based forms using JSON schema. I have found a number of tools that will do this and that also aid in the construction of the HTML form from the schema. These are:
+An additional challenge is the creation of a web form that validates against this schema. I have found a number of tools that will do this and that also aid in the construction of the HTML form from the schema. These are:
 
 + [Jeremy Dorn's JSON Editor](http://jeremydorn.com/json-editor/)
 + [Alpaca](http://www.alpacajs.org/)
 + [Angular Schema Form](http://schemaform.io/)
 
-Some initial evaluation of Alpaca has been undertaken.
+As yet, I have been unable to evaluate the strengths and weaknesses of these tools.
 
-Although these technologies are primarily recommended for managing research workflow, a goal of the project is to make data and provenance queryable by the public. In general, MongoDB is not the best system for complex data queries because it lacks the database joins of which most relational databases are capable. How much of a problem this would be depends on the data and the type of queries you expect to run. Aggregating data in the application’s code, as rather than in the database query, can have an impact on performance, but in most cases it is possible to achieve the same result. There is a body of thought that a document storage system like MongoDB can be a stepping stone to eventually move the data into a relational database with a more rigid schema. This is something that can only be assessed based on usage tests.
+It should be stated that MongoDB records can be created by scripts. An easy-to-implement system would be to create an `insert_record()` function and pass it an `_id value`. In the above examples, it would look like this:
 
+```Javascript
+insert_record("10-ways-to-explore-and-express-what-makes-your-community-unique")
+```
 
+Then another `upsert_field()` function would allow you to add keyword-value pairs to the existing record:
+
+```Javascript
+ upsert_record({"path": ",Corpus,NewYorkTimes,HumanitiesQuery,RawData,"})
+```
+
+The `upsert_record()` function could be repeated indefinitely to add new fields to the record’s manifest whenever needed. The information is not validated, and there is no prompt for what fields may be required or optional, but these functions would make constructing records with manifest information relatively painless.
+
+If you've made it this far, check out the [draft schema documentation](https://github.com/scottkleinman/WE1S/blob/master/DraftSchema.md) next.
