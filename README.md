@@ -6,18 +6,17 @@
 * [Manifest Creation and Access](#manifest-creation-and-access)
 * [Manifest Schema](https://github.com/scottkleinman/WE1S/blob/master/DraftSchema.md)
 
-
 ##Introduction
-WhatEvery1Says Project (WE1S) is a research project to analyse public discourse about the humanities. As a humanities "big data" project involving collaborators at multiple campuses, the project the following requirements: 
+[WhatEvery1Says Project](http://4humanities.org/category/whatevery1says/) (WE1S) is a research project to analyse public discourse about the humanities. As a humanities "big data" project involving collaborators at multiple campuses, the project the following requirements: 
 
 1. A data storage system
 2. A system for storing metadata that helps us keep track of the relationships between stored data and workflow (hereafter, the manifest system)
 3. A web-based interface for creating, updating, and deleting information from the above systems.
 
-The data storage system should ideally be a database, rather than a file storage system so that we do not have to maintain a complex hierarchy of directory structures and file paths dependent on a particular server location; instead, content can be distrubuted and pointed to from manifest documents. It is also ideal for each database record to function as a manifest. In other words, each database record is a node in which either data or metadata, or both, can be embedded. Lastly, it would be best if the system were compatible with the YAML schema or its JSON subset in order to facilitate human readability, parsing, and interoperability with a variety of tools.
+The data storage system should ideally be a database, rather than a file storage system so that we do not have to maintain a complex hierarchy of directory structures and file paths dependent on a particular server location; instead, content can be distrubuted and pointed to from manifest documents. It is also ideal for each database record to function as a manifest. In other words, each database record is a node in which either data or metadata, or both, can be embedded. Lastly, it would be best if the system were compatible with the [YAML schema](http://www.yaml.org/spec/1.2/spec.html) or its JSON subset in order to facilitate human readability, parsing, and interoperability with a variety of tools.
 
 ##Technology Overview
-The current proposal recommends JSON Schema for modelling manifests and the MongoDB NoSQL database for storage. Web forms can be generated from and validated against JSON schema, and the resulting data can be formatted for storage in MongoDB's JSON-like format. Content can be parsed easily into human-readable YAML or parsed directly by processing scripts for automated processes.
+The current proposal recommends [JSON Schema](http://json-schema.org/) for modelling manifests and the [MongoDB](https://www.mongodb.org/) NoSQL database for storage. Web forms can be generated from and validated against JSON schema, and the resulting data can be formatted for storage in MongoDB's JSON-like format. Content can be parsed easily into human-readable YAML or parsed directly by processing scripts for automated processes.
 
 MongoDB is very well suited to these considerations. A MongoDB record is a single JSON object called a “collection”. Each collection consists of a set of keyword-value pairs called “documents”. These terms are confusing in the context of WE1S, so, in the discussion below, I will use the term “record” for MongoDB’s “collection”, and I will refer to keywords and their values, or sometimes “fields”, rather than “documents”. A MongoDB record looks like the following:
 
@@ -124,3 +123,4 @@ Some initial evaluation of Alpaca has been undertaken.
 
 Although these technologies are primarily recommended for managing research workflow, a goal of the project is to make data and provenance queryable by the public. In general, MongoDB is not the best system for complex data queries because it lacks the database joins of which most relational databases are capable. How much of a problem this would be depends on the data and the type of queries you expect to run. Aggregating data in the application’s code, as rather than in the database query, can have an impact on performance, but in most cases it is possible to achieve the same result. There is a body of thought that a document storage system like MongoDB can be a stepping stone to eventually move the data into a relational database with a more rigid schema. This is something that can only be assessed based on usage tests.
 
+[Continue to the Manifest Schema](https://github.com/scottkleinman/WE1S/blob/master/DraftSchema.md)
