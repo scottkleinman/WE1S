@@ -2,12 +2,12 @@
 
 ## Contents
 [Introduction](#introduction)
+[Technology Overview](#technology-overview)
+[Manifest Creation and Access](#manifest-creation-and-access)
+[Manifest Schema](https://github.com/scottkleinman/WE1S/blob/master/DraftSchema.md)
+
 
 ##Introduction
-##Technology Overview
-##Manifest Creation and Access
-##[Manifest Schema](https://github.com/scottkleinman/WE1S/blob/master/DraftSchema.md)
-
 WhatEvery1Says Project (WE1S) is a research project to analyse public discourse about the humanities. As a humanities "big data" project involving collaborators at multiple campuses, the project the following requirements: 
 
 1. A data storage system
