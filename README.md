@@ -1,10 +1,10 @@
 #WhatEvery1Says Workflow Management Overview (Draft)
 
 ## Contents
-[Introduction](#introduction)
-[Technology Overview](#technology-overview)
-[Manifest Creation and Access](#manifest-creation-and-access)
-[Manifest Schema](https://github.com/scottkleinman/WE1S/blob/master/DraftSchema.md)
+* [Introduction](#introduction)
+* [Technology Overview](#technology-overview)
+* [Manifest Creation and Access](#manifest-creation-and-access)
+* [Manifest Schema](https://github.com/scottkleinman/WE1S/blob/master/DraftSchema.md)
 
 
 ##Introduction
