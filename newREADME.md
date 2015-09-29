@@ -4,6 +4,9 @@
 [Introduction](#introduction)
 
 ##Introduction
+##Technology Overview
+##Manifest Creation and Access
+##[Manifest Schema](https://github.com/scottkleinman/WE1S/blob/master/DraftSchema.md)
 
 WhatEvery1Says Project (WE1S) is a research project to analyse public discourse about the humanities. As a humanities "big data" project involving collaborators at multiple campuses, the project the following requirements: 
 
@@ -120,5 +123,4 @@ This provides the opportunity to employ a number of tools that allow the creatio
 Some initial evaluation of Alpaca has been undertaken.
 
 Although these technologies are primarily recommended for managing research workflow, a goal of the project is to make data and provenance queryable by the public. In general, MongoDB is not the best system for complex data queries because it lacks the database joins of which most relational databases are capable. How much of a problem this would be depends on the data and the type of queries you expect to run. Aggregating data in the application’s code, as rather than in the database query, can have an impact on performance, but in most cases it is possible to achieve the same result. There is a body of thought that a document storage system like MongoDB can be a stepping stone to eventually move the data into a relational database with a more rigid schema. This is something that can only be assessed based on usage tests.
-
 
