@@ -1,3 +1,3 @@
-README
+### README
 
-zipped code is one version behind live code.
+Draft version of manifest form website. Database configuration is not included and must be supplied at the top of `app.py`.
