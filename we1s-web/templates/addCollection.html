@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% set active_page = 'addCollection' %}
+{% block head %}
+<style type="text/css">
+  .padded-row {
+    padding: 5px;
+    margin: 5px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Title and Menu -->
+<div class="jumbotron" style="padding: 10px;">
+<div class="row padded-row">
+  <div class="col-md-12">
+  <h2>WhatEvery1Says Corpus Manifest Forms</h2>
+  <br>
+  <p style="text-align:center;">Select the type of manifest you would like to create.</p>
+</div>
+<div class="row padded-row">
+  <div class="col-md-4"><a class="btn btn-primary btn-lg btn-block" role="button" href="{{ url_for('addCollectionNode') }}">Collection</a></div>
+  <div class="col-md-4"><a class="btn btn-primary btn-lg btn-block" role="button" href="{{ url_for('addRawDataNode') }}">Raw Data</a></div>
+  <div class="col-md-4"><a class="btn btn-primary btn-lg btn-block" role="button" href="{{ url_for('addProcessedDataNode') }}">Processed Data</a></div>
+</div>
+<div class="row padded-row">
+  <div class="col-md-4"><a class="btn btn-primary btn-lg btn-block" role="button" href="{{ url_for('addMetadataNode') }}">Metadata</a></div>
+  <div class="col-md-4"><a class="btn btn-primary btn-lg btn-block" role="button" href="{{ url_for('addOutputsNode') }}">Outputs</a></div>
+  <div class="col-md-4"><a class="btn btn-primary btn-lg btn-block" role="button" href="{{ url_for('addRelatedNode') }}">Related</a></div>
+</div>
+<div class="row padded-row">
+  <div class="col-md-4"><a class="btn btn-primary btn-lg btn-block" role="button" href="#" onclick="alert('This option is not yet available.');">Generic</a></div>
+<!--   <div class="col-md-4"><a class="btn btn-primary btn-lg btn-block" role="button" href="{{ url_for('addGenericNode') }}">Generic</a></div>
+ -->  <div class="col-md-4">&nbsp;</div>
+  <div class="col-md-4">&nbsp;</div>
+</div>
+
+{% endblock %}

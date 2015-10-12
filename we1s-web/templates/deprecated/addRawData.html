@@ -1,0 +1,309 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Raw Data Form Demo</title>
+<!-- dependencies (jquery, handlebars and bootstrap) -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+<link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+     
+<!-- alpaca -->
+<link type="text/css" href="https://code.cloudcms.com/alpaca/1.5.13/bootstrap/alpaca.min.css" rel="stylesheet"/>
+<script type="text/javascript" src="https://code.cloudcms.com/alpaca/1.5.13/bootstrap/alpaca.min.js"></script>
+
+<!-- CKEditor -->
+<script type="text/javascript" src="http://alpacajs.org/lib/ckeditor/ckeditor.js"></script>
+
+<!-- Date Picker -->
+<script type="text/javascript" src="http://alpacajs.org/lib/moment/min/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="http://alpacajs.org/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="http://alpacajs.org/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" />
+
+<style type="text/css">
+body {width:75%; height:80%;margin:10px auto;}
+/*.bootstrap-datetimepicker-widget{position:relative;}*/ /* Place datepicker relative to date field. */
+.alpaca-message{display:none;} /* Hide default error messages. */
+.alpaca-message-custom{display:block;} /* Show custom error messages. */
+.alpaca-field-date{position:relative;} /* Relatively positioned container for datepicker */
+</style>
+</head>
+<body>
+<!-- Title and Menu -->
+<div class="jumbotron" style="padding: 10px;">
+  <h3 align="center">WhatEvery1Says Raw Data Manifest Form</h3>
+  <p><a class="btn btn-primary btn-lg" role="button" onclick="window.location='{{ url_for("main") }}'">Home</a> <a class="btn btn-primary btn-lg" role="button" onclick="window.location='{{ url_for("display") }}'">Display Publications</a> <a class="btn btn-primary btn-lg" role="button" onclick="resetForm()">Reset Form</a></p>
+</div> 
+
+<!-- Div for Alpaca Form -->
+<div id="form"></div>
+
+<!-- Alpaca Form Script-->
+<script type="text/javascript">
+function resetForm() {
+    $('#form').find('form')[0].reset();
+}
+$(document).ready(function() {
+    var view = {
+                   "parent": "bootstrap-edit",
+                   "layout": {
+                       "template": "{{ url_for('static', filename='alpaca/two-column-layout-template.html') }}?ver={{version}}",
+                       "bindings": {
+                           "_id": "#leftcolumn",
+                           "notes": "#rightcolumn"
+                       }
+                   }
+               }; // End view                    
+            // Get today's date
+            var today = moment().format('YYYY-MM-DD');
+            // Default data values
+            var loadedData = {
+                        "description":"bortaS <b>bIr</b> jablu’DI’ reH QaQqu’ nay’!",
+                        "date": today
+                };
+
+            // Initialise Alpaca form
+            $("#form").alpaca({
+              "schema": {
+                  "title":"Collection Manifest Form",
+                  "type":"object",
+                  "properties": {
+                      "namespace": {
+                          "enum": ["WE1Sv1.0"],
+                          "label": "namespace",
+                          "required": true,
+                          "default": "WE1Sv1.0"
+                      },
+                      "_id": {
+                          "type":"string",
+                          "title":"_id",
+                          "default": "RawData",
+                          "required": true
+                      },
+                      "path": {
+                          "type":"string",
+                          "title":"Path",
+                          "required": true
+                      },
+                      "description": {
+                          "type":"string"
+                      },
+                      "relationships": {
+                          "title": "Relationships",
+                          "type": "array",
+                          "items": {
+                              "type": "object",
+                              "properties": {
+                                  "rType": {
+                                    "default": "isPartOf",
+                                    "schema": {
+                                        "enum": ["isPartOf", "hasPart"],
+                                      }
+                                  },
+                                  "rValue": {
+                                    "title": "Relationship Value",
+                                    "type": "string"
+                                  }
+                              }
+                          }
+                      },
+                      "OCR": {
+                          "type":"boolean",
+                          "default": false
+                      },
+                      "rights": {
+                          "title": "Rights",
+                          "type":"string"
+                      },
+                      "we1s:title": {
+                          "title": "Title",
+                          "type":"string"
+                      },
+                      "we1s:label": {
+                          "title": "Label",
+                          "type":"string"
+                      },
+                      "notes": {
+                          "type":"array",
+                          "title":"Notes"
+                      }
+                    }
+            }, // End schema
+                // Options array
+                "options": {
+                    "hideInitValidationError": true,
+                    "form":{
+                        "attributes":{
+                            "action": document.URL,
+                            "method":"post"
+                        },
+                        "buttons":{
+                            "submit":{
+                                "title": "Submit",
+                                "click": function() {
+                                    // Focus on invalid field if the form is invalid. This code
+                                    // doesn't work because the submit button is disabled for an
+                                    // invalid form.
+                                    this.refreshValidationState(true);
+                                    if (!this.isValid(true)) {
+                                        this.focus();
+                                        return;
+                                    }
+
+                                    // Somewhat elaborate procedure to turn the json into a string
+                                    var value = this.getValue();
+                                    // Remove empty nodes
+                                    $.each(value, function(index, element) {
+                                        if (element.length < 1) {
+                                            delete value[index];
+                                        } 
+                                    });
+                                    // Submit data by Ajax
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/process", //document.URL,
+                                        data: JSON.stringify(value, null, "\t"),
+                                        contentType: 'application/json',
+                                        dataType: 'json',
+                                        headers: { 'dummyFunction': 'dummy' },
+                                        beforeSend: function(){
+                                            //alert('Sending...');
+                                            console.log(JSON.stringify(value, null, "\t"));
+                                        },
+                                        success: function(jsonResult) {
+                                            console.log(jsonResult);
+                                            // Remove the html list from the json response and send 
+                                            // it to the modal
+                                            htmlResult = jsonResult["htmlResult"];
+                                            delete jsonResult["htmlResult"];
+                                            $('.modal-body').html(htmlResult);
+                                            $('#myModal').modal();
+                                        },
+                                        complete: function(){
+                                            //alert('Database action complete.');
+                                        },
+                                        error: function(jqXHR, textStatus, errorThrown){
+                                            $('.modal-body').html('Error: Your action could not be completed.');
+                                            $('#myModal').modal();
+                                            console.log("Error: " + errorThrown);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    },
+                    // Field configuration arrray
+                    "fields": {
+                        "namespace": {
+                            "type":"select"
+                        },
+                        "_id": {
+                            // Remove initial 'The', replace space with "_"; remove error styling
+                            "onFieldKeyup": function(e) {
+                                v = this.getValue();
+                                v = v.replace(/The /g, "");
+                                v = v.toLowerCase();
+                                v = v.replace(/\s+/g, "_");
+                                $('input[name="_id"]').val(v);
+                                var idDiv = $("div").find('[data-alpaca-field-name="_id"]');
+                                idDiv.removeClass("alpaca-required has-error alpaca-invalid");
+                            }/*,
+                            "change": function(e) {
+                                console.log('k');
+                            }*/
+                        },
+                        "path": {
+                            // Change comma to slash at any keystroke
+                            "onFieldKeyup": function(e) {
+                                v = this.getValue();
+                                v = v.replace(/,/g, "/");
+                                $('input[name="path"]').val(v);
+                            },
+                            "events": {
+                                // On change, ensure that the string begins "/Publications/"
+                                "change": function() {
+                                    v = this.getValue();
+                                    if (v.substring(0,14) != "/Publications/") {
+                                        v = "/Publications/" + v;
+                                        $('input[name="path"]').val(v)
+                                    }
+                                    if (v.substring(-1) != "/") {
+                                       $('input[name="path"]').val(v + "/") 
+                                    }
+                                }
+                            }
+                        },
+                        // Add CKEditor with basic html tools
+                        "description": {
+                            "type":"ckeditor",
+                            "ckeditor": {
+                                "toolbar": [
+                                    ['Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'Find', 'Replace', '-', 'Outdent', 'Indent', '-', 'Print'], '/', ['NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+                                    ['Image', 'Table', '-', 'Link', 'Flash', 'TextColor', 'BGColor', 'Source']
+                                ]
+                            }
+                        },
+                        "relationships": {
+                            "items": {
+                                "fields": {
+                                    "rType": {
+                                        "type": "select",
+                                        "label": "Relationship Type",
+                                        "dataSource": ["isPartOf", "hasPart"],
+                                        "emptySelectFirst": true,
+                                        "removeDefaultNone": true,
+                                    }
+                                }
+                            }
+                        },
+                        "OCR": {
+                            "type": "checkbox",
+                            "rightLabel": "OCR",
+                            "default": false
+                        },
+                        "notes": {
+                            // Change add button text to "Add Note"
+                            "toolbar": {
+                                "showLabels": true,
+                                "actions": [
+                                    {"label": "Add Note", "action": "add"}
+                                ]
+                            },
+                            // Show full-sized buttons with labels in actionbar
+                            "actionbar": {
+                                "showLabels": true,
+                                "actions": [
+                                    {"label": "Add Note", "action": "add"},
+                                    {"label": "Delete Note", "action": "remove"},
+                                    {"label": "Move Up", "action": "up"},
+                                    {"label": "Move Down", "action": "down"}
+                                ]
+                            }
+                        }
+                    } // End fields
+                }, // End options
+                // View array -- use only if changing the layout
+               //,"view": view                    
+                "postRender": function(control) {
+                } // End postRender
+            }); // End Alpaca
+}); // End document.ready()
+</script>
+
+<!-- Modal Containing Response to Database Query -->
+<div id="myModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="myModalLabel">Data Saved to MongoDB</h3>
+      </div>
+      <div class="modal-body" style="margin-top:10px;">
+        {{ msg }}
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+<link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+<!-- jQuery UI Support -->
+<script type="text/javascript" src="http://alpacajs.org//lib/jquery-ui/jquery-ui.js"></script>
+<link type="text/css" href="http://alpacajs.org//lib/jquery-ui/themes/cupertino/jquery-ui.min.css" rel="stylesheet"/>
+
+<!-- alpaca -->
+<link type="text/css" href="https://code.cloudcms.com/alpaca/1.5.13/bootstrap/alpaca.min.css" rel="stylesheet"/>
+<script type="text/javascript" src="https://code.cloudcms.com/alpaca/1.5.13/bootstrap/alpaca.min.js"></script>
+
+<!-- fileupload control (for UploadField) -->
+<link rel="stylesheet" type="text/css" href="http://alpacajs.org/lib/jquery-file-upload/css/jquery.fileupload.css"/>
+<link rel="stylesheet" type="text/css" href="http://alpacajs.org/lib/jquery-file-upload/css/jquery.fileupload-ui.css"/>
+<script src="http://alpacajs.org/lib/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="http://alpacajs.org/lib/jquery-file-upload/js/jquery.iframe-transport.js"></script>
+<script src="http://alpacajs.org/lib/jquery-file-upload/js/jquery.fileupload.js"></script>
+<script src="http://alpacajs.org/lib/jquery-file-upload/js/jquery.fileupload-process.js"></script>
+<script src="http://alpacajs.org/lib/jquery-file-upload/js/jquery.fileupload-ui.js"></script>
+
+<!-- CKEditor -->
+<script type="text/javascript" src="http://alpacajs.org/lib/ckeditor/ckeditor.js"></script>
+<style type="text/css">
+body {width:75%; height:80%;margin:10px auto;}
+/*.bootstrap-datetimepicker-widget{position:relative;}*/ /* Place datepicker relative to date field. */
+.alpaca-message{display:none;} /* Hide default error messages. */
+.alpaca-message-custom{display:block;} /* Show custom error messages. */
+.alpaca-field-date{position:relative;} /* Relatively positioned container for datepicker */
+</style>
+  </head>
+  <body>
+  <div id="form"></div>
+  <script>
+$(document).ready(function() {
+    // Initialise Alpaca form
+$("#form").alpaca({
+    "view": "bootstrap-create",
+    "schema": {
+        "type": "array",
+    },
+    "options": {
+        "type": "upload",
+        "label": "Upload File",
+        "upload": {
+            "dataType": "json",
+            "url": "http://127.0.0.1:5000/uploads/",
+            "autoUpload": true
+        }
+    },
+    "postRender": function(control) {
+        var button = $("<button class='btn btn-default'>View</button>");
+        control.getFieldEl().append("<br/>").append(button);
+        $(button).click(function() {
+            alert(JSON.stringify(control.getValue(), null, 3));
+        });
+    }
+});
+});
+</script>
+<!-- Modal Containing Response to Database Query -->
+<div id="errorModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="myModalLabel">Data Saved to MongoDB</h3>
+      </div>
+      <div class="modal-body" style="margin-top:10px;">
+        ...
+      </div>
+    </div>
+  </div>
+</div>
+
+  </body>
+</html>

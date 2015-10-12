@@ -1,0 +1,436 @@
+{% extends "base.html" %}
+{% set active_page = 'addPublication' %}
+{% block head %}
+<!-- dependencies (handlebars) -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+     
+<!-- alpaca -->
+<link type="text/css" href="https://code.cloudcms.com/alpaca/1.5.13/bootstrap/alpaca.min.css" rel="stylesheet"/>
+<script type="text/javascript" src="https://code.cloudcms.com/alpaca/1.5.13/bootstrap/alpaca.min.js"></script>
+
+<!-- CKEditor -->
+<script type="text/javascript" src="http://alpacajs.org/lib/ckeditor/ckeditor.js"></script>
+
+<!-- Date Picker -->
+<script type="text/javascript" src="http://alpacajs.org/lib/moment/min/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="http://alpacajs.org/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="http://alpacajs.org/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" />
+{% endblock %}
+
+{% block content %}
+<!-- Title and Menu -->
+<div class="jumbotron" style="padding: 10px;">
+  <h2>WhatEvery1Says Publications Manifest Form</h2>
+</div> 
+
+<!-- Div for Alpaca Form -->
+<div id="form"></div>
+
+<!-- Alpaca Form Script-->
+<script type="text/javascript">
+function resetForm() {
+    $('#form').find('form')[0].reset();
+}
+$(document).ready(function() {
+    var view = {
+                   "parent": "bootstrap-edit",
+                   "layout": {
+                       "template": "{{ url_for('static', filename='alpaca/two-column-layout-template.html') }}?ver={{version}}",
+                       "bindings": {
+                           "_id": "#leftcolumn",
+                           "publication": "#leftcolumn",
+                           "path": "#leftcolumn",
+                           "description": "#leftcolumn",
+                           "publisher": "#leftcolumn",
+                           "date": "#rightcolumn",
+                           "edition": "#rightcolumn",
+                           "altTite": "#rightcolumn",
+                           "contentType": "#rightcolumn",
+                           "language": "#rightcolumn",
+                           "country": "#rightcolumn",
+                           "authors": "#rightcolumn",
+                           "notes": "#rightcolumn"
+                       }
+                   }
+               }; // End view                    
+            // Get today's date
+            var today = moment().format('YYYY-MM-DD');
+            // Default data values
+            var loadedData = {
+                        "description":"bortaS <b>bIr</b> jablu’DI’ reH QaQqu’ nay’!",
+                        "date": today,
+                        "language": "en",
+                        "country": "usa"
+                };
+
+            // Initialise Alpaca form
+            $("#form").alpaca({
+                // Data array -- contains default data
+                "data": loadedData,
+                // Schema array
+                "schema": {
+                    "title":"Publication Manifest Form",
+                    "type":"object",
+                    "properties": {
+                        "namespace": {
+                            "enum": ["WE1Sv1.0"],
+                            "label": "namespace",
+                            "required": true,
+                            "default": "WE1Sv1.0"
+                        },
+                        "_id": {
+                            "type":"string",
+                            "title":"_id",
+                            "required": true
+                        },
+                        "publication": {
+                            "type":"string",
+                            "title":"Publication",
+                            "required": true
+                        },
+                        "path": {
+                            "type":"string",
+                            "title":"Path",
+                            "required": true
+                        },
+                        "description": {
+                            "type":"string",
+                            "required": true
+                        },
+                        "publisher": {
+                            "type":"string",
+                            "title":"Publisher",
+                            "required": false
+                        },
+                        "date": {
+                            "title": "Publication Date",
+                            "type": "object",
+                            "required": true,
+                            "properties": {
+                                "toggledaterange": {
+                                    "type": "boolean"
+                                },
+                                "sdate": {
+                                    "title": "Enter Publication Date",
+                                    "type": "any",
+                                    "format": "date",
+                                    "default": today
+                                },
+                                "start": {
+                                    "title": "Enter Start Date",
+                                    "type": "any",
+                                    "format": "date",
+                                    "default": today
+                                },
+                                "end": {
+                                    "title": "Enter End Date",
+                                    "type": "any",
+                                    "format": "date",
+                                    "default": today
+                                }
+                            }
+                        },
+                        "edition": {
+                            "type":"string",
+                            "title":"Edition"
+                        },  
+                        "altTitle": {
+                            "type":"string",
+                            "title":"Alternative Title"
+                        },
+                        "contentType": {
+                            "type":"string",
+                            "title":"Content Type"
+                        },
+                        // ISO-639-2 language codes
+                        "language": {
+                            "enum":["aa", "ab", "af", "ak", "als", "am", "an", "ang", "ar", "arc", "as", "ast", "av", "ay", "az", "ba", "bar", "bat-smg", "bcl", "be", "be-x-old", "bg", "bh", "bi", "bm", "bn", "bo", "bpy", "br", "bs", "bug", "bxr", "ca", "cdo", "ce", "ceb", "ch", "cho", "chr", "chy", "co", "cr", "cs", "csb", "cu", "cv", "cy", "da", "de", "diq", "dsb", "dv", "dz", "ee", "far", "el", "en", "eo", "es", "et", "eu", "ext", "ff", "fi", "fiu-vro", "fj", "fo", "fr", "frp", "fur", "fy", "ga", "gan", "gd", "gil", "gl", "gn", "got", "gu", "gv", "ha", "hak", "haw", "he", "hi", "ho", "hr", "ht", "hu", "hy", "hz", "ia", "id", "ie", "ig", "ii", "ik", "ilo", "io", "is", "it", "iu", "ja", "jbo", "jv", "ka", "kg", "ki", "kj", "kk", "kl", "km", "kn", "khw", "ko", "kr", "ks", "ksh", "ku", "kv", "kw", "ky", "la", "lad", "lan", "lb", "lg", "li", "lij", "lmo", "ln", "lo", "lt", "lv", "map-bms", "mg", "man", "mh", "mi", "min", "mk", "ml", "mn", "mo", "mr", "ms", "mt", "mus", "my", "na", "nah", "nap", "nd", "nds", "nds-nl", "ne", "new", "ng", "nl", "nn", "no", "nr", "nso", "nrm", "nv", "ny", "oc", "oj", "om", "or", "os", "pa", "pag", "pam", "pap", "pdc", "pi", "pih", "pl", "pms", "ps", "pt", "qu", "rm", "rmy", "rn", "ro", "roa-rup", "ru", "rw", "sa", "sc", "scn", "sco", "sd", "se", "sg", "sh", "si", "simple", "sk", "sl", "sm", "sn", "so", "sq", "sr", "ss", "st", "su", "sv", "sw", "ta", "te", "tet", "tg", "th", "ti", "tk", "tl", "tlh", "tn", "to", "tpi", "tr", "ts", "tt", "tum", "tw", "ty", "udm", "ug", "uk", "ur", "uz", "ve", "vi", "vec", "vls", "vo", "wa", "war", "wo", "xal", "xh", "yi", "yo", "za", "zh", "zh-classical", "zh-min-nan", "zh-yue", "zu"],
+                            "title":"Language",
+                            "required":true
+                        },
+                        // ISO country codes                              
+                        "country": {
+                            "type":"string",
+                            "title":"Country",
+                            "required":true
+                        },
+                        "authors": {
+                            "type":"array",
+                            "title":"Authors",
+                            // Add "Author Name" legend to subfields
+                            "items": {
+                                "title": "Author Name",
+                                "type": "string"
+                            }
+                        },
+                        "notes": {
+                            "type":"array",
+                            "title":"Notes"
+                        }
+                    } // End properties
+                }, // End schema
+                // Options array
+                "options": {
+                    "hideInitValidationError": true,
+                    "form":{
+                        "attributes":{
+                            "action": document.URL,
+                            "method":"post"
+                        },
+                        "buttons":{
+                            "submit":{
+                                "title": "Submit",
+                                "click": function() {
+                                    // Focus on invalid field if the form is invalid. This code
+                                    // doesn't work because the submit button is disabled for an
+                                    // invalid form.
+                                    this.refreshValidationState(true);
+                                    if (!this.isValid(true)) {
+                                        this.focus();
+                                        return;
+                                    }
+
+                                    // Somewhat elaborate procedure to turn the json into a string
+                                    var value = this.getValue();
+                                    // Remove empty nodes
+                                    $.each(value, function(index, element) {
+                                        if (element.length < 1) {
+                                            delete value[index];
+                                        } 
+                                    });
+                                    // Submit data by Ajax
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/process", //document.URL,
+                                        data: JSON.stringify(value, null, "\t"),
+                                        contentType: 'application/json',
+                                        dataType: 'json',
+                                        headers: { 'dummyFunction': 'dummy' },
+                                        beforeSend: function(){
+                                            //alert('Sending...');
+                                            console.log(JSON.stringify(value, null, "\t"));
+                                        },
+                                        success: function(jsonResult) {
+                                            console.log(jsonResult);
+                                            // Remove the html list from the json response and send 
+                                            // it to the modal
+                                            htmlResult = jsonResult["htmlResult"];
+                                            delete jsonResult["htmlResult"];
+                                            $('.modal-body').html(htmlResult);
+                                            $('#myModal').modal();
+                                        },
+                                        complete: function(){
+                                            //alert('Database action complete.');
+                                        },
+                                        error: function(jqXHR, textStatus, errorThrown){
+                                            $('.modal-body').html('Error: Your action could not be completed.');
+                                            $('#myModal').modal();
+                                            console.log("Error: " + errorThrown);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    },
+                    // Field configuration arrray
+                    "fields": {
+                        "namespace": {
+                            "type":"select"
+                        },
+                        "_id": {
+                            // Remove initial 'The', replace space with "_"; remove error styling
+                            "onFieldKeyup": function(e) {
+                                v = this.getValue();
+                                v = v.replace(/The /g, "");
+                                v = v.toLowerCase();
+                                v = v.replace(/\s+/g, "_");
+                                $('input[name="_id"]').val(v);
+                                var idDiv = $("div").find('[data-alpaca-field-name="_id"]');
+                                idDiv.removeClass("alpaca-required has-error alpaca-invalid");
+                            }/*,
+                            "change": function(e) {
+                                console.log('k');
+                            }*/
+                        },
+                        "publication": {
+                            // On change, remove initial "The", replace whitespace with "_", send value to _id,
+                            // remove error styling
+                            "events": {
+                                "change": function() {
+                                    p = $('input[name="publication"]').val();
+                                    p = p.replace(/The /g, "");
+                                    p = p.toLowerCase();
+                                    p = p.replace(/\s+/g, "_");
+                                    $('input[name="_id"]').val(p);
+                                    var idDiv = $("div").find('[data-alpaca-field-name="_id"]');
+                                    idDiv.removeClass("alpaca-required has-error alpaca-invalid");
+                                },
+                            }
+                        },
+                        "path": {
+                            // Change comma to slash at any keystroke
+                            "onFieldKeyup": function(e) {
+                                v = this.getValue();
+                                v = v.replace(/,/g, "/");
+                                $('input[name="path"]').val(v);
+                            },
+                            "events": {
+                                // On change, ensure that the string begins "/Publications/"
+                                "change": function() {
+                                    v = this.getValue();
+                                    if (v.substring(0,14) != "/Publications/") {
+                                        v = "/Publications/" + v;
+                                        $('input[name="path"]').val(v)
+                                    }
+                                    if (v.substring(-1) != "/") {
+                                       $('input[name="path"]').val(v + "/") 
+                                    }
+                                }
+                            }
+                        },
+                        // Add CKEditor with basic html tools
+                        "description": {
+                            "type":"ckeditor",
+                            "ckeditor": {
+                                "toolbar": [
+                                    ['Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'Find', 'Replace', '-', 'Outdent', 'Indent', '-', 'Print'], '/', ['NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+                                    ['Image', 'Table', '-', 'Link', 'Flash', 'TextColor', 'BGColor', 'Source']
+                                ]
+                            }
+                        },
+                        // Ensure that the edition is an integer. We don't want this, but it is useful code, so
+                        // commented out.
+/*                        "edition": {
+                            "dummy": "Validator does not work if it is the only property",
+                            "validator": function(callback) {
+                                var value = this.getValue();
+                                // Check if the value is an integer
+                                if ((typeof value === "number") && Math.floor(value) === value) {
+                                    callback({"status":true});
+                                }
+                                else {
+                                    message = "The edition must be entered as an integer.";
+                                    callback({
+                                        "status": false,
+                                        "message": message
+                                    });
+                                    return;
+                                }
+                            }
+                        },*/
+                        "date": {
+                            "fields": {
+                                "sdate": {
+                                    // Enter today's date in the datepicker; use YYYY-DD-MM format; allow manual entry
+                                    "type": "date",
+                                    "picker": {
+                                        "format": "YYYY-DD-MM",
+                                        "useCurrent":true
+                                    },
+                                    "manualEntry": true,
+                                    "hidden": false
+                                },
+                                "start": {
+                                    // Enter today's date in the datepicker; use YYYY-DD-MM format; allow manual entry
+                                    "type": "date",
+                                    "picker": {
+                                        "format": "YYYY-DD-MM",
+                                        "useCurrent":true
+                                    },
+                                    "manualEntry": true
+                                },
+                                "end": {
+                                    // Enter today's date in the datepicker; use YYYY-DD-MM format; allow manual entry
+                                    "type": "date",
+                                    "picker": {
+                                        "format": "YYYY-DD-MM",
+                                        "useCurrent":true
+                                    },
+                                    "manualEntry": true
+                                },
+                                "toggledaterange": {
+                                    "type": "checkbox",
+                                    "rightLabel": "Enter a date range.",
+                                    "default": "false"
+                                }
+                            }
+                        },
+
+                        // ISO-639 Language labels
+                        "language": {
+                            "optionLabels": ["Afar", "Abkhazian", "Afrikaans", "Akan", "Alemannic", "Amharic", "Aragonese", "Anglo-Saxon / Old English", "Arabic", "Aramaic", "Assamese", "Asturian", "Avar", "Aymara", "Azerbaijani", "Bashkir", "Bavarian", "Samogitian", "Bikol", "Belarusian", "Belarusian (Taraškievica)", "Bulgarian", "Bihari", "Bislama", "Bambara", "Bengali", "Tibetan", "Bishnupriya Manipuri", "Breton", "Bosnian", "Buginese", "Buriat (Russia)", "Catalan", "Min Dong Chinese", "Chechen", "Cebuano", "Chamorro", "Choctaw", "Cherokee", "Cheyenne", "Corsican", "Cree", "Czech", "Kashubian", "Old Church Slavonic / Old Bulgarian", "Chuvash", "Welsh", "Danish", "German", "Dimli", "Lower Sorbian", "Divehi", "Dzongkha", "Ewe", "Farsi", "Greek", "English", "Esperanto", "Spanish", "Estonian", "Basque", "Extremaduran", "Peul", "Finnish", "Võro", "Fijian", "Faroese", "French", "Arpitan / Franco-Provençal", "Friulian", "West Frisian", "Irish", "Gan Chinese", "Scottish Gaelic", "Gilbertese", "Galician", "Guarani", "Gothic", "Gujarati", "Manx", "Hausa", "Hakka Chinese", "Hawaiian", "Hebrew", "Hindi", "Hiri Motu", "Croatian", "Haitian", "Hungarian", "Armenian", "Herero", "Interlingua", "Indonesian", "Interlingue", "Igbo", "Sichuan Yi", "Inupiak", "Ilokano", "Ido", "Icelandic", "Italian", "Inuktitut", "Japanese", "Lojban", "Javanese", "Georgian", "Kongo", "Kikuyu", "Kuanyama", "Kazakh", "Greenlandic", "Cambodian", "Kannada", "Khowar", "Korean", "Kanuri", "Kashmiri", "Ripuarian", "Kurdish", "Komi", "Cornish", "Kirghiz", "Latin", "Ladino / Judeo-Spanish", "Lango", "Luxembourgish", "Ganda", "Limburgian", "Ligurian", "Lombard", "Lingala", "Laotian", "Lithuanian", "Latvian", "Banyumasan", "Malagasy", "Mandarin", "Marshallese", "Maori", "Minangkabau", "Macedonian", "Malayalam", "Mongolian", "Moldovan", "Marathi", "Malay", "Maltese", "Creek / Muskogee", "Burmese", "Nauruan", "Nahuatl", "Neapolitan", "North Ndebele", "Low German / Low Saxon", "Dutch Low Saxon", "Nepali", "Newar", "Ndonga", "Dutch", "Norwegian Nynorsk", "Norwegian", "South Ndebele", "Northern Sotho", "Norman", "Navajo", "Chichewa", "Occitan", "Ojibwa", "Oromo", "Oriya", "Ossetian / Ossetic", "Panjabi / Punjabi", "Pangasinan", "Kapampangan", "Papiamentu", "Pennsylvania German", "Pali", "Norfolk", "Polish", "Piedmontese", "Pashto", "Portuguese", "Quechua", "Raeto Romance", "Romani", "Kirundi", "Romanian", "Aromanian", "Russian", "Rwandi", "Sanskrit", "Sardinian", "Sicilian", "Scots", "Sindhi", "Northern Sami", "Sango", "Serbo-Croatian", "Sinhalese", "Simple English", "Slovak", "Slovenian", "Samoan", "Shona", "Somalia", "Albanian", "Serbian", "Swati", "Southern Sotho", "Sundanese", "Swedish", "Swahili", "Tamil", "Telugu", "Tetum", "Tajik", "Thai", "Tigrinya", "Turkmen", "Tagalog ", "Klingon", "Tswana", "Tonga", "Tok Pisin", "Turkish", "Tsonga", "Tatar", "Tumbuka", "Twi", "Tahitian", "Udmurt", "Uyghur", "Ukrainian", "Urdu", "Uzbek", "Venda", "Vietnamese", "Venetian", "West Flemish", "Volapük", "Walloon", "Waray-Waray / Samar-Leyte Visayan", "Wolof", "Kalmyk", "Xhosa", "Yiddish", "Yoruba", "Zhuang", "Chinese", "Classical Chinese", "Minnan", "Cantonese", "Zulu"]
+                        },
+                        // ISO-language codes
+                        "country": {
+                            "type": "country"
+                        },
+                        "authors": {
+                            // Change add button text to "Add Author"
+                            "toolbar": {
+                                "showLabels": true,
+                                "actions": [
+                                    {"label": "Add Author", "action": "add" }]
+                            }
+                        },
+                        "notes": {
+                            // Change add button text to "Add Note"
+                            "toolbar": {
+                                "showLabels": true,
+                                "actions": [
+                                    {"label": "Add Note", "action": "add"}
+                                ]
+                            },
+                            // Show full-sized buttons with labels in actionbar
+                            "actionbar": {
+                                "showLabels": true,
+                                "actions": [
+                                    {"label": "Add Note", "action": "add"},
+                                    {"label": "Delete Note", "action": "remove"},
+                                    {"label": "Move Up", "action": "up"},
+                                    {"label": "Move Down", "action": "down"}
+                                ]
+                            }
+                        }
+                    } // End fields
+                }, // End options
+                // View array -- use only if changing the layout
+               //,"view": view                    
+                "postRender": function(control) {
+                    // Hide the date range fields
+                    control.childrenByPropertyId["date"].childrenByPropertyId["start"].hide();
+                    control.childrenByPropertyId["date"].childrenByPropertyId["end"].hide();
+                    // Monitor the check box and show/hide fields based on state
+    //              control.childrenByPropertyId["date"].childrenByPropertyId["toggledaterange"].on("change", function() {
+                    $("input[name=date_toggledaterange]").on("change", function() {
+                        state = $("input[name=date_toggledaterange]").prop('checked');
+                        if (state == true) {
+                            control.childrenByPropertyId["date"].childrenByPropertyId["sdate"].hide();
+                            control.childrenByPropertyId["date"].childrenByPropertyId["start"].show();
+                            control.childrenByPropertyId["date"].childrenByPropertyId["end"].show();
+                        }
+                        else {
+                            control.childrenByPropertyId["date"].childrenByPropertyId["sdate"].show();
+                            control.childrenByPropertyId["date"].childrenByPropertyId["start"].hide();
+                            control.childrenByPropertyId["date"].childrenByPropertyId["end"].hide();
+                        }
+                    });
+                } // End postRender
+            }); // End Alpaca
+}); // End document.ready()
+</script>
+
+<!-- Modal Containing Response to Database Query -->
+<div id="myModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="myModalLabel">Data Saved to MongoDB</h3>
+      </div>
+      <div class="modal-body" style="margin-top:10px;">
+        {{ msg }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
