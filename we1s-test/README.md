@@ -159,7 +159,7 @@ Now let's pick this command apart. We're asking Mallet to train itself to recogn
 
 Navigate to the `we1s-test folder` and look for the `keys.txt` file. Open it in Sublime, and you should see something like this:
 
-[Mallet output image 1]
+![Mallet keys.txt file](https://github.com/scottkleinman/WE1S/we1s-test/blob/master/mallet-keys.JPG?raw=true "Mallet keys.txt file")
 
 If you got that, you have successfully tested Mallet, and you are ready to do topic modeling on WE1S data. Just one warning. When working with bigger data sets, you may encounter the following error:
 
