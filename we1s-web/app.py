@@ -2,10 +2,11 @@ import re
 from flask import Flask, render_template, url_for, request
 import json, types, pymongo
 from pymongo import MongoClient
+import os
 
 app = Flask(__name__)
 ## Supply IP address and port number
-db_config = 'mongodb://0.0.0.1:0000/'
+db_config = os.getenv('MONGO_URL', 'mongodb://0.0.0.1:0000/')
 
 ### Index Route ###
 @app.route("/", methods=["GET", "POST"])
