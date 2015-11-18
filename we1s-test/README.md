@@ -16,11 +16,11 @@ Double-click the Graphical Installer and let Anaconda install. For the most part
 ###Testing your Python Installation
 Before proceeding, it is useful to test whether Python works. To do this, you will need to open a command prompt (Windows) or terminal (Mac). If you do not know how to do this on your system, Google "open command prompt windows 8" (replace the Windows version number with whatever version you are running) or "open terminal Mac OSX". Type python and hit enter. You should see something like this:
 
-[Image of Command Prompt 1]
+![The Python Command Prompt](https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/python-command.png?raw=true "The Python Command Prompt")
 
 Next to the `>>>` prompt, type `print("hello")` and hit `enter`. You should see this:
 
-[Image of Command Prompt 2]
+![The Python Print Response](https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/python-hello.png?raw=true "The Python Print Response")
 
 If this works, Python is running. Type `exit()` to exit Python.
 
@@ -34,7 +34,7 @@ Mac: `cd /Users/USERNAME/Desktop/we1s-test`
 
 Once you are in the test folder, type `python hello.py` followed by `enter` to run the "hello" test script. You should see something like this:
 
-[Image of Command Prompt 3]
+![The Python Hello Script Response](https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/python-hello-script.png?raw=true "The Python Hello Script Response")
 
 You have now confirmed that you can run a Python script. Note that you must `cd` to the directory containing the script in order to run it.
 
@@ -42,15 +42,15 @@ Anaconda comes with a package called Jupyter notebooks (formerly iPython noteboo
 
 You should see this:
 
-[Jupyter Image 1]
+![The iPython/Jupyter Home Screen](https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/ipython-1.png?raw=true "The iPython/Jupyter Home Screen")
 
 Here the `we1s-test` folder is renamed `a-we1s-test` just to get it to display at the top of the screen. You can keep the original name. Click the `New` button and select `Python 2`. A new window will open that looks like this:
 
-[Jupyter Image 2]
+![Empty iPython/Jupyter Notebook](https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/ipython-2.png?raw=true "Empty iPython/Jupyter Notebook")
 
 The selection highlighted in green is called a cell. You can enter Python code in it and then execute the code by typing `Shift+Enter`. Let's try it. Type `print("hello")`. Then type `Shift+Enter`. You should see this:
 
-[Jupyter Image 3]
+![iPython/Jupyter Output](https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/ipython-3.png?raw=true "iPython/Jupyter Output")
  
 Now let's try something more complicated. In the `we1s-test` folder, you will see subfolders called `input` and `output`. The input folder contains a text file called `file.txt`. If you open it in Sublime, you will see that it just says, "THIS IS SOME SAMPLE TEXT". Go back into your jupyter notebook and paste the following into a cell:
 
@@ -95,7 +95,7 @@ print("I've just written a new file to your output folder. Check it out!")
 
 Note the comments preceded by `#` which describe what each block of code is doing. At the top of the file is the configuration section. The name of the file is already configured for you, but you will need to change the input and output file paths. In the code above, these are set to Windows file paths. If you have a Mac, type `#` at the beginning of the lines that have `C:\\` and remove the `#` from the lines that have `/Users/`. Next replace `USERNAME` with your username. Now you are ready to run the code. Type `Shift+Enter`. You should see this:
 
-[Jupyter output image 1]
+![iPython/Jupyter Script Output](https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/ipython-4.png?raw=true "iPython/Jupyter Script Output")
 
 If you get an error, go back and check your configuration settings. If the code works, go to the output folder and open the `file.txt` file in Sublime. You will see that it contains the same text converted to lower case.
 
