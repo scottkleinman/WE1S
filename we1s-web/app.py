@@ -14,9 +14,55 @@ def main():
     return render_template("index.html")
 
 ### Eventually This Will Contain an Upload Function ###
+@app.route("/upload-test", methods=["GET", "POST"])
+def uploadTest():
+    return render_template("upload-test.html")
+
+### Eventually This Will Contain an Upload Function ###
+@app.route("/upload-test/process", methods=["GET", "POST"])
+def uploadTestProcess():
+    #if request.method == 'POST':
+    #file = request.files['file']
+    print("Files: ")
+    print(file)
+    s = {"files": [
+      {
+        "name": "picture1.jpg",
+        "size": 902604,
+        "url": "http:\/\/example.org\/files\/picture1.jpg",
+        "thumbnailUrl": "http:\/\/example.org\/files\/thumbnail\/picture1.jpg",
+        "deleteUrl": "http:\/\/example.org\/files\/picture1.jpg",
+        "deleteType": "DELETE"
+      },
+      {
+        "name": "picture2.jpg",
+        "size": 841946,
+        "url": "http:\/\/example.org\/files\/picture2.jpg",
+        "thumbnailUrl": "http:\/\/example.org\/files\/thumbnail\/picture2.jpg",
+        "deleteUrl": "http:\/\/example.org\/files\/picture2.jpg",
+        "deleteType": "DELETE"
+      }
+    ]}
+    s = json.dumps(s)
+    return s
+
+### Eventually This Will Contain an Upload Function ###
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
     return render_template("upload.html")
+
+### Eventually This Will Contain an Upload Handler Function ###
+@app.route("/upload/handler", methods=["POST"])
+def uploadHandler():
+    form = request.form
+    headers = request.data
+    print("Data:")
+    print(headers)
+    moo = json.dumps('success')
+    print(moo)
+    for key, value in form.items():
+        print key, "=>", value
+    return moo
 
 ### Search Function ###
 @app.route("/search", methods=["GET", "POST"])

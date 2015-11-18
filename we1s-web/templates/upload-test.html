@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+<link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+<!-- jQuery UI Support -->
+<script type="text/javascript" src="http://alpacajs.org//lib/jquery-ui/jquery-ui.js"></script>
+<link type="text/css" href="http://alpacajs.org//lib/jquery-ui/themes/cupertino/jquery-ui.min.css" rel="stylesheet"/>
+
+<!-- alpaca -->
+<link type="text/css" href="https://code.cloudcms.com/alpaca/1.5.13/bootstrap/alpaca.min.css" rel="stylesheet"/>
+<!-- <script type="text/javascript" src="https://code.cloudcms.com/alpaca/1.5.13/bootstrap/alpaca.min.js"></script>
+ -->
+<!-- fileupload control (for UploadField) -->
+<!-- <link rel="stylesheet" type="text/css" href="http://alpacajs.org/lib/jquery-file-upload/css/jquery.fileupload.css"/>
+<link rel="stylesheet" type="text/css" href="http://alpacajs.org/lib/jquery-file-upload/css/jquery.fileupload-ui.css"/>
+<script src="http://alpacajs.org/lib/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="http://alpacajs.org/lib/jquery-file-upload/js/jquery.iframe-transport.js"></script>
+<script src="http://alpacajs.org/lib/jquery-file-upload/js/jquery.fileupload.js"></script>
+<script src="http://alpacajs.org/lib/jquery-file-upload/js/jquery.fileupload-process.js"></script>
+<script src="http://alpacajs.org/lib/jquery-file-upload/js/jquery.fileupload-ui.js"></script>
+ -->
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='jquery-fileupload/css/jquery.fileupload.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='jquery-fileupload/css/jquery.fileupload-ui.css') }}"/>
+<script src="{{ url_for ('static', filename='jquery-fileupload/js/vendor/jquery.ui.widget.js') }}"></script>
+<script src="{{ url_for ('static', filename='jquery-fileupload/js/jquery.iframe-transport.js') }}"></script>
+<script src="{{ url_for ('static', filename='jquery-fileupload/js/jquery.fileupload.js') }}"></script>
+<script src="{{ url_for ('static', filename='jquery-fileupload/js/jquery.fileupload-process.js') }}"></script>
+<script src="{{ url_for ('static', filename='jquery-fileupload/js/jquery.fileupload-ui.js') }}"></script>
+
+<!--<style type="text/css">
+body {width:75%; height:80%;margin:10px auto;}
+</style>-->
+  </head>
+  <body>
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-fixed-top .navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://github.com/blueimp/jQuery-File-Upload">jQuery File Upload</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="https://github.com/blueimp/jQuery-File-Upload/tags">Download</a></li>
+                <li><a href="https://github.com/blueimp/jQuery-File-Upload">Source Code</a></li>
+                <li><a href="https://github.com/blueimp/jQuery-File-Upload/wiki">Documentation</a></li>
+                <li><a href="https://blueimp.net">&copy; Sebastian Tschan</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <h1>jQuery File Upload Demo</h1>
+    <br>
+    <!-- The file upload form used as target for the file upload widget -->
+    <form id="fileupload" action="{{url_for('uploadTestProcess')}}" method="POST" enctype="multipart/form-data">
+        <!-- Redirect browsers with JavaScript disabled to the origin page -->
+        <noscript><input type="hidden" name="redirect" value="https://blueimp.github.io/jQuery-File-Upload/"></noscript>
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <div class="row fileupload-buttonbar">
+            <div class="col-lg-7">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                <span class="btn btn-success fileinput-button">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>Add files...</span>
+                    <input type="file" name="files[]" multiple>
+                </span>
+                <button type="submit" class="btn btn-primary start">
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start upload</span>
+                </button>
+                <button type="reset" class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel upload</span>
+                </button>
+                <button type="button" class="btn btn-danger delete">
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Delete</span>
+                </button>
+                <input type="checkbox" class="toggle">
+                <!-- The global file processing state -->
+                <span class="fileupload-process"></span>
+            </div>
+            <!-- The global progress state -->
+            <div class="col-lg-5 fileupload-progress fade">
+                <!-- The global progress bar -->
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                </div>
+                <!-- The extended global progress state -->
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+        </div>
+        <!-- The table listing the files available for upload/download -->
+        <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+    </form>
+    <br>
+</div>
+<!-- The blueimp Gallery widget -->
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+{% raw %}{% for (var i=0, file; file=o.files[i]; i++) { %}{% endraw %}
+    <tr class="template-upload fade">
+        <td>
+            <span class="preview"></span>
+        </td>
+        <td>
+            <p class="name">{% raw %}{%=file.name%}{% endraw %}</p>
+            <strong class="error text-danger"></strong>
+        </td>
+        <td>
+            <p class="size">Processing...</p>
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+        </td>
+        <td>
+            {% raw %}{% if (!i && !o.options.autoUpload) { %}{% endraw %}
+                <button class="btn btn-primary start" disabled>
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start</span>
+                </button>
+            {% raw %}{% } %}{% endraw %}
+            {% raw %}{% if (!i) { %}{% endraw %}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+            {% raw %}{% } %}{% endraw %}
+        </td>
+    </tr>
+{% raw %}{% } %}{% endraw %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+{% raw %}{% for (var i=0, file; file=o.files[i]; i++) { %}{% endraw %}
+    <tr class="template-download fade">
+        <td>
+            <span class="preview">
+                {% raw %}{% if (file.thumbnailUrl) { %}{% endraw %}
+                    <a href="{% raw %}{%=file.url%}{% endraw %}" title="{% raw %}{%=file.name%}{% endraw %}" download="{% raw %}{%=file.name%}{% endraw %}" data-gallery><img src="{% raw %}{%=file.thumbnailUrl%}{% endraw %}"></a>
+                {% raw %}{% } %}{% endraw %}
+            </span>
+        </td>
+        <td>
+            <p class="name">
+                {% raw %}{% if (file.url) { %}{% endraw %}
+                    <a href="{% raw %}{%=file.url%}{% endraw %}" title="{% raw %}{%=file.name%}{% endraw %}" download="{% raw %}{%=file.name%}{% endraw %}" {% raw %}{%=file.thumbnailUrl?'data-gallery':''%}{% endraw %}>{% raw %}{%=file.name%}{% endraw %}</a>
+                {% raw %}{% } else { %}{% endraw %}
+                    <span>{% raw %}{%=file.name%}{% endraw %}</span>
+                {% raw %}{% } %}
+            </p>
+            {% raw %}{% if (file.error) { %}{% endraw %}
+                <div><span class="label label-danger">Error</span> {% raw %}{%=file.error%}{% endraw %}</div>
+            {% raw %}{% } %}{% endraw %}
+        </td>
+        <td>
+            <span class="size">{% raw %}{%=o.formatFileSize(file.size)%}{% endraw %}</span>
+        </td>
+        <td>
+            {% raw %}{% if (file.deleteUrl) { %}{% endraw %}
+                <button class="btn btn-danger delete" data-type="{% raw %}{%=file.deleteType%}{% endraw %}" data-url="{% raw %}{%=file.deleteUrl%}{% endraw %}"{% raw %}{% if (file.deleteWithCredentials) { %}{% endraw %} data-xhr-fields='{"withCredentials":true}'{% raw %}{% } %}{% endraw %}>
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Delete</span>
+                </button>
+                <input type="checkbox" name="delete" value="1" class="toggle">
+            {% raw %}{% } else { %}{% endraw %}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+            {% raw %}{% } %}{% endraw %}
+        </td>
+    </tr>
+{% raw %}{% } %}{% endraw %}
+</script>
+  </body>
+</html>
