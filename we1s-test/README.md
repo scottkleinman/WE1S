@@ -33,7 +33,7 @@ Windows: `cd C:\Users\USERNAME\Desktop\wes1s-test`
 
 Mac: `cd /Users/USERNAME/Desktop/we1s-test`
 
-`cd` means "change directory`. You can go up a level by typing `cd ..`, and you can find your current location by typing `pwd`. Type `dir` (Windows) or `ls` (Mac) to see a list of files in the directory.
+`cd` means "change directory". You can go up a level by typing `cd ..`, and you can find your current location by typing `pwd`. Type `dir` (Windows) or `ls` (Mac) to see a list of files in the directory.
 
 Once you are in the test folder, type `python hello.py` followed by `enter` to run the "hello" test script. You should see something like this:
 
