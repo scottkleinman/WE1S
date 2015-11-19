@@ -1,9 +1,12 @@
-# Setting Up and Testing A WE1S Local Workspace
+# Setting Up and Testing a WE1S Local Workspace
 This is a guide for preparing your computer for work with data from the WE1S data set. It tells you how to download and install the necessary software, how to set up a file system, and how to acquire the data from the WE1S file store.
 
 The WE1S workflow uses the Python programming language for preparing and analyzing data files. Therefore, you must have Python installed on your system. In addition, the Mallet machine learning toolkit is used for topic modeling. The instructions here provide guidance for installing this software.
 
 It is valuable to have a good text editor on your system. Many such editors are available (you can even use Word in a pinch), but, in the interest of simplification, we will recommend [Sublime Text 3](http://www.sublimetext.com/3) and refer to that in subsequent instruction.
+
+## Before You Start
+Download the WE1S test environment. To do this, go to [http://kinolien.github.io/gitzip/](http://kinolien.github.io/gitzip/). Copy the url `https://github.com/scottkleinman/WE1S/tree/master/` and paste it into the search form at the top right of the page. You should see the files in the WE1S GitHub repository. Click the `Download Zip File` button for `we1s-test`. Extract the zip archive and place the unzipped folder on your desktop. The location on the desktop is very important for the directions below.
 
 ##Python
 The Python programming language comes with a set of core functions which can be supplemented by the installation of additional "packages". There are numerous ways to install Python on your system, but the easiest is to use a pre-made Python distribution. This typically includes an auto-installer you can double-click to perform the installation, as well as many of the important Python packages already installed. The WE1S project recommends the Anaconda distribution. Anaconda is produced by Continuum Analytics for use in their data analytics products and services. The distribution itself is free. Anaconda also comes with a very good Python editor called Spyder which can be used to edit and run Python scripts. This is an option if you do not wish to use Sublime.
