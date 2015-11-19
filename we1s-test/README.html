@@ -1,0 +1,149 @@
+<html>
+<head>
+<meta charset="utf-8"/>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+
+<style type="text/css">
+	img { margin: 10px auto; width: 90%; }
+	.caption { font-size: smaller; margin-bottom: 18px; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1 id="setting-up-and-testing-a-we1s-local-workspace">Setting Up and Testing a WE1S Local Workspace</h1>
+<p>This is a guide for preparing your computer for work with data from the WE1S data set. It tells you how to download and install the necessary software, how to set up a file system, and how to acquire the data from the WE1S file store.</p>
+<p>The WE1S workflow uses the Python programming language for preparing and analyzing data files. Therefore, you must have Python installed on your system. In addition, the Mallet machine learning toolkit is used for topic modeling. The instructions here provide guidance for installing this software.</p>
+<p>It is valuable to have a good text editor on your system. Many such editors are available (you can even use Word in a pinch), but, in the interest of simplification, we will recommend <a href="http://www.sublimetext.com/3">Sublime Text 3</a> and refer to that in subsequent instruction.</p>
+<h2 id="before-you-start">Before You Start</h2>
+<p>Download the WE1S test environment. To do this, go to <a href="http://kinolien.github.io/gitzip/" class="uri">http://kinolien.github.io/gitzip/</a>. Copy the url <code>https://github.com/scottkleinman/WE1S/tree/master/</code> and paste it into the search form at the top right of the page. You should see the files in the WE1S GitHub repository. Click the <code>Download Zip File</code> button for <code>we1s-test</code>. Extract the zip archive and place the unzipped folder on your desktop. The location on the desktop is very important for the directions below.</p>
+<h2 id="python">Python</h2>
+<p>The Python programming language comes with a set of core functions which can be supplemented by the installation of additional &quot;packages&quot;. There are numerous ways to install Python on your system, but the easiest is to use a pre-made Python distribution. This typically includes an auto-installer you can double-click to perform the installation, as well as many of the important Python packages already installed. The WE1S project recommends the Anaconda distribution. Anaconda is produced by Continuum Analytics for use in their data analytics products and services. The distribution itself is free. Anaconda also comes with a very good Python editor called Spyder which can be used to edit and run Python scripts. This is an option if you do not wish to use Sublime.</p>
+<h3 id="installing-anaconda">Installing Anaconda</h3>
+<p>Download either the <a href="https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda2-2.4.0-Windows-x86_64.exe">Windows 64-Bit Graphical Installer</a> or the <a href="https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda2-2.4.0-MacOSX-x86_64.pkg">Mac OS X 64-Bit Graphical Installer</a>. If one of these links does not work, go to <a href="https://www.continuum.io/downloads" class="uri">https://www.continuum.io/downloads</a>. Make sure that you click the Graphical Installer and that you are downloading Python version 2.7.</p>
+<p>Double-click the Graphical Installer and let Anaconda install. For the most part, the process is simple. The Mac OS X provides prompts along the way, but you can simply instruct the process to continue when these appear. When the installation is finished, a Launcher icon will appear on your desktop. You do not need to use this, but you may find it convenient.</p>
+<h3 id="testing-your-python-installation">Testing your Python Installation</h3>
+<p>Before proceeding, it is useful to test whether Python works. To do this, you will need to open a command prompt (Windows) or terminal (Mac). If you do not know how to do this on your system, Google &quot;open command prompt windows 8&quot; (replace the Windows version number with whatever version you are running) or &quot;open terminal Mac OSX&quot;. Type python and hit enter. You should see something like this:</p>
+<div class="figure">
+<img src="https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/python-command.png?raw=true" title="The Python Command Prompt" alt="The Python Command Prompt" />
+<p class="caption">The Python Command Prompt</p>
+</div>
+<p>Next to the <code>&gt;&gt;&gt;</code> prompt, type <code>print(&quot;hello&quot;)</code> and hit <code>enter</code>. You should see this:</p>
+<div class="figure">
+<img src="https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/python-hello.png?raw=true" title="The Python Print Response" alt="The Python Print Response" />
+<p class="caption">The Python Print Response</p>
+</div>
+<p>If this works, Python is running. Type <code>exit()</code> to exit Python.</p>
+<p>Next download and the WE1S test resources here. Unzip the file to your system's desktop. Once that is done, return to the command prompt or terminal. The prompt should display your current location on your computer. In the example above, this is <code>C:\Users\Scott</code>. On a Mac, it will be something like <code>/Users/Scott</code>. Note the username for your system. Now navigate to the WE1S test folder using the following command:</p>
+<p>Windows: <code>cd C:\Users\USERNAME\Desktop\wes1s-test</code></p>
+<p>Mac: <code>cd /Users/USERNAME/Desktop/we1s-test</code></p>
+<p><code>cd</code> means &quot;change directory<code>. You can go up a level by typing</code>cd ..<code>, and you can find your current location by typing</code>pwd<code>. Type</code>dir<code>(Windows) or</code>ls` (Mac) to see a list of files in the directory.</p>
+<p>Once you are in the test folder, type <code>python hello.py</code> followed by <code>enter</code> to run the &quot;hello&quot; test script. You should see something like this:</p>
+<div class="figure">
+<img src="https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/python-hello-script.png?raw=true" title="The Python Hello Script Response" alt="The Python Hello Script Response" />
+<p class="caption">The Python Hello Script Response</p>
+</div>
+<p>You have now confirmed that you can run a Python script. Note that you must <code>cd</code> to the directory containing the script in order to run it.</p>
+<p>Anaconda comes with a package called Jupyter notebooks (formerly iPython notebooks) that allows you to run Python in your browser. We'll test this next, using the old name &quot;iPython&quot; for simplicity. From the command or terminal prompt, type <code>ipython notebook</code> and hit <code>enter</code> (you can also use the desktop launcher). There will be a short delay after which a browser window will open.</p>
+<p>You should see this:</p>
+<div class="figure">
+<img src="https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/ipython-1.png?raw=true" title="The iPython/Jupyter Home Screen" alt="The iPython/Jupyter Home Screen" />
+<p class="caption">The iPython/Jupyter Home Screen</p>
+</div>
+<p>Here the <code>we1s-test</code> folder is renamed <code>a-we1s-test</code> just to get it to display at the top of the screen. You can keep the original name. Click the <code>New</code> button and select <code>Python 2</code>. A new window will open that looks like this:</p>
+<div class="figure">
+<img src="https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/ipython-2.png?raw=true" title="Empty iPython/Jupyter Notebook" alt="Empty iPython/Jupyter Notebook" />
+<p class="caption">Empty iPython/Jupyter Notebook</p>
+</div>
+<p>The selection highlighted in green is called a cell. You can enter Python code in it and then execute the code by typing <code>Shift+Enter</code>. Let's try it. Type <code>print(&quot;hello&quot;)</code>. Then type <code>Shift+Enter</code>. You should see this:</p>
+<div class="figure">
+<img src="https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/ipython-3.png?raw=true" title="iPython/Jupyter Output" alt="iPython/Jupyter Output" />
+<p class="caption">iPython/Jupyter Output</p>
+</div>
+<p>Now let's try something more complicated. In the <code>we1s-test</code> folder, you will see subfolders called <code>input</code> and <code>output</code>. The input folder contains a text file called <code>file.txt</code>. If you open it in Sublime, you will see that it just says, &quot;THIS IS SOME SAMPLE TEXT&quot;. Go back into your jupyter notebook and paste the following into a cell:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">##### Configuration #####</span>
+
+<span class="co"># Configure the filename</span>
+filename <span class="op">=</span> <span class="st">&quot;file.txt&quot;</span>
+
+<span class="co"># Configure the path to input directory</span>
+input_path <span class="op">=</span> <span class="st">&quot;C:\Users\USERNAME\Desktop\we1s-test\input&quot;</span>
+<span class="co"># input_path = &quot;/Users/USERNAME/Desktop/we1s-test/input&quot;</span>
+
+<span class="co"># Configure the path to output directory</span>
+output_path <span class="op">=</span> <span class="st">&quot;C:\Users\USERNAME\Desktop\we1s-test\output&quot;</span>
+<span class="co"># output_path = &quot;/Users/USERNAME/Desktop/we1s-test/output&quot;</span>
+
+<span class="co">##### End of Configuration #####</span>
+
+<span class="co"># Import the os package to manage file paths</span>
+<span class="im">import</span> os
+
+<span class="co"># Create input and out file paths</span>
+input_file <span class="op">=</span> os.path.join(input_path, filename)
+output_file <span class="op">=</span> os.path.join(output_path, filename)
+
+<span class="co"># Open the input file and read it</span>
+f <span class="op">=</span> <span class="bu">open</span>(input_file)
+text <span class="op">=</span> f.read()
+f.close()
+<span class="bu">print</span>(<span class="st">&quot;The input file says: &quot;</span> <span class="op">+</span> text)
+
+<span class="co"># Convert the text to lower case</span>
+text <span class="op">=</span> lower(text)
+
+<span class="co"># Open the output file for writing and save the new text to it</span>
+f <span class="op">=</span> <span class="bu">open</span>(output_file, <span class="st">&quot;w&quot;</span>)
+f.write(text)
+f.close()
+<span class="bu">print</span>(<span class="st">&quot;I&#39;ve just written a new file to your output folder. Check it out!&quot;</span>)</code></pre></div>
+<p>Note the comments preceded by <code>#</code> which describe what each block of code is doing. At the top of the file is the configuration section. The name of the file is already configured for you, but you will need to change the input and output file paths. In the code above, these are set to Windows file paths. If you have a Mac, type <code>#</code> at the beginning of the lines that have <code>C:\\</code> and remove the <code>#</code> from the lines that have <code>/Users/</code>. Next replace <code>USERNAME</code> with your username. Now you are ready to run the code. Type <code>Shift+Enter</code>. You should see this:</p>
+<div class="figure">
+<img src="https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/ipython-4.png?raw=true" title="iPython/Jupyter Script Output" alt="iPython/Jupyter Script Output" />
+<p class="caption">iPython/Jupyter Script Output</p>
+</div>
+<p>If you get an error, go back and check your configuration settings. If the code works, go to the output folder and open the <code>file.txt</code> file in Sublime. You will see that it contains the same text converted to lower case.</p>
+<p>Now we will perform one last test. We'll now try the same thing from an iPython notebook that has been pre-prepared. Make sure that you were in the <code>we1s-test</code> folder when you launched iPython. If not, go to the command or terminal and type <code>Control+C</code> or <code>Command+C</code> one or more times until iPython exits stops. You should get a normal prompt again. Use it to <code>cd</code> to the <code>we1s-test</code> directory and then type <code>ipython notebook</code> followed by <code>enter</code>. iPython notebooks should restart, and you should be able to see a file called <code>ipython-notebook-test.ipynb</code>. Click on it, and a new browser window will open. Follow the instructions from there.</p>
+<p>If you do not receive an error after following the instructions, you have successfully run the iPython notebook test. To exit, close the iPython notebooks windows in your browser and return to the command or terminal prompt. Type <code>Control+C</code> or <code>Command+C</code> to interrupt the iPython process. You may have to do this several times. Once the process is interrupted, you can type <code>exit</code> to exit from the command prompt or terminal.</p>
+<p>You have now successfully tested your Python installation, and you are ready to use it for work on the WE1S project.</p>
+<h2 id="mallet">MALLET</h2>
+<p>Mallet is a machine learning tool written in Java. To run it, you must first have the Java Developers Toolkit (JDK) installed on your system. This is different from the Java plugin that is used for browsers, so you probably don’t already have it.</p>
+<h3 id="installing-java-developers-kit-jdk">Installing Java Developers Kit (JDK)</h3>
+<p>Go to <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" class="uri">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a> and click the Java download image at the top. On the next page, you will see a list of download links near the top with the header (at the time of writing) &quot;Java SE Development Kit 8u65&quot;. Click the <strong>Accept License Agreement</strong> radio button underneath and then click the download link appropriate to your system. This will likely be &quot;Windows x64&quot; or &quot;Mac OS X x64&quot;. When the download finishes, double-click the downloaded file to install JDK. You are now ready to install Mallet.</p>
+<h3 id="installing-mallet">Installing Mallet</h3>
+<p>Download Mallet by clicking <a href="http://mallet.cs.umass.edu/dist/mallet-2.0.8RC3.zip">this link</a>. When the download is finished, unzip the archive. Double-click on the <code>mallet-2.0.8RC3</code> folder and you'll find another folder with the same name inside. Change the name to <code>mallet</code>. Make sure it is all lower case, or you'll run into trouble below. Drag the mallet <code>folder</code> to your root directory. <code>C:\</code> (Windows) or <code>/Users/</code> (Mac). This is very important.</p>
+<p>The instructions in this paragraph apply only to Windows users. You next need to set the Windows environment variable. Type <code>Windows Key+Q</code> to get a search bar and search for &quot;environment variables&quot;. Click the <code>Edit the system environment variables</code> link. When the System Properties dialog appears, click <code>Environment Variables…</code>. Click the <code>New...</code> button at the top of the dialog and type <code>MALLET_HOME</code> (all caps) for the variable name and <code>C:\mallet\</code> for the variable path. Click <code>OK</code> for each of the dialogs until the System Properties dialog is closed.</p>
+<p>Mac users may now re-join us. Open a command prompt or terminal. Type <code>cd C:\mallet</code> (Windows) or <code>cd /Users/mallet</code> (Mac) to go to the <code>mallet</code> folder. Then type <code>\bin\mallet</code> (Windows) or <code>./bin/mallet</code> and hit <code>enter</code>. If Mallet is working, you should see a list of commands. If you get an error, there is a problem with your installation. See the detailed instructions in the <a href="http://programminghistorian.org/lessons/topic-modeling-and-mallet">Program Historian Mallet tutorial</a> for further help.</p>
+<h3 id="testing-mallet">Testing Mallet</h3>
+<p>You are now ready to test Mallet. For the test, we will use Mallet's sample data. Open a Windows command prompt or Mac terminal and navigate to the <code>mallet</code> directory. We'll start by importing Mallet's sample data set. Copy the following command into Sublime:</p>
+<pre><code>bin\mallet import-dir --input sample-data\web\en --output C:\Users\USERNAME\Desktop\we1s-test\mallet-test.mallet --keep-sequence --remove-stopwords</code></pre>
+<p>For the Mac, this would be</p>
+<pre><code>./bin/mallet import-dir --input sample-data/web/en --output /Users/USERNAME/we1s-test/mallet-test.
+mallet --keep-sequence --remove-stopwords</code></pre>
+<p>Replace <code>USERNAME</code> with your username.</p>
+<p>Now let's look at what this command is doing. It is setting the input directory for your data to <code>sample-data/web/en</code>. This folder contains a small number of texts in English. Since <code>sample-data</code> is inside the <code>mallet</code> directory, we can simply give the path relative to that directory.</p>
+<p>Next the command sets the path to the output file, which we'll call <code>mallet-test.mallet</code>. We want to save it to the <code>we1s-test</code> directory, so we'll give it the complete path there.</p>
+<p>Finally, the command contains a couple of “arguments” (options) telling Mallet to keep the sequence of the words but to remove stop words (Mallet has a small list of default stop words).</p>
+<p>When we run this command, Mallet will import the texts and save it to a mallet data file called <code>mallet-test.mallet</code>. To run the command, copy the version you have in Sublime and paste it into the command prompt or terminal (you can normally do this by right-clicking). There will be a pause and then you should get another prompt without any errors.</p>
+<p>So far, you have just imported the data. Now you can run the topic model with a second command:</p>
+<pre><code>bin\mallet train-topics  --input C:\Users\USERNAME\Desktop\we1s-test\mallet-test.mallet --num-topics 10 --output-state C:\Users\USERNAME\Desktop\we1s-test\output-state.gz --output-topic-keys C:\Users\USERNAME\Desktop\we1s-test\keys.txt</code></pre>
+<p>For the Mac, this would be</p>
+<pre><code>./bin/mallet train-topics  --input /Users/USERNAME/Desktop/we1s-test/mallet-test.mallet --num-topics 10 --output-state /Users/USERNAME/Desktop/we1s-test/output-state.gz --output-topic-keys /Users/USERNAME/Desktop/we1s-test/we1s-test/keys.txt</code></pre>
+<p>Paste this command into Sublime. As you can see, you'll need to configure your username. Now let's pick this command apart. We're asking Mallet to train itself to recognize topics and feeding it our <code>mallet-test.mallet</code> data file as input by providing it the complete path to that file. Then we are telling it to generate 10 topics and send two types of output (output-state and output-topic-keys) to a file called <code>output-state.gz</code> and a file called <code>keys.txt</code>. Paste this command into the command prompt or terminal window and hit enter. If there are no errors (and be careful, it is easy to make typos), a bunch of data should flash down the screen, rather like the Matrix. After a minute or less, you should receive a new command prompt when the process is complete.</p>
+<p>Navigate to the <code>we1s-test folder</code> and look for the <code>keys.txt</code> file. Open it in Sublime, and you should see something like this:</p>
+<div class="figure">
+<img src="https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/mallet-keys.png?raw=true" title="Mallet keys.txt file" alt="Mallet keys.txt file" />
+<p class="caption">Mallet keys.txt file</p>
+</div>
+<p>If you got that, you have successfully tested Mallet, and you are ready to do topic modeling on WE1S data. Just one warning. When working with bigger data sets, you may encounter the following error:</p>
+<pre><code>Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: Java heap space</code></pre>
+<p>If this happens, see the section on <strong>Issues with Big Data</strong> in the <a href="http://programminghistorian.org/lessons/topic-modeling-and-mallet">Programming Historian tutorial</a>.</p>
+</div>
+</body>
+</html>
