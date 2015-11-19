@@ -3,7 +3,7 @@ This is a guide for preparing your computer for work with data from the WE1S dat
 
 The WE1S workflow uses the Python programming language for preparing and analyzing data files. Therefore, you must have Python installed on your system. In addition, the Mallet machine learning toolkit is used for topic modeling. The instructions here provide guidance for installing this software.
 
-It is valuable to have a good text editor on your system. Many such editors are available (you can even use Word in a pinch), but, in the interest of simplification, we will recommend [Sublime Text 3](http://www.sublimetext.com/3) and refer to that in subsequent instruction.
+It is valuable to have a good text editor on your system. Many such editors are available (you can even use Word in a pinch), but, in the interest of simplification, we will recommend [Sublime Text 3](http://www.sublimetext.com/3) and refer to that in subsequent instructions.
 
 ## Before You Start
 Download the WE1S test environment. To do this, go to [http://kinolien.github.io/gitzip/](http://kinolien.github.io/gitzip/). Copy the url `https://github.com/scottkleinman/WE1S/tree/master/` and paste it into the search form at the top right of the page. You should see the files in the WE1S GitHub repository. Click the `Download Zip File` button for `we1s-test`. Extract the zip archive and place the unzipped folder on your desktop. The location on the desktop is very important for the directions below.
