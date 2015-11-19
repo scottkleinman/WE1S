@@ -17,7 +17,7 @@ Download either the [Windows 64-Bit Graphical Installer](https://3230d63b5fc54e6
 Double-click the Graphical Installer and let Anaconda install. For the most part, the process is simple. The Mac OS X provides prompts along the way, but you can simply instruct the process to continue when these appear. When the installation is finished, a Launcher icon will appear on your desktop. You do not need to use this, but you may find it convenient.
 
 ###Testing your Python Installation
-Before proceeding, it is useful to test whether Python works. To do this, you will need to open a command prompt (Windows) or terminal (Mac). If you do not know how to do this on your system, Google "open command prompt windows 8" (replace the Windows version number with whatever version you are running) or "open terminal Mac OSX". Type python and hit enter. You should see something like this:
+Before proceeding, it is useful to test whether Python works. To do this, you will need to open a command prompt (Windows) or terminal (Mac). If you do not know how to do this on your system, Google "open command prompt windows 8" (replace the Windows version number with whatever version you are running) or "open terminal Mac OSX". Type `python` and hit `enter`. You should see something like this:
 
 ![The Python Command Prompt](https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/python-command.png?raw=true "The Python Command Prompt")
 
@@ -55,7 +55,7 @@ The selection highlighted in green is called a cell. You can enter Python code i
 
 ![iPython/Jupyter Output](https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/ipython-3.png?raw=true "iPython/Jupyter Output")
  
-Now let's try something more complicated. In the `we1s-test` folder, you will see subfolders called `input` and `output`. The input folder contains a text file called `file.txt`. If you open it in Sublime, you will see that it just says, "THIS IS SOME SAMPLE TEXT". Go back into your jupyter notebook and paste the following into a cell:
+Now let's try something more complicated. In the `we1s-test` folder, you will see subfolders called `input` and `output`. The input folder contains a text file called `file.txt`. If you open it in Sublime, you will see that it just says, "THIS IS SOME SAMPLE TEXT". Go back into your iPython notebook and paste the following into a cell:
 
 ```python
 ##### Configuration #####
@@ -96,7 +96,7 @@ f.close()
 print("I've just written a new file to your output folder. Check it out!")
 ```
 
-Note the comments preceded by `#` which describe what each block of code is doing. At the top of the file is the configuration section. The name of the file is already configured for you, but you will need to change the input and output file paths. In the code above, these are set to Windows file paths. If you have a Mac, type `#` at the beginning of the lines that have `C:\\` and remove the `#` from the lines that have `/Users/`. Next replace `USERNAME` with your username. Now you are ready to run the code. Type `Shift+Enter`. You should see this:
+Note the comments preceded by `#` which describe what each block of code is doing. At the top of the file is the configuration section. The name of the file is already configured for you, but you will need to change the input and output file paths. In the code above, these are set to Windows file paths. If you have a Mac, type `#` at the beginning of the lines that have `C:\` and remove the `#` from the lines that have `/Users/`. Next replace `USERNAME` with your username. Now you are ready to run the code. Type `Shift+Enter`. You should see this:
 
 ![iPython/Jupyter Script Output](https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/ipython-4.png?raw=true "iPython/Jupyter Script Output")
 

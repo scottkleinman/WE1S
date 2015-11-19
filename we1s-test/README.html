@@ -29,7 +29,7 @@
 <p>Download either the <a href="https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda2-2.4.0-Windows-x86_64.exe">Windows 64-Bit Graphical Installer</a> or the <a href="https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda2-2.4.0-MacOSX-x86_64.pkg">Mac OS X 64-Bit Graphical Installer</a>. If one of these links does not work, go to <a href="https://www.continuum.io/downloads" class="uri">https://www.continuum.io/downloads</a>. Make sure that you click the Graphical Installer and that you are downloading Python version 2.7.</p>
 <p>Double-click the Graphical Installer and let Anaconda install. For the most part, the process is simple. The Mac OS X provides prompts along the way, but you can simply instruct the process to continue when these appear. When the installation is finished, a Launcher icon will appear on your desktop. You do not need to use this, but you may find it convenient.</p>
 <h3 id="testing-your-python-installation">Testing your Python Installation</h3>
-<p>Before proceeding, it is useful to test whether Python works. To do this, you will need to open a command prompt (Windows) or terminal (Mac). If you do not know how to do this on your system, Google &quot;open command prompt windows 8&quot; (replace the Windows version number with whatever version you are running) or &quot;open terminal Mac OSX&quot;. Type python and hit enter. You should see something like this:</p>
+<p>Before proceeding, it is useful to test whether Python works. To do this, you will need to open a command prompt (Windows) or terminal (Mac). If you do not know how to do this on your system, Google &quot;open command prompt windows 8&quot; (replace the Windows version number with whatever version you are running) or &quot;open terminal Mac OSX&quot;. Type <code>python</code> and hit <code>enter</code>. You should see something like this:</p>
 <div class="figure">
 <img src="https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/python-command.png?raw=true" title="The Python Command Prompt" alt="The Python Command Prompt" />
 <p class="caption">The Python Command Prompt</p>
@@ -66,7 +66,7 @@
 <img src="https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/ipython-3.png?raw=true" title="iPython/Jupyter Output" alt="iPython/Jupyter Output" />
 <p class="caption">iPython/Jupyter Output</p>
 </div>
-<p>Now let's try something more complicated. In the <code>we1s-test</code> folder, you will see subfolders called <code>input</code> and <code>output</code>. The input folder contains a text file called <code>file.txt</code>. If you open it in Sublime, you will see that it just says, &quot;THIS IS SOME SAMPLE TEXT&quot;. Go back into your jupyter notebook and paste the following into a cell:</p>
+<p>Now let's try something more complicated. In the <code>we1s-test</code> folder, you will see subfolders called <code>input</code> and <code>output</code>. The input folder contains a text file called <code>file.txt</code>. If you open it in Sublime, you will see that it just says, &quot;THIS IS SOME SAMPLE TEXT&quot;. Go back into your iPython notebook and paste the following into a cell:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">##### Configuration #####</span>
 
 <span class="co"># Configure the filename</span>
@@ -103,7 +103,7 @@ f <span class="op">=</span> <span class="bu">open</span>(output_file, <span clas
 f.write(text)
 f.close()
 <span class="bu">print</span>(<span class="st">&quot;I&#39;ve just written a new file to your output folder. Check it out!&quot;</span>)</code></pre></div>
-<p>Note the comments preceded by <code>#</code> which describe what each block of code is doing. At the top of the file is the configuration section. The name of the file is already configured for you, but you will need to change the input and output file paths. In the code above, these are set to Windows file paths. If you have a Mac, type <code>#</code> at the beginning of the lines that have <code>C:\\</code> and remove the <code>#</code> from the lines that have <code>/Users/</code>. Next replace <code>USERNAME</code> with your username. Now you are ready to run the code. Type <code>Shift+Enter</code>. You should see this:</p>
+<p>Note the comments preceded by <code>#</code> which describe what each block of code is doing. At the top of the file is the configuration section. The name of the file is already configured for you, but you will need to change the input and output file paths. In the code above, these are set to Windows file paths. If you have a Mac, type <code>#</code> at the beginning of the lines that have <code>C:\</code> and remove the <code>#</code> from the lines that have <code>/Users/</code>. Next replace <code>USERNAME</code> with your username. Now you are ready to run the code. Type <code>Shift+Enter</code>. You should see this:</p>
 <div class="figure">
 <img src="https://github.com/scottkleinman/WE1S/blob/master/we1s-test/images/ipython-4.png?raw=true" title="iPython/Jupyter Script Output" alt="iPython/Jupyter Script Output" />
 <p class="caption">iPython/Jupyter Script Output</p>
