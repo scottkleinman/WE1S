@@ -11,7 +11,7 @@ python scrub.py
 ##Configuration
 Begin by configuring the input and output folders. You may also designate the location of a stop words file. By default, `scrub.py` will save a log file of the scrubbing options. For example:
 
-```
+```python
 input_file_path = "C:/Users/USERNAME/workspace/1/articles"
 output_file_path = "C:/Users/USERNAME/workspace/1/articles-scrubbed"
 stopwords_location = "C:/Users/USERNAME/workspace/1/stopwords.txt"
@@ -20,7 +20,7 @@ save_log = True
 
 The rest of the file is a Python dictionary formatted in strict json format for consistency. Each processing section is is indicated in a Python comment preceded by `#`. The format for each processing instruction is as follows:
 
-```json
+```python
 {
 "Comment": "Describe the purpose of the processing instruction.",
 "values": [
