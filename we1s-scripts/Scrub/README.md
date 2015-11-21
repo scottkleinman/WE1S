@@ -35,8 +35,9 @@ The rest of the file is a Python dictionary formatted in strict json format for 
 
 The `Comment` property provides a method of describing the justification for implementing the specific processing instruction. The `active` field is set to `true` by default. Setting it to `false` will cause `scrub.py` to ignore the processing instruction. The `Comment` and `active` properties are optional.
 
-**Important:**
+###Important:
 *Quotation marks (especially in the `comment` value) must be escaped using `\"`.
+
 *The `find` and `replace` values acept regex strings (without delimiters).
 
 ##Stop Words
