@@ -34,22 +34,54 @@ body {width:75%; height:80%;margin:10px auto;}
 </style>
   </head>
   <body>
-  <div id="form"></div>
+  <div id="field1"></div>
   <script>
 $(document).ready(function() {
     // Initialise Alpaca form
-$("#form").alpaca({
+  $("#field1").alpaca({
     "view": "bootstrap-create",
     "schema": {
-        "type": "array",
+        "type": "object",
+        "properties": {
+            "title": {
+                "type": "string",
+                "title": "Title",
+                "required": false
+            },
+            "files": {
+                "type": "array",
+                "title": "Files",
+                "required": true
+            }
+        }
     },
     "options": {
-        "type": "upload",
-        "label": "Upload File",
-        "upload": {
-            "dataType": "json",
-            "url": "http://127.0.0.1:5000/uploads/",
-            "autoUpload": true
+        "fields": {
+            "files": {
+                "type": "upload",
+                "multiple": true,
+                //"maxFileSize": 25000000,
+                "maxNumberOfFiles": 13,
+                //"fileTypes": "/(\.|\/)(gif|jpe?g|png)$/i",
+                "upload": {
+                    "showUploadPreview": false,
+                    "url": "{{url_for('uploadHandler')}}",
+                    "autoUpload": true
+                }
+            }
+        },
+        "focus": true,
+        "form": {
+            "attributes": {
+                "method": "POST",
+                "action": "{{url_for('uploadHandler')}}",
+                "enctype": "multipart/form-data"
+            },
+            "buttons": {
+                "submit": {
+                    "value": "Submit"
+                }
+            }
         }
     },
     "postRender": function(control) {
@@ -62,6 +94,9 @@ $("#form").alpaca({
 });
 });
 </script>
+<div>
+{{ url_for('uploadHandler') }}
+</div>
 <!-- Modal Containing Response to Database Query -->
 <div id="errorModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
   <div class="modal-dialog modal-lg">
