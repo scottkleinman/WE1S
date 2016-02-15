@@ -1,5 +1,5 @@
 #Guidelines for Using Networked Corpus
-The instructions below assume you are working on a Windows machine. Guidelines for the Mac will be added soon.
+The instructions below assume you are working on a Windows machine. Guidelines for the Mac will be added soon. Also, it is assumed that you have Mallet and Python installed (the Python dependencies should come with most Python distributions like Anaconda).
 
 ##Preparing to Use Networked Corpus
 The GitHub repo of [Networked Corpus](https://github.com/jeffbinder/networkedcorpus) appears to make assumptions about your environment and file locations that make it difficult to run out of the box. As a result, a zipped version is provided here with some modifications to make it easier to run. [Download](https://raw.githubusercontent.com/scottkleinman/WE1S/master/networkedcorpus/networkedcorpus.zip) and extract the zipped version. Then do the following:
