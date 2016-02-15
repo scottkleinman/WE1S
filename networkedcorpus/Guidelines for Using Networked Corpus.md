@@ -2,7 +2,7 @@
 The instructions below assume you are working on a Windows machine. Guidelines for the Mac will be added soon.
 
 ##Preparing to Use Networked Corpus
-The GitHub repo of Networked Corpus appears to make assumptions about your environment and file locations that make it difficult to run out of the box. As a result, a zipped version is provided here with some modifications to make it easier to run. Download and extract the zipped version. Then do the following:
+The GitHub repo of [Networked Corpus](https://github.com/jeffbinder/networkedcorpus) appears to make assumptions about your environment and file locations that make it difficult to run out of the box. As a result, a zipped version is provided here with some modifications to make it easier to run. Download and extract the zipped version. Then do the following:
 
 Open `gen-networked-corpus.py` in a text editor and scroll to line 303. Change `datadir = "/path/to/data-folder"` as appropriate to provide the location of your data.
 
