@@ -24,11 +24,11 @@ This will install Serendip in the `Anaconda\Lib\site-packages\VEP_Core-1.01-py2.
 
 6. Next search for "import-dir". The line will probably begin with `callStr = 'mallet import-dir`. Change "mallet" to the full path to Mallet on your system (e.g. `C:/mallet/bin/mallet`). Note that the path should end in `bin\mallet`. **Update (Mar 8 2016):** In addition, it is recommended that you change `--token-regex "[^\p{Space}]*"` to `--token-regex "[\p{L}\p{M}]+"` in the same line. This will allow Mallet to read a wider variety of Unicode sequences (useful if you are dealing with languages other than Modern English.)
 
-6a. **Update (Mar 8 2016):** This will fix some newly discovered bugs. Search for `--stoplist-file` and insert a space before it. This will allow you to use your own stop words file independent of the Mallet list.
+7. **Update (Mar 8 2016):** This will fix some newly discovered bugs. Search for `--stoplist-file` and insert a space before it. This will allow you to use your own stop words file independent of the Mallet list.
 
-7. Search for "train-topics". The line will probably begin with `callStr = 'mallet train-topics`. As above, change "mallet" to the full path to Mallet on your system ending in `bin\mallet`.
+8. Search for "train-topics". The line will probably begin with `callStr = 'mallet train-topics`. As above, change "mallet" to the full path to Mallet on your system ending in `bin\mallet`.
 
-8. In an editor, open `C:\Users\Scott\Anaconda2\Lib\site-packages\VEP_Core-1.01-py2.7.egg\vep_core\Serendip\templates\text.html`. Search for "GET_TOPIC_NAMES_URL". In the line `$GET_TOPIC_NAMES_URL = "{{ url_for('corpus_get_topic_names', corpus_name=corpus_name) }}";` change `corpus_topic_names` to `corpus_get_topic_names`. This fixes a bug in the templating system for Serendip's Text Viewer.
+9. In an editor, open `C:\Users\Scott\Anaconda2\Lib\site-packages\VEP_Core-1.01-py2.7.egg\vep_core\Serendip\templates\text.html`. Search for "GET_TOPIC_NAMES_URL". In the line `$GET_TOPIC_NAMES_URL = "{{ url_for('corpus_get_topic_names', corpus_name=corpus_name) }}";` change `corpus_topic_names` to `corpus_get_topic_names`. This fixes a bug in the templating system for Serendip's Text Viewer.
 
 This should make Serendip mostly functional. A few features probably need additional tweaking, but I haven't looked into this yet.
 
