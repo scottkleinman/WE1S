@@ -18,7 +18,7 @@ The data storage system should ideally be a database, rather than a file storage
 ##Technology Overview
 The current proposal recommends [JSON Schema](http://json-schema.org/) for modelling manifests and the [MongoDB](https://www.mongodb.org/) NoSQL database for storage. Web forms can be generated from and validated against JSON schema, and the resulting data can be formatted for storage in MongoDB's JSON-like format. Content can be parsed easily into human-readable YAML or parsed directly by processing scripts for automated processes.
 
-MongoDB is very well suited to these considerations. A MongoDB record is a single JSON object called a “collection”. Each collection consists of a set of keyword-value pairs called “documents”. These terms are confusing in the context of WE1S, so, in the discussion below, I will use the term “record” for MongoDB’s “collection”, and I will refer to keywords and their values, or sometimes “fields”, rather than “documents”. A MongoDB record looks like the following:
+MongoDB is very well suited to these considerations. A MongoDB record is stored as a single BSON object called "document". Each document consists of a set of keyword-value pairs. These terms are confusing in the context of WE1S, so, in the discussion below, I will use the term “record” for MongoDB’s “document”. A MongoDB record looks like the following:
 
 ###Example 1:
 
