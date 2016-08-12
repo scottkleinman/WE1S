@@ -1,15 +1,15 @@
 import re
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for
 import json, types, pymongo
 from pymongo import MongoClient
 import os
 
 app = Flask(__name__)
 ## Supply IP address and port number
-db_config = os.getenv('MONGO_URL', 'mongodb://0.0.0.1:0000/')
+db_config = os.getenv('MONGO_URL', 'mongodb://dbuser:we1s@ds023435.mlab.com:23435/we1s')
 
 ### Index Route ###
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def main():
     return render_template("index.html")
 
@@ -391,7 +391,7 @@ def process():
     # Return the Ajax response
     return jsonResult
 
-@app.route("/process/collection", methods=["GET", "POST"])
+@app.route("/process/collection", methods=["POST"])
 def processCollectionNode():
     """
     Gets the submitted json string, trims whitespace from the values, and returns the 
@@ -457,7 +457,7 @@ def processCollectionNode():
         # Straightforward insert -- publications.insert(jsonForDB)
         # Upsert is better because it works for add and edit
         id = jsonForDB.pop("_id")
-        corpus.update({"_id":id},{"$set":jsonForDB}, upsert=True)
+        corpus.update({"_id":id},{"$set":jsonforDB}, upsert=True)
 
     # Return the Ajax response
     return jsonResult

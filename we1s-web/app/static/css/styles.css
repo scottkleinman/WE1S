@@ -1,0 +1,39 @@
+body {
+	padding-top: 70px;
+	padding-bottom: 10px;
+}
+
+main {
+	width: 75%;
+	margin: 10px auto;
+}
+
+footer { text-align: center; }
+
+h2 { text-align: center; }
+
+/* Alpaca and Alpaca Plugin Styling */
+.bootstrap-datetimepicker-widget { position: relative; }
+.alpaca-message { display: none; } /* Hide default error messages. */
+.alpaca-message-custom { display: block; } /* Show custom error messages. */
+
+/* Modal Styling */
+.modal-content { padding: 10px; }
+
+/* Accordion Panel Styling */
+.panel-heading.accordion-toggle:after {
+    font-family:'Glyphicons Halflings'; /* essential for enabling glyphicon */
+    content:"\e114"; /* symbol for "opening" panels */
+    float: right;
+    position: relative;
+    bottom: 23px;
+    font-size: 15pt;
+    color: grey;
+}
+.panel-heading.accordion-toggle.collapsed:after {    
+    content:"\e080"; /* symbol for "collapsed" panels */
+}
+
+.panel-heading:hover { cursor: pointer; }
+
+.panel-title { font-weight: bold; }
