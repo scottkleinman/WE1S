@@ -1,8 +1,8 @@
 # Import flask and template operators
 from flask import Flask, render_template
 
-# Import SQLAlchemy
-from mongokit import Connection
+# MongoDB client
+from pymongo import MongoClient
 
 # Define the WSGI application object
 app = Flask(__name__)
@@ -11,8 +11,9 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 # connect to the database
-connection = Connection(app.config['MONGODB_HOST'],
-                        app.config['MONGODB_PORT'])
+client = MongoClient(app.config['MONGODB_HOST'],
+                     app.config['MONGODB_PORT'])
+db = client[app.config['MONGODB_NAME']]
 
 
 # Sample HTTP error handling
@@ -26,13 +27,8 @@ from app.create import *
 
 # Register blueprint(s)
 app.register_blueprint(create)
-# app.register_blueprint(xyz_module)
-# ..
-
-# register the User document with our current connection
-connection.register([PublicationManifest])
 
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template('index.html')

@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+
+{% block styles %}
+    {{ super() }}
+    <link type="text/css" rel="stylesheet"
+          href="//code.cloudcms.com/alpaca/1.5.17/bootstrap/alpaca.min.css"/>
+{% endblock %}
+
+
+{% block content %}
+    <div class="jumbotron"><h2>WhatEvery1Says {{ formname }}</h2>
+        <div id="form"></div>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript"
+            src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+    <script type="text/javascript"
+            src="//code.cloudcms.com/alpaca/1.5.17/bootstrap/alpaca.min.js"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='scripts/' + formfile) }}"></script>
+{% endblock %}

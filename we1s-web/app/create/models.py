@@ -1,12 +1,7 @@
-from mongokit import Document
-
-
-class PublicationManifest(Document):
-    structure = {
-        'name': unicode,
-        'email': unicode,
-    }
-    use_dot_notation = True
-
-    def __repr__(self):
-        return '<User %r>' % self.name
+# from mongoengine import *
+#
+#
+# class PublicationManifest(Document):
+#     email = StringField(required=True)
+#     first_name = StringField(max_length=50)
+#     last_name = StringField(max_length=50)

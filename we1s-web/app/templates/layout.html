@@ -3,92 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>WhatEvery1Says</title>
-    <link rel="stylesheet" type="text/css"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-    <script type="text/javascript"
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script type="text/javascript"
-            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <style type="text/css">
-        body {
-            padding-top: 70px;
-        }
-
-        h2, footer {
-            text-align: center;
-        }
-    </style>
+    {% block styles %}
+        <link rel="stylesheet" type="text/css"
+              href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css"
+              href="{{ url_for('static', filename='css/styles.css') }}"/>
+    {% endblock %}
 </head>
+
 <body>
-<nav role="navigation" class="navbar navbar-fixed-top navbar-default">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-                    aria-controls="navbar" class="navbar-toggle collapsed">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a href="#" class="navbar-brand">WE1S</a></div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>
-                <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle">
-                        Display
-                        <span class="caret"></span>
-                    </a>
-                    <ul role="menu" class="dropdown-menu">
-                        <li><a href="#">Publications</a></li>
-                        <li><a href="#">Corpus</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle">
-                        Create
-                        <span class="caret"></span>
-                    </a>
-                    <ul role="menu" class="dropdown-menu">
-                        <li><a href="{{ url_for("create.create_publication") }}">Publication Manifest</a></li>
-                        <li><a href="{{ url_for("create.create_publication") }}">Corpus Manifest</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Corpus Record</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a id="searchHelp" href="#">
-                    <span class="glyphicon glyphicon-question-sign" aria-hidden="true" aria-label="Help"></span>
-                </a></li>
-            </ul>
-            <form class="navbar-form navbar-right" role="search">
-                <div class="form-group">
-                    <input id="search" type="text" class="form-control" placeholder="Search">
-                </div>
-                <button id="searchSubmit" class="btn btn-default">Submit</button>
-            </form>
-        </div>
-    </div>
-</nav>
+
+{% include "navbar.html" %}
 
 <div class="container">
     {% block content %}{% endblock %}
 </div>
 
+{% block scripts %}
+    <script type="text/javascript"
+            src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+{% endblock %}
+
 <footer>
-	<span id="aboutus">
-		© 2015
-		<a href="http://4humanities.org/" target="_blank">4Humanities</a>
-		<a href="http://4humanities.org/category/whatevery1says/" target="_blank">WhatEvery1Says Research Group</a>
-		 ·
-	</span>
+    © 2015
+    <a href="http://4humanities.org/" target="_blank">4Humanities</a>
+    <a href="http://4humanities.org/category/whatevery1says/" target="_blank">WhatEvery1Says Research Group</a>
+    ·
     <br>
-    <span id="license">
-		This site is licensed under the <a href="http://opensource.org/licenses/MIT">MIT License</a>.
-	</span>
+    This site is licensed under the <a href="http://opensource.org/licenses/MIT">MIT License</a>.
 </footer>
 
 </body>
