@@ -220,13 +220,14 @@ A boolean to indicate whether the data has been digitized using Optical Characte
 ####rights
 A statement of licensing rights or intellectual property restrictions. `Free culture` is assumed by default.
 
-##RawData Records
-Data records along the RawData path have the following schema.
+##Data Documents
+Data documents along a Data Record path contain the binary or plain text content of the data. They have the following schema (this example below assumes the `RawData` path).
 
 ```javascript
 {
   *"_id": "Some_id",
   *"path": ",Corpus,New_York_Times,RawData,",
+  *"content": "This is the text of the journal article.",  
    "authors": [],
    "mimeType": "",
    "documentType": ""
@@ -235,7 +236,7 @@ Data records along the RawData path have the following schema.
 
 ###Notes:
 
-Since records of this type will typically be derived from files, it makes sense to use the file name (minus the file extension) as the `_id`.
+Since records of this type will typically consist of or be derived from files, it makes sense to use the file name (minus the file extension) as the `_id`.
 
 For items like newspaper articles, the author(s) can be supplied for each article.
 

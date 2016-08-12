@@ -2,6 +2,8 @@
 scrub.py
 v1.0 2015-05-02
 v1.1 2015-11-21 active property and stop word handling added
+v1.2 2016-07-14 Unicode error handling added
+v1.3 2016-07-19 Added functions to remove accents and replace curly quotes
 scott.kleinman@csun.edu
 
 1.  Requires configuration in config.py file in same folder as scrub.py
@@ -14,25 +16,33 @@ __license__ = "GPL"
 __version__ = "1.0"
 __email__ = "scott.kleinman@csun.edu"
 
-import os, re
+import os, re, codecs
+import unicodedata as ud
 from config import *
 iterations = len(options)
 
 # Read and scrub files in input directory	
 def readFiles(input_file_path, output_file_path):
+    ## Defaults here for now
+    encoding = 'utf-8'
+    error_handling = 'strict'
     fileList = os.listdir(input_file_path)
 	# Open individual files
     for file in fileList:
         file_path = os.path.join(input_file_path, file)
-        with open(file_path) as f:
+        with codecs.open(file_path,'r',encoding=encoding,errors=error_handling) as f:
             text = f.read()
             # Call the scrub function
             output = scrub(text)
             # Write the scrubbed text to a new file
             output_path = os.path.join(output_file_path, file)
-            fh = open(output_path,'w')
-            fh.write(output)
+            with codecs.open(output_path,'w',encoding='utf8',errors=error_handling) as fh:
+                fh.write(output)
             fh.close
+
+def remove_accents(input_str):
+    nfkd_form = ud.normalize('NFKD', input_str)
+    return u"".join([c for c in nfkd_form if not ud.combining(c)])
 
 def scrub(text):
     # Cycle iterations
@@ -62,10 +72,18 @@ def scrub(text):
                     find = values[j]["find"]
                     replace = values[j]["replace"]
                     text = re.sub(find, replace, text)
+
+    # Remove left and right (curly) quotation marks
+    text = text.replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u201c",'"').replace(u"\u201d", '"')
+
+    # Remove accents
+    text = remove_accents(text)
+
     return text
 
 # Initiate
 print("Processing...\n")
+print("Reading "+input_file_path+"\n")
 
 # Read and Scrub Files
 readFiles(input_file_path, output_file_path)
@@ -92,6 +110,9 @@ for i, item in enumerate(options):
                 if k != "values":
                     out += str(k) + ": " + str(options[i][k]) + "\n"
         out += "\n"
+
+    out += "Curly quotes removed.\n"
+    out += "Accents removed.\n"
 
 # Print Log
 print(out)
