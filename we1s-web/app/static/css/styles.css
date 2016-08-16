@@ -7,11 +7,6 @@ h2, footer {
     text-align: center;
 }
 
-/* Alpaca and Alpaca Plugin Styling */
-.bootstrap-datetimepicker-widget {
-    position: relative;
-}
-
 .alpaca-message {
     display: none;
 }
