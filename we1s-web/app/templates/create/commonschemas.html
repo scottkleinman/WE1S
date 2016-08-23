@@ -1,0 +1,24 @@
+{% macro date() -%}
+"date": {
+    "title": "Publication Date",
+    "type": "object",
+    "required": true,
+    "properties": {
+        "start": {
+            "title": "Enter Start Date",
+            "format": "string"
+        },
+        "end": {
+            "title": "Enter End Date",
+            "format": "string"
+        }
+    }
+}
+{% endmacro %}
+
+{% macro notes() -%}
+"notes": {
+    "type": "array",
+    "title": "Notes"
+}
+{% endmacro %}

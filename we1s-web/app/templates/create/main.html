@@ -45,6 +45,5 @@
             src={{ url_for('static', filename='lib/moment-with-locales.min.js') }}></script>
     <script type="text/javascript"
             src={{ url_for('static', filename='lib/bootstrap-datetimepicker.min.js') }}></script>
-    <script type="text/javascript"
-            src="{{ url_for('static', filename='scripts/' + formfile) }}"></script>
+    {% include formfile %}
 {% endblock %}

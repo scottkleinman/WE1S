@@ -1,0 +1,131 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        var defaultData = null;
+        {% block defaultData %}{% endblock %}
+
+        $("#form").alpaca({
+            "data": defaultData,
+            "schema": {
+                "title": "Publication Manifest Form",
+                "type": "object",
+                "properties": {
+                    "namespace": {
+                        "enum": ["WE1Sv1.0"],
+                        "label": "namespace",
+                        "type": "string",
+                        "required": true
+                    },
+                    "_id": {
+                        "type": "string",
+                        "title": "_id",
+                        "required": true
+                    },
+                    "path": {
+                        "type": "string",
+                        "title": "Path",
+                        "required": true
+                    },
+                    "publication": {
+                        "type": "string",
+                        "title": "Publication",
+                        "required": true
+                    },
+                    "description": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "publisher": {
+                        "type": "string",
+                        "title": "Publisher",
+                        "required": false
+                    },
+                    {% block schema %}{% endblock %}
+                }
+            },
+            "options": {
+                "hideInitValidationError": true,
+                "form": {
+                    "attributes": {
+                        "action": document.URL,
+                        "method": "post"
+                    },
+                    "buttons": {
+                        "submit": {
+                            "title": "Submit",
+                            "click": function () {
+                                // Somewhat elaborate procedure to turn the json into a string
+                                var value = this.getValue();
+                                // Submit data by Ajax
+                                $.ajax({
+                                    type: "POST",
+                                    url: document.URL,
+                                    data: JSON.stringify(value),
+                                    contentType: 'application/json',
+                                    dataType: 'json',
+                                    beforeSend: function () {
+                                        console.log(JSON.stringify(value, null, "\t"));
+                                    },
+                                    success: function (jsonResult) {
+                                        console.log(jsonResult);
+                                        // Remove the html list from the json response and send
+                                        // it to the modal
+                                        var htmlResult = jsonResult["htmlResult"];
+                                        delete jsonResult["htmlResult"];
+                                        $('.modal-body').html(htmlResult);
+                                        $('#myModal').modal();
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        $('.modal-body').html('Error: Your action could not be completed.');
+                                        $('#myModal').modal();
+                                        console.log("Error: " + errorThrown);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                },
+                // Field configuration arrray
+                "fields": {
+                    "namespace": {
+                        "type": "select"
+                    },
+                    "_id": {
+                        // Remove initial 'The', replace space with "_"; remove error styling
+                        "onFieldKeyup": function (e) {
+                            var v = this.getValue();
+                            v = v.replace(/The /g, "");
+                            v = v.toLowerCase();
+                            v = v.replace(/\s+/g, "_");
+                            $('input[name="_id"]').val(v);
+                            var idDiv = $("div").find('[data-alpaca-field-name="_id"]');
+                            idDiv.removeClass("alpaca-required has-error alpaca-invalid");
+                        }
+                    },
+                    "path": {
+                        // Change comma to slash at any keystroke
+                        "onFieldKeyup": function (e) {
+                            var v = this.getValue();
+                            v = v.replace(/,/g, "/");
+                            $('input[name="path"]').val(v);
+                        },
+                        "events": {
+                            // On change, ensure that the string begins "/Publications/"
+                            "change": function () {
+                                var v = this.getValue();
+                                if (v.substring(0, 14) != "/Publications/") {
+                                    v = "/Publications/" + v;
+                                    $('input[name="path"]').val(v)
+                                }
+                                if (v.substring(-1) != "/") {
+                                    $('input[name="path"]').val(v + "/")
+                                }
+                            }
+                        }
+                    },
+                    {% block options_fields %}{% endblock %}
+                } // End fields
+            },// End options
+            {%  block postRender %}{% endblock %}
+        });
+    });
+</script>

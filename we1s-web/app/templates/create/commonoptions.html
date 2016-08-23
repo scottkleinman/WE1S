@@ -1,0 +1,50 @@
+{% macro date() -%}
+"date": {
+    "fields": {
+        "start": {
+            // Enter today's date in the datepicker; use YYYY-DD-MM format; allow manual entry
+            "type": "date",
+            "picker": {
+                "format": "YYYY-MM-DD",
+                "useCurrent": true
+            },
+            "event": {
+                "change": function () {
+                    var end = new Date($('input[name="end"]').val());
+                    console.log(end);
+                }
+            }
+        },
+        "end": {
+            // Enter today's date in the datepicker; use YYYY-DD-MM format; allow manual entry
+            "type": "date",
+            "picker": {
+                "format": "YYYY-MM-DD",
+                "useCurrent": true
+            }
+        }
+    }
+}
+{% endmacro %}
+
+{% macro notes() -%}
+"notes": {
+    // Change add button text to "Add Note"
+    "toolbar": {
+        "showLabels": true,
+        "actions": [
+            {"label": "Add Note", "action": "add"}
+        ]
+    },
+    // Show full-sized buttons with labels in actionbar
+    "actionbar": {
+        "showLabels": true,
+        "actions": [
+            {"label": "Add Note", "action": "add"},
+            {"label": "Delete Note", "action": "remove"},
+            {"label": "Move Up", "action": "up"},
+            {"label": "Move Down", "action": "down"}
+        ]
+    }
+}
+{% endmacro %}
