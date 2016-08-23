@@ -20,31 +20,43 @@ def create_corpus():
     return render_template('create/corpus.html')
 
 
-@create.route('/create/collection')
+@create.route('/create/collection', methods=['GET', 'POST'])
 def create_collection():
-    return render_template('create/corpus.html')
+    return render_template('create/main.html',
+                           formname='Collection Manifest Form',
+                           formfile='create/collection.html')
 
 
-@create.route('/create/rawdata')
+@create.route('/create/rawdata', methods=['GET', 'POST'])
 def create_rawdata():
-    return render_template('create/corpus.html')
+    return render_template('create/main.html',
+                           formname='Raw Data Manifest Form',
+                           formfile='create/rawdata.html')
 
 
-@create.route('/create/processeddata')
+@create.route('/create/processeddata', methods=['GET', 'POST'])
 def create_processeddata():
-    return render_template('create/corpus.html')
+    return render_template('create/main.html',
+                           formname='Processed Data Manifest Form',
+                           formfile='create/processeddata.html')
 
 
-@create.route('/create/metadata')
+@create.route('/create/metadata', methods=['GET', 'POST'])
 def create_metadata():
-    return render_template('create/corpus.html')
+    return render_template('create/main.html',
+                           formname='Metadata Manifest Form',
+                           formfile='create/metadata.html')
 
 
-@create.route('/create/outputs')
+@create.route('/create/outputs', methods=['GET', 'POST'])
 def create_outputs():
-    return render_template('create/corpus.html')
+    return render_template('create/main.html',
+                           formname='Outputs Manifest Form',
+                           formfile='create/outputs.html')
 
 
-@create.route('/create/related')
+@create.route('/create/related', methods=['GET', 'POST'])
 def create_related():
-    return render_template('create/corpus.html')
+    return render_template('create/main.html',
+                           formname='Related Manifest Form',
+                           formfile='create/related.html')

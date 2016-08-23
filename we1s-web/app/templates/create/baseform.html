@@ -1,12 +1,16 @@
 <script type="text/javascript">
+    function resetForm() {
+        $('#form').find('form')[0].reset();
+    }
     $(document).ready(function () {
-        var defaultData = null;
-        {% block defaultData %}{% endblock %}
+        {% block defaultData %}
+            var defaultData = null;
+        {% endblock %}
 
         $("#form").alpaca({
             "data": defaultData,
             "schema": {
-                "title": "Publication Manifest Form",
+                "title": "Manifest Form",
                 "type": "object",
                 "properties": {
                     "namespace": {
@@ -24,20 +28,6 @@
                         "type": "string",
                         "title": "Path",
                         "required": true
-                    },
-                    "publication": {
-                        "type": "string",
-                        "title": "Publication",
-                        "required": true
-                    },
-                    "description": {
-                        "type": "string",
-                        "required": true
-                    },
-                    "publisher": {
-                        "type": "string",
-                        "title": "Publisher",
-                        "required": false
                     },
                     {% block schema %}{% endblock %}
                 }
@@ -99,27 +89,6 @@
                             $('input[name="_id"]').val(v);
                             var idDiv = $("div").find('[data-alpaca-field-name="_id"]');
                             idDiv.removeClass("alpaca-required has-error alpaca-invalid");
-                        }
-                    },
-                    "path": {
-                        // Change comma to slash at any keystroke
-                        "onFieldKeyup": function (e) {
-                            var v = this.getValue();
-                            v = v.replace(/,/g, "/");
-                            $('input[name="path"]').val(v);
-                        },
-                        "events": {
-                            // On change, ensure that the string begins "/Publications/"
-                            "change": function () {
-                                var v = this.getValue();
-                                if (v.substring(0, 14) != "/Publications/") {
-                                    v = "/Publications/" + v;
-                                    $('input[name="path"]').val(v)
-                                }
-                                if (v.substring(-1) != "/") {
-                                    $('input[name="path"]').val(v + "/")
-                                }
-                            }
                         }
                     },
                     {% block options_fields %}{% endblock %}

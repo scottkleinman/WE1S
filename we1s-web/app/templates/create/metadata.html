@@ -1,0 +1,31 @@
+{% extends 'create/baseform.html' %}
+{% import 'create/commonschemas.html' as schemas %}
+{% import 'create/commonoptions.html' as options %}
+
+{% block defaultData %}
+    var defaultData = {
+        "_id": "Metadata",
+        "description": "bortaS <b>bIr</b> jablu’DI’ reH QaQqu’ nay’!",
+        "namespace": "WE1Sv1.0"
+    };
+{% endblock %}
+
+{% block schema %}
+    {{ schemas.description('false') }},
+    {{ schemas.title() }},
+    {{ schemas.label() }},
+    {{ schemas.mimetype() }},
+    {{ schemas.notes() }}
+{% endblock %}
+
+{% block options_fields %}
+    {{ options.mimetype() }},
+    {{ options.path("/Publications/") }},
+    {{ options.description() }},
+    {{ options.date() }},
+    {{ options.notes() }}
+{% endblock %}
+
+{% block postRender %}
+
+{% endblock %}
