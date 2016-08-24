@@ -5,14 +5,14 @@ from flask import Flask, render_template
 from pymongo import MongoClient
 
 # Define the WSGI application object
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
 
 # Configurations
 app.config.from_object('config')
+app.config.from_pyfile('config.py')
 
 # connect to the database
-client = MongoClient(app.config['MONGODB_HOST'],
-                     app.config['MONGODB_PORT'])
+client = MongoClient(app.config['MONGODB_URI'])
 db = client[app.config['MONGODB_NAME']]
 
 
