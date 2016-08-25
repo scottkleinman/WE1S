@@ -2,6 +2,27 @@
     function resetForm() {
         $('#form').find('form')[0].reset();
     }
+    function toHTML(json) {
+        var html = '<ul>';
+        for (var property in json) {
+            if (json.hasOwnProperty(property)) {
+                if (json[property] instanceof Array) {
+                    html += '<li><b>' + property + '</b>:<ul>';
+                    for (var item in json[property]) {
+                        html += '<li>' + item.toString().trim() + '</li>';
+                    }
+                    html += '</ul></li>';
+                }
+                else if (typeof(json[property]) == 'object') {
+                    html += '<li><b>' + property + '</b>:' + toHTML(json[property]) + '</li>';
+                }
+                else {
+                    html += '<li><b>' + property + '</b>: ' + json[property].toString().trim() + '</li>';
+                }
+            }
+        }
+        return html + '</ul>';
+    }
     $(document).ready(function () {
         {% block defaultData %}
             var defaultData = null;
@@ -51,16 +72,13 @@
                                     url: document.URL,
                                     data: JSON.stringify(value),
                                     contentType: 'application/json',
-                                    dataType: 'json',
+                                    dataType: 'text',
                                     beforeSend: function () {
                                         console.log(JSON.stringify(value, null, "\t"));
                                     },
-                                    success: function (jsonResult) {
-                                        console.log(jsonResult);
-                                        // Remove the html list from the json response and send
-                                        // it to the modal
-                                        var htmlResult = jsonResult["htmlResult"];
-                                        delete jsonResult["htmlResult"];
+                                    success: function (result) {
+                                        console.log(result);
+                                        var htmlResult = toHTML(value);
                                         $('.modal-body').html(htmlResult);
                                         $('#myModal').modal();
                                     },

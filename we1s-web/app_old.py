@@ -374,7 +374,7 @@ def process():
 
     # Change slashes to commas in the path
     jsonForDB["path"] = jsonForDB["path"].replace("/",",")
-    jsonforDB = json.dumps(jsonForDB, sort_keys=False, indent=4, separators=(',', ': '))
+    jsonForDB = json.dumps(jsonForDB, sort_keys=False, indent=4, separators=(',', ': '))
 
     # Build a pymongo command to insert the data in the database. This should probably be moved 
     # to a separate function. Database data will not be saved unless active is set to True.
