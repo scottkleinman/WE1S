@@ -1,6 +1,10 @@
 # Statement for enabling the development environment
 DEBUG = True
 
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'md', 'docx'}
+MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+
 # Application threads. A common general assumption is
 # using 2 per available processor cores - to handle
 # incoming requests using one and performing background

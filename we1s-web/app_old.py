@@ -1,55 +1,62 @@
-import re
-from flask import Flask, render_template, url_for
-import json, types, pymongo
-from pymongo import MongoClient
+import json
 import os
+import re
+
+from flask import Flask, render_template
+from flask import request
+from pymongo import MongoClient
 
 app = Flask(__name__)
 ## Supply IP address and port number
 db_config = os.getenv('MONGO_URL', 'mongodb://dbuser:we1s@ds023435.mlab.com:23435/we1s')
+
 
 ### Index Route ###
 @app.route("/", methods=["GET"])
 def main():
     return render_template("index.html")
 
+
 ### Eventually This Will Contain an Upload Function ###
 @app.route("/upload-test", methods=["GET", "POST"])
 def uploadTest():
     return render_template("upload-test.html")
 
+
 ### Eventually This Will Contain an Upload Function ###
 @app.route("/upload-test/process", methods=["GET", "POST"])
 def uploadTestProcess():
-    #if request.method == 'POST':
-    #file = request.files['file']
+    # if request.method == 'POST':
+    # file = request.files['file']
     print("Files: ")
     print(file)
     s = {"files": [
-      {
-        "name": "picture1.jpg",
-        "size": 902604,
-        "url": "http:\/\/example.org\/files\/picture1.jpg",
-        "thumbnailUrl": "http:\/\/example.org\/files\/thumbnail\/picture1.jpg",
-        "deleteUrl": "http:\/\/example.org\/files\/picture1.jpg",
-        "deleteType": "DELETE"
-      },
-      {
-        "name": "picture2.jpg",
-        "size": 841946,
-        "url": "http:\/\/example.org\/files\/picture2.jpg",
-        "thumbnailUrl": "http:\/\/example.org\/files\/thumbnail\/picture2.jpg",
-        "deleteUrl": "http:\/\/example.org\/files\/picture2.jpg",
-        "deleteType": "DELETE"
-      }
+        {
+            "name": "picture1.jpg",
+            "size": 902604,
+            "url": "http:\/\/example.org\/files\/picture1.jpg",
+            "thumbnailUrl": "http:\/\/example.org\/files\/thumbnail\/picture1.jpg",
+            "deleteUrl": "http:\/\/example.org\/files\/picture1.jpg",
+            "deleteType": "DELETE"
+        },
+        {
+            "name": "picture2.jpg",
+            "size": 841946,
+            "url": "http:\/\/example.org\/files\/picture2.jpg",
+            "thumbnailUrl": "http:\/\/example.org\/files\/thumbnail\/picture2.jpg",
+            "deleteUrl": "http:\/\/example.org\/files\/picture2.jpg",
+            "deleteType": "DELETE"
+        }
     ]}
     s = json.dumps(s)
     return s
+
 
 ### Eventually This Will Contain an Upload Function ###
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
     return render_template("upload.html")
+
 
 ### Eventually This Will Contain an Upload Handler Function ###
 @app.route("/upload/handler", methods=["POST"])
@@ -64,13 +71,14 @@ def uploadHandler():
         print key, "=>", value
     return moo
 
+
 ### Search Function ###
 @app.route("/search", methods=["GET", "POST"])
 def search():
     """
     Searches the whole database
     """
-    #response = request.json['search']
+    # response = request.json['search']
     jsonObj = request.get_json()
     query = str(jsonObj['query'])
     regex = re.compile(query, re.IGNORECASE)
@@ -98,8 +106,8 @@ def search():
             htmlResult = "<h4>Publications: " + str(pcount) + "</h4>"
             htmlResult += "<ul>"
             for item in p:
-                args = '?_id='+item["_id"]+'&amp;path='+item["path"]
-                htmlResult += '<li><a href="/publications/edit'+args+'">'+item["_id"]+'</a></li>'
+                args = '?_id=' + item["_id"] + '&amp;path=' + item["path"]
+                htmlResult += '<li><a href="/publications/edit' + args + '">' + item["_id"] + '</a></li>'
             htmlResult += "</ul>"
 
         htmlResult += "<hr>"
@@ -110,12 +118,13 @@ def search():
             htmlResult += "<h4>Corpus: " + str(ccount) + "</h4>"
             htmlResult += "<ul>"
             for item in c:
-                args = '?_id='+item["_id"]+'&amp;path='+item["path"]
-                htmlResult += '<li><a href="/corpus/collection/edit'+args+'">'+item["_id"]+'</a></li>'
+                args = '?_id=' + item["_id"] + '&amp;path=' + item["path"]
+                htmlResult += '<li><a href="/corpus/collection/edit' + args + '">' + item["_id"] + '</a></li>'
             htmlResult += "</ul>"
 
     # Return the Ajax response
     return htmlResult
+
 
 #########################
 ### Display Functions ###
@@ -137,8 +146,9 @@ def displayPublications():
         result = publications.find()
         results = []
         for publication in result:
-             results.append(publication)
+            results.append(publication)
     return render_template("displayPublications.html", results=results)
+
 
 @app.route("/display/corpus", methods=["GET", "POST"])
 def displayCorpus():
@@ -157,8 +167,9 @@ def displayCorpus():
         result = corpus.find()
         results = []
         for collection in result:
-             results.append(collection)
+            results.append(collection)
     return render_template("displayCorpus.html", results=results)
+
 
 #####################
 ### Add Functions ###
@@ -169,11 +180,12 @@ def addPublication():
     Form for creating publications manifests. Form data gets submitted by Ajax.
     """
     preloaded = [
-        {"description":"bortaS <b>bIr</b> jablu'DI' reH QaQqu' nay'!"},
+        {"description": "bortaS <b>bIr</b> jablu'DI' reH QaQqu' nay'!"},
         {"language": "en"},
         {"country": "usa"}
     ]
     return render_template("addPublication.html", msg="", preloaded=preloaded)
+
 
 @app.route("/corpus/add", methods=["GET", "POST"])
 def addCollection():
@@ -182,12 +194,14 @@ def addCollection():
     """
     return render_template("addCollection.html")
 
+
 @app.route("/corpus/collection/add", methods=["GET", "POST"])
 def addCollectionNode():
     """
     Form for creating collection manifests. Form data gets submitted by Ajax.
     """
     return render_template("addCollectionNode.html")
+
 
 @app.route("/corpus/raw-data/add", methods=["GET", "POST"])
 def addRawDataNode():
@@ -196,12 +210,14 @@ def addRawDataNode():
     """
     return render_template("addRawDataNode.html")
 
+
 @app.route("/corpus/processed-data/add", methods=["GET", "POST"])
 def addProcessedDataNode():
     """
     Form for creating processedData manifests. Form data gets submitted by Ajax.
     """
     return render_template("addProcessedDataNode.html")
+
 
 @app.route("/corpus/metadata/add", methods=["GET", "POST"])
 def addMetadataNode():
@@ -210,12 +226,14 @@ def addMetadataNode():
     """
     return render_template("addMetadataNode.html")
 
+
 @app.route("/corpus/outputs/add", methods=["GET", "POST"])
 def addOutputsNode():
     """
     Form for creating outputs manifests. Form data gets submitted by Ajax.
     """
     return render_template("addOutputsNode.html")
+
 
 @app.route("/corpus/related/add", methods=["GET", "POST"])
 def addRelatedNode():
@@ -224,12 +242,14 @@ def addRelatedNode():
     """
     return render_template("addRelatedNode.html")
 
+
 @app.route("/corpus/generic/add", methods=["GET", "POST"])
 def addGenericNode():
     """
     Form for creating generic manifests. Form data gets submitted by Ajax.
     """
     return render_template("addGenericNode.html")
+
 
 ######################
 ### Edit Functions ###
@@ -253,8 +273,8 @@ def editPublication():
     result = publications.find_one({"_id": id, "path": path})
 
     # Pre-processing
-    del result["htmlResult"] # Remove HTML output
-    result["path"].replace(",","/") # Place slashes in path
+    del result["htmlResult"]  # Remove HTML output
+    result["path"].replace(",", "/")  # Place slashes in path
 
     # Handle dates
     if len(result["date"]) == 10:
@@ -263,16 +283,17 @@ def editPublication():
     else:
         # Format: {'start': '2014-01-01', 'end': '2015-10-01'}
         print("Result Date")
-        date = str(result["date"][0]).replace("'","\"")
+        date = str(result["date"][0]).replace("'", "\"")
         dates = json.loads(date)
         start = dates["start"]
         end = dates["end"]
         result["date"] = {"toggledaterange": True, "sdate": start, "start": start, "end": end}
 
-    # Convert to json string
+    # Convert to json stringØ
     jsonStr = json.dumps(result)
 
     return render_template("editPublication.html", results=jsonStr)
+
 
 @app.route("/corpus/collection/edit", methods=["GET", "POST"])
 def editCollectionNode():
@@ -296,8 +317,8 @@ def editCollectionNode():
     result = corpus.find_one({"_id": id, "path": path})
 
     # Pre-processing
-    del result["htmlResult"] # Remove HTML output
-    result["path"].replace(",","/") # Place slashes in path
+    del result["htmlResult"]  # Remove HTML output
+    result["path"].replace(",", "/")  # Place slashes in path
 
     # Handle dates
     if len(result["date"]) == 10:
@@ -306,7 +327,7 @@ def editCollectionNode():
     else:
         # Format: {'start': '2014-01-01', 'end': '2015-10-01'}
         print("Result Date")
-        date = str(result["date"][0]).replace("'","\"")
+        date = str(result["date"][0]).replace("'", "\"")
         dates = json.loads(date)
         start = dates["start"]
         end = dates["end"]
@@ -316,6 +337,7 @@ def editCollectionNode():
     jsonStr = json.dumps(result)
 
     return render_template("editCollectionNode.html", results=jsonStr)
+
 
 #####################################
 ### Add/Edit Processing Functions ###
@@ -373,7 +395,7 @@ def process():
     jsonResult = json.dumps(jsonObj, sort_keys=False, indent=4, separators=(',', ': '))
 
     # Change slashes to commas in the path
-    jsonForDB["path"] = jsonForDB["path"].replace("/",",")
+    jsonForDB["path"] = jsonForDB["path"].replace("/", ",")
     jsonForDB = json.dumps(jsonForDB, sort_keys=False, indent=4, separators=(',', ': '))
 
     # Build a pymongo command to insert the data in the database. This should probably be moved 
@@ -386,10 +408,11 @@ def process():
         # Straightforward insert -- publications.insert(jsonForDB)
         # Upsert is better because it works for add and edit
         id = jsonForDB.pop("_id")
-        publications.update({"_id":id},{"$set":jsonForDB}, upsert=True)
+        publications.update({"_id": id}, {"$set": jsonForDB}, upsert=True)
 
     # Return the Ajax response
     return jsonResult
+
 
 @app.route("/process/collection", methods=["POST"])
 def processCollectionNode():
@@ -444,7 +467,7 @@ def processCollectionNode():
     jsonResult = json.dumps(jsonObj, sort_keys=False, indent=4, separators=(',', ': '))
 
     # Change slashes to commas in the path
-    jsonForDB["path"] = jsonForDB["path"].replace("/",",")
+    jsonForDB["path"] = jsonForDB["path"].replace("/", ",")
     jsonforDB = json.dumps(jsonForDB, sort_keys=False, indent=4, separators=(',', ': '))
 
     # Build a pymongo command to insert the data in the database. This should probably be moved 
@@ -457,10 +480,11 @@ def processCollectionNode():
         # Straightforward insert -- publications.insert(jsonForDB)
         # Upsert is better because it works for add and edit
         id = jsonForDB.pop("_id")
-        corpus.update({"_id":id},{"$set":jsonforDB}, upsert=True)
+        corpus.update({"_id": id}, {"$set": jsonforDB}, upsert=True)
 
     # Return the Ajax response
     return jsonResult
+
 
 ##########################
 ### Deletion Functions ###
@@ -480,15 +504,16 @@ def delete():
         if request.headers["mode"] == "deleteCollectionNode":
             db = client['Corpus']
             node = db['Corpus']
-        #elif request.headers["mode"] == "something else:
-            #db = client['Something']
-            #node = db['Something']
+            # elif request.headers["mode"] == "something else:
+            # db = client['Something']
+            # node = db['Something']
         else:
             db = client['Publications']
             node = db['Publications']
         node.remove({"_id": id})
     # Return the Ajax response
     return "Success."
+
 
 ###################
 ### Run the app ###

@@ -34,7 +34,6 @@ def create_publication():
         except Exception as e:
             print e
             abort(500)
-
     return render_template('create/main.html',
                            formname='Publications Manifest Form',
                            formfile='create/publication.html')

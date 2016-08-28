@@ -21,11 +21,6 @@
     {% block content %}{% endblock %}
 </div>
 
-{% block scripts %}
-    <script type="text/javascript"
-            src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-{% endblock %}
-
 <footer>
     © 2015
     <a href="http://4humanities.org/" target="_blank">4Humanities</a>
@@ -34,6 +29,11 @@
     <br>
     This site is licensed under the <a href="http://opensource.org/licenses/MIT">MIT License</a>.
 </footer>
+
+{% block scripts %}
+    <script type="text/javascript"
+            src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+{% endblock %}
 
 </body>
 </html>

@@ -8,7 +8,8 @@ import os
 # and send_from_directory will help us to send/show on the
 # browser the file that the user just uploaded
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
-from werkzeug import secure_filename
+from pymongo import MongoClient
+from werkzeug.utils import secure_filename
 
 # Initialize the Flask application
 upload_app = Flask(__name__)
@@ -16,19 +17,21 @@ upload_app = Flask(__name__)
 # This is the path to the upload directory
 upload_app.config['UPLOAD_FOLDER'] = 'uploads/'
 # These are the extension that we are accepting to be uploaded
-upload_app.config['ALLOWED_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+upload_app.config['ALLOWED_EXTENSIONS'] = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
 
 # For a given file, return whether it's an allowed type or not
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in upload_app.config['ALLOWED_EXTENSIONS']
 
+
 # This route will show a form to perform an AJAX request
 # jQuery is loaded to execute the request and update the
 # value of the operation
 @upload_app.route('/')
 def index():
-    return render_template('upload.html')
+    return render_template('upload-test.html')
 
 
 # Route that will process the file upload
@@ -44,18 +47,17 @@ def upload():
         active = True
         if active == True:
             # Connect to DB -- Supply configuration
-            client = MongoClient('mongodb://0.0.0.0:0000/')
+            client = MongoClient('mongodb://dbuser:we1s@ds023435.mlab.com:23435/we1s')
             db = client['Collections']
             collections = db['Collections']
 
             # Construct json
-            path = ",mypath,"+filename+","
+            path = ",mypath," + file.filename + ","
             jsonForDB = {"_id": "myFileId", "path": path, "content": file}
 
             # Perform the upsert
             id = jsonForDB.pop("_id")
-            collections.update({"_id":id},{"$set":jsonForDB}, upsert=True)
-
+            collections.update({"_id": id}, {"$set": jsonForDB}, upsert=True)
 
         # Make the filename safe, remove unsupported chars
         filename = secure_filename(file.filename)
@@ -67,6 +69,7 @@ def upload():
         return redirect(url_for('uploaded_file',
                                 filename=filename))
 
+
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
 # directory and show it on the browser, so if the user uploads
@@ -75,6 +78,7 @@ def upload():
 def uploaded_file(filename):
     return send_from_directory(upload_app.config['UPLOAD_FOLDER'],
                                filename)
+
 
 if __name__ == '__main__':
     upload_app.run(host="0.0.0.0", debug=True)

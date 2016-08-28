@@ -65,7 +65,7 @@ $(document).ready(function() {
                 //"fileTypes": "/(\.|\/)(gif|jpe?g|png)$/i",
                 "upload": {
                     "showUploadPreview": false,
-                    "url": "{{url_for('uploadHandler')}}",
+                    "url": "{{url_for('upload_handler')}}",
                     "autoUpload": true
                 }
             }
@@ -74,7 +74,7 @@ $(document).ready(function() {
         "form": {
             "attributes": {
                 "method": "POST",
-                "action": "{{url_for('uploadHandler')}}",
+                "action": "{{url_for('upload_handler')}}",
                 "enctype": "multipart/form-data"
             },
             "buttons": {
@@ -95,7 +95,7 @@ $(document).ready(function() {
 });
 </script>
 <div>
-{{ url_for('uploadHandler') }}
+{{ url_for('upload_handler') }}
 </div>
 <!-- Modal Containing Response to Database Query -->
 <div id="errorModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">

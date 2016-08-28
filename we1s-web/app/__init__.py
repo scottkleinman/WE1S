@@ -24,6 +24,7 @@ def not_found(error):
 
 # Import a module / component using its blueprint handler variable
 from app.create import *
+from app.upload import *
 
 # Register blueprint(s)
 app.register_blueprint(create)
