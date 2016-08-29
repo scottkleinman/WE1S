@@ -8,15 +8,15 @@
             if (json.hasOwnProperty(property)) {
                 if (json[property] instanceof Array) {
                     html += '<li><b>' + property + '</b>:<ul>';
-                    for (var item in json[property]) {
-                        html += '<li>' + item.toString().trim() + '</li>';
+                    for (var i = 0; i < json[property].length; i++) {
+                        html += '<li>' + toHTML(json[property][i]) + '</li>';
                     }
                     html += '</ul></li>';
                 }
                 else if (typeof(json[property]) == 'object') {
                     html += '<li><b>' + property + '</b>:' + toHTML(json[property]) + '</li>';
                 }
-                else {
+                else if (typeof(json[property]) == 'string') {
                     html += '<li><b>' + property + '</b>: ' + json[property].toString().trim() + '</li>';
                 }
             }
@@ -27,6 +27,8 @@
         {% block defaultData %}
             var defaultData = null;
         {% endblock %}
+
+        var transactionId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);});
 
         $("#form").alpaca({
             "data": defaultData,
@@ -66,6 +68,15 @@
                             "click": function () {
                                 // Somewhat elaborate procedure to turn the json into a string
                                 var value = this.getValue();
+                                if (value.files) {
+                                    for (var i = 0; i < value.files.length; i++) {
+                                        var file = value.files[i];
+                                        delete file.deleteUrl;
+                                        delete file.deleteType;
+                                        delete file.size;
+                                        file.transactionId = transactionId;
+                                    }
+                                }
                                 // Submit data by Ajax
                                 $.ajax({
                                     type: "POST",

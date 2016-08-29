@@ -5,8 +5,6 @@
     {{ super() }}
     <link type="text/css" rel="stylesheet"
           href={{ url_for('static', filename='lib/alpaca.min.css') }}/>
-    <link type="text/css" rel="stylesheet" media="screen"
-          href={{ url_for('static', filename='lib/bootstrap-datetimepicker.min.css') }}/>
     <link type="text/css" rel="stylesheet"
           href="{{ url_for('static', filename='lib/jquery_file_upload/css/jquery.fileupload.css') }}"/>
     <link type="text/css" rel="stylesheet"
@@ -96,7 +94,7 @@
                             "fileTypes": /(\.|\/)(gif|jpe?g|png)$/i,
                             "upload": {
                                 "formData": {
-                                    "path": transactionId
+                                    "transactionId": transactionId
                                 },
                                 "dataType": "json",
                                 "url": "{{url_for('upload_file')}}"
@@ -112,7 +110,33 @@
                         },
                         "buttons": {
                             "submit": {
-                                "value": "Submit"
+                                "value": "Submit",
+                                "click": function () {
+                                // Somewhat elaborate procedure to turn the json into a string
+                                var value = this.getValue();
+                                // Submit data by Ajax
+                                $.ajax({
+                                    type: "POST",
+                                    url: document.URL,
+                                    data: JSON.stringify(value),
+                                    contentType: 'application/json',
+                                    dataType: 'text',
+                                    beforeSend: function () {
+                                        console.log(JSON.stringify(value, null, "\t"));
+                                    },
+                                    success: function (result) {
+                                        console.log(result);
+                                        var htmlResult = toHTML(value);
+                                        $('.modal-body').html(htmlResult);
+                                        $('#myModal').modal();
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        $('.modal-body').html('Error: Your action could not be completed.');
+                                        $('#myModal').modal();
+                                        console.log("Error: " + errorThrown);
+                                    }
+                                });
+                            }
                             }
                         }
                     }

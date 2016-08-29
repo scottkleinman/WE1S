@@ -14,6 +14,14 @@
     {{ schemas.description('false') }},
     {{ schemas.title() }},
     {{ schemas.label() }},
+    "OCR": {
+        "type":"boolean",
+        "default": false
+    },
+    "rights": {
+        "title": "Rights",
+        "type":"string"
+    },
     "relationships": {
         "title": "Relationships",
         "type": "array",
@@ -33,15 +41,8 @@
             }
         }
     },
-    "OCR": {
-        "type":"boolean",
-        "default": false
-    },
-    "rights": {
-        "title": "Rights",
-        "type":"string"
-    },
-    {{ schemas.notes() }}
+    {{ schemas.notes() }},
+    {{ schemas.files('false') }}
 {% endblock %}
 
 {% block options_fields %}
@@ -63,10 +64,11 @@
         "rightLabel": "OCR",
         "default": false
     },
-    {{ options.path("/Publications/") }},
+    {{ options.path("/Corpus/") }},
     {{ options.description() }},
     {{ options.date() }},
-    {{ options.notes() }}
+    {{ options.notes() }},
+    {{ options.files() }}
 {% endblock %}
 
 {% block postRender %}

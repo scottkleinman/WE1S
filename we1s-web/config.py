@@ -2,7 +2,7 @@
 DEBUG = True
 
 UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'md', 'docx'}
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'md', 'docx', 'jpg'}
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 
 # Application threads. A common general assumption is

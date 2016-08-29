@@ -46,6 +46,14 @@
 }
 {% endmacro %}
 
+{% macro files(required) %}
+"files": {
+    "type": "array",
+    "title": "Files",
+    "required": {{ required }}
+}
+{% endmacro %}
+
 {% macro mimetype() %}
 "mimeType": {
     "title": "Mime type",

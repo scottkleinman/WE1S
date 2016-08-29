@@ -5,8 +5,16 @@
     {{ super() }}
     <link type="text/css" rel="stylesheet"
           href={{ url_for('static', filename='lib/alpaca.min.css') }}/>
-    <link type="text/css" rel="stylesheet" media="screen"
-          href={{ url_for('static', filename='lib/bootstrap-datetimepicker.min.css') }}/>
+    {% if use_date %}
+        <link type="text/css" rel="stylesheet" media="screen"
+              href={{ url_for('static', filename='lib/bootstrap-datetimepicker.min.css') }}/>
+    {% endif %}
+    {% if use_files %}
+        <link type="text/css" rel="stylesheet"
+              href="{{ url_for('static', filename='lib/jquery_file_upload/css/jquery.fileupload.css') }}"/>
+        <link type="text/css" rel="stylesheet"
+              href="{{ url_for('static', filename='lib/jquery_file_upload/css/jquery.fileupload-ui.css') }}"/>
+    {% endif %}
 {% endblock %}
 
 
@@ -38,15 +46,29 @@
 
 {% block scripts %}
     {{ super() }}
+    {% if use_date %}
+        <script type="text/javascript"
+                src={{ url_for('static', filename='lib/moment-with-locales.min.js') }}></script>
+        <script type="text/javascript"
+                src={{ url_for('static', filename='lib/bootstrap-datetimepicker.min.js') }}></script>
+    {% endif %}
+    {% if use_files %}
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='lib/jquery_file_upload/js/vendor/jquery.ui.widget.js') }}"></script>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='lib/jquery_file_upload/js/jquery.iframe-transport.js') }}"></script>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='lib/jquery_file_upload/js/jquery.fileupload.js') }}"></script>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='lib/jquery_file_upload/js/jquery.fileupload-process.js') }}"></script>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='lib/jquery_file_upload/js/jquery.fileupload-ui.js') }}"></script>
+    {% endif %}
     <script type="text/javascript"
             src="//cdn.ckeditor.com/4.5.10/full/ckeditor.js"></script>
     <script type="text/javascript"
             src={{ url_for('static', filename='lib/handlebars.min.js') }}></script>
     <script type="text/javascript"
             src={{ url_for('static', filename='lib/alpaca.min.js') }}></script>
-    <script type="text/javascript"
-            src={{ url_for('static', filename='lib/moment-with-locales.min.js') }}></script>
-    <script type="text/javascript"
-            src={{ url_for('static', filename='lib/bootstrap-datetimepicker.min.js') }}></script>
     {% include formfile %}
 {% endblock %}

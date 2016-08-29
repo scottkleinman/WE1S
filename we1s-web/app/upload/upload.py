@@ -42,9 +42,9 @@ def upload_file():
             return 'no file part', 400
         upfile = request.files['files_files[]']
 
-        if 'path' not in request.form:
+        if 'transactionId' not in request.form:
             return 'no transaction id', 400
-        transactionId = str(request.form['path'])
+        transactionId = str(request.form['transactionId'])
 
         # if user does not select file, browser also
         # submit a empty part without filename
