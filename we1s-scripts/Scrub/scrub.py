@@ -3,7 +3,8 @@ scrub.py
 v1.0 2015-05-02
 v1.1 2015-11-21 active property and stop word handling added
 v1.2 2016-07-14 Unicode error handling added
-v1.3 2016-07-19 Added functions to remove accents and replace curly quotes
+v1.3 2016-07-19 Added functions to remove accents and replace curly quotes. There are two 
+                options for curly quotes. Using ftfy will also normalise line breaks.
 scott.kleinman@csun.edu
 
 1.  Requires configuration in config.py file in same folder as scrub.py
@@ -11,12 +12,12 @@ scott.kleinman@csun.edu
 """
 
 __author__ = "Scott Kleinman"
-__copyright__ = "copyright 2015, The WE1S Project"
+__copyright__ = "copyright 2015-, The WE1S Project"
 __license__ = "GPL"
-__version__ = "1.0"
+__version__ = "1.3"
 __email__ = "scott.kleinman@csun.edu"
 
-import os, re, codecs
+import os, re, codecs, ftfy
 import unicodedata as ud
 from config import *
 iterations = len(options)
@@ -74,7 +75,9 @@ def scrub(text):
                     text = re.sub(find, replace, text)
 
     # Remove left and right (curly) quotation marks
-    text = text.replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u201c",'"').replace(u"\u201d", '"')
+    #text = text.replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u201c",'"').replace(u"\u201d", '"')
+    # ftfy may be more comprehensive than the above. It also normalises line breaks to "\n"
+    text = ftfy.fix_text(text, normalization='NFKC')
 
     # Remove accents
     text = remove_accents(text)
