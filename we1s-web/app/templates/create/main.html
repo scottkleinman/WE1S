@@ -45,7 +45,6 @@
 
 
 {% block scripts %}
-    {{ super() }}
     {% if use_date %}
         <script type="text/javascript"
                 src={{ url_for('static', filename='lib/moment-with-locales.min.js') }}></script>
