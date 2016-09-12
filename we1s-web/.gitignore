@@ -1,2 +1,2 @@
-instance/
+instance/config.py
 *.pyc

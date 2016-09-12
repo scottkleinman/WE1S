@@ -59,7 +59,7 @@ def upload_file():
     return render_template("upload/upload.html")
 
 
-@app.route("/upload/<transactionId>/<filename>", methods=["DELETE"])
+@app.route("/upload/<string:transactionId>/<string:filename>", methods=["DELETE"])
 def delete_file(transactionId, filename):
     if len(filename) < 1 or len(transactionId) < 1 or not allowed_file(filename):
         return 'Forbidden', 403

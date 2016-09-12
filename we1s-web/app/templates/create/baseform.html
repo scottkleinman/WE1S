@@ -94,7 +94,7 @@
                                         $('#myModal').modal();
                                     },
                                     error: function (jqXHR, textStatus, errorThrown) {
-                                        $('.modal-body').html('Error: Your action could not be completed.');
+                                        $('.modal-body').html('Error: Your action could not be completed.\n' + jqXHR.responseText);
                                         $('#myModal').modal();
                                         console.log("Error: " + errorThrown);
                                     }

@@ -1,0 +1,10 @@
+# Statement for enabling the development environment
+DEBUG = True
+HOSTNAME = '0.0.0.0'
+PORT = 8081
+
+# Define the database we are working with
+MONGODB_HOST = "hostname"
+MONGODB_NAME = "dbname"
+MONGODB_URI = "uri"
+MONGODB_PORT = 23435

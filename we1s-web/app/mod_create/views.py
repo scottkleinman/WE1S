@@ -1,6 +1,7 @@
 import os
 import shutil
 
+from bson import Binary
 from flask import abort, Blueprint, render_template, request
 
 from app import db, app
@@ -17,12 +18,18 @@ def trim_json(json):
             for i in range(len(value)):
                 value[i] = trim_json(value[i])
             json[key] = value
-        elif isinstance(value, str):
+        elif isinstance(value, basestring):
             json[key] = value.strip(' \t')
     return json
 
 
-def save_files(json):
+def process_files(json):
+    files = json['files']
+    for f in files:
+        path = os.path.join(app.config['UPLOAD_FOLDER'], f['transactionId'], f['name'])
+        content = open(path, 'rb').read()
+        f.update({'content': Binary(content), 'path': json['path'] + ',' + f['name']})
+        db.Corpus.insert_one(f)
     return json
 
 
@@ -33,14 +40,15 @@ def clean_up_fs(json):
         path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file['transactionId'])
         if os.path.exists(path):
             shutil.rmtree(path)
+    del json['files']
 
 
 def write_to_db(json, collection):
     json = trim_json(json)
-    if 'files' in json:
-        json = save_files(json)
-        clean_up_fs(json)
     json['path'] = json['path'].replace('/', ',')
+    if 'files' in json:
+        json = process_files(json)
+        clean_up_fs(json)
     db[collection].update_one({'_id': json['_id']}, {'$set': json}, upsert=True)
 
 
@@ -55,8 +63,7 @@ def create_publication():
         try:
             write_to_db(request.get_json(), 'Publications')
             return 'OK', 200
-        except Exception as e:
-            print e
+        except Exception:
             abort(500)
     return render_template('create/main.html',
                            formname='Publications Manifest Form',
@@ -86,7 +93,10 @@ def create_raw_data():
         try:
             write_to_db(request.get_json(), 'Corpus')
             return 'OK', 200
-        except Exception:
+        except IOError:
+            return 'Failed to locate file', 500
+        except Exception as err:
+            print err
             abort(500)
     return render_template('create/main.html',
                            formname='Raw Data Manifest Form',

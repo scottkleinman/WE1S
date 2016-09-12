@@ -1,6 +1,3 @@
-# Statement for enabling the development environment
-DEBUG = True
-
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'md', 'docx', 'jpg'}
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024
