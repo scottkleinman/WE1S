@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 
-
 {% block styles %}
     <style type="text/css">
         .padded-row {
@@ -10,8 +9,27 @@
     </style>
 {% endblock %}
 
+{% block headscripts %}
+<script>
+$(document).ready(function() {
+    $("#delete").click(function() {
+        bootbox.confirm({ 
+            size: 'small',
+            message: "Are you sure you wish to delete this publication?", 
+            callback: function(result) {
+                if (result) {
+                    // Confirmed. Delete the publication
+                    alert("The delete function has not yet been hooked up to the database.");
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
 
 {% block content %}
+    <div id="example" style="display:none;"></div>
     <div class="jumbotron" style="padding: 10px;">
     <div class="row padded-row">
     <div class="col-md-12">
@@ -30,7 +48,7 @@
                     <button type="button" title="Edit" class="btn btn-default" onclick="alert('I don\'t work yet!');">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </button>
-                    <button type="button" title="Delete" class="btn btn-default" onclick="alert('I don\'t work yet!');">
+                    <button type="button" title="Delete" class="btn btn-default" id="delete">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
                     <button type="button" title="Export Manifest" class="btn btn-default" onclick="alert('I don\'t work yet!');">
