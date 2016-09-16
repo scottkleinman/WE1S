@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+
+{% block styles %}
+    <style type="text/css">
+        .padded-row {
+            padding: 5px;
+            margin: 5px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div class="jumbotron" style="padding: 10px;">
+    <div class="row padded-row">
+    <div class="col-md-12">
+        <h2>Publications</h2>
+        <br>
+        <table class="table table-striped table-hover">
+            <theader>
+                <th>Publication</th>
+                <th>Actions</th>
+            </theader>
+            <tbody>
+            {% for item in publicationList %}
+            <tr>
+                <td>{{ item|safe }}</td>
+                <td width="150">
+                    <button type="button" title="Edit" class="btn btn-default" onclick="alert('I don\'t work yet!');">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button type="button" title="Delete" class="btn btn-default" onclick="alert('I don\'t work yet!');">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                    <button type="button" title="Export Manifest" class="btn btn-default" onclick="alert('I don\'t work yet!');">
+                        <span class="glyphicon glyphicon-download"></span>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <div class="row padded-row">
+    <div class="col-md-12">
+        <h4>Notes:</h4>
+        <p>The list of publications will quickly get too long for the screen, so it is 
+        probably a good idea to paginate the table. I have had good luck using 
+        <a href="https://datatables.net/" target="_blank">DataTables</a> for this in 
+        the past, although the API becomes a little complicated when you are doing 
+        server-side pagination. There may be a solution with lower overhead.</p>
+    </div>
+    </div>
+
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $("#help").click(function () {
+                html = '<p>Publications contains a list of all publications in the database. .';
+                $('#myModal .modal-title').html("<h3>Publications Help</h3>");
+                $('#myModal .modal-body').html(html);
+                $('#myModal').modal();
+            });
+        });
+    </script>
+{% endblock %}

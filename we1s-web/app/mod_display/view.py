@@ -5,6 +5,17 @@ from flask import send_file
 
 from app import app, db
 
+@app.route('/display/publications')
+def display_publications():
+	try:
+		publications = db.Publications
+		publicationList = []
+		for item in publications.find():
+			publicationList.append(item['publication'])
+		return render_template('display/publications.html', publicationList=publicationList)
+	except Exception:
+		abort(500)
+ 
 @app.route('/display/rawdata/<name>')
 def display_raw_data(name):
     d = db.Corpus.find_one({'name': name})
