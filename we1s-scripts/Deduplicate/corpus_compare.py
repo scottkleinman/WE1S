@@ -18,6 +18,7 @@ v1.2 2015-11-15 parsing defaults and bug fixes
 v1.3 2016-07-20 rework sequence similarity, refactor
 v1.4 2016-07-21 generator without passing resultwriter, renaming
 v1.5 2016-07-22 refactor, timing, speed optimizations
+v1.6 2016-10-06 clean up for release
 """
 
 #pylint: disable=line-too-long
@@ -34,16 +35,13 @@ from argparse import RawDescriptionHelpFormatter
 import logging
 ## time the script
 from datetime import datetime
-# from timeit import default_timer as timer ## http://stackoverflow.com/questions/7370801/measure-time-elapsed-in-python
 ## file handling, matching, writing
 import os
-# import errno
 import fnmatch
 import csv
 ## working with lists and indexes
 import itertools
 import operator
-# from operator import itemgetter
 ## comparing files and strings
 import difflib
 import filecmp
@@ -57,7 +55,7 @@ import numpy as np
 __author__ = "Jeremy Douglass"
 __copyright__ = "copyright 2016, The WE1S Project"
 __license__ = "GPL"
-__version__ = "1.5"
+__version__ = "1.6"
 __email__ = "jeremydouglass@gmail.com"
 
 ## LOGGING
@@ -74,11 +72,6 @@ def comp_fnames_file_equality(fname1, fname2):
 
     Equality = True/False.
     Uses filecmp byte-comparison (more efficient than md5).
-
-    NOTES:
-    http://stackoverflow.com/questions/4283639/check-files-for-equality
-    http://stackoverflow.com/questions/1072569/see-if-two-files-have-the-same-content-in-python
-    http://stackoverflow.com/questions/23192359/why-is-filecmp-cmp-slow-for-huge-files-even-when-its-shallow-parameter-is-true
     """
     equality = filecmp.cmp(fname1, fname2, shallow=True)
     if equality is True: ## if os.stat seems the same...
@@ -93,12 +86,12 @@ def comp_strs_jaccard_similarity(str1, str2):
     Similarity = shared terms / all terms.
 
     NOTES:
-    -  Could speed up an implementation? http://www.nltk.org/_modules/nltk/metrics/distance.html
-    -  Could compute on tf-idf matrix, rather than as pairs? http://stackoverflow.com/questions/32805916/compute-jaccard-distances-on-sparse-matrix
+    -  Could speed up an implementation?
+    -  Could compute on tf-idf matrix, rather than as pairs?
     """
     set1 = set(str1.split())
     set2 = set(str2.split())
-    similarity = float(len(set1.intersection(set2))*1.0/len(set1.union(set2))) # similarity [0,1], 1 = exact replica.
+    similarity = float(len(set1.intersection(set2))*1.0/len(set1.union(set2))) ## similarity [0,1], 1 = exact replica.
     similarity = round(similarity, 2)
     return similarity
 
@@ -160,14 +153,12 @@ def fnamelist_to_fsizes(fname_list):
 
     NOTE:
     Could create a simple sorted list wihtout the size tuple (computing os.stat as the key)
-    however the comparison function needs the sizes to compare only files which are the same size.
-    https://wiki.python.org/moin/HowTo/Sorting
-    http://stackoverflow.com/questions/5575706/i-want-to-use-python-to-list-a-directory-then-sort-the-filenames-by-size
+    however the comparison function needs the sizes in order to compare only files which are the same size.
     """
     filesizes = []
     for fname in fname_list:
         filesizes.append((fname, (os.stat(fname).st_size)))
-    return sorted(filesizes, key=lambda filesizes: (filesizes[1], filesizes[0])) # sort by size then name
+    return sorted(filesizes, key=lambda filesizes: (filesizes[1], filesizes[0])) ## sort by size, then name
 
 def fnamelist_to_strgen(fname_list):
     """
@@ -177,7 +168,6 @@ def fnamelist_to_strgen(fname_list):
     NOTES:
     For processing large document collections with the tfidfvectorizer,
     a memory-efficient generator is necessary to yield file contents on-demand rather than loading them all at once.
-    http://stackoverflow.com/questions/16453855/tfidfvectorizer-for-corpus-that-cannot-fit-in-memory
     """
     for fname in fname_list:
         yield fname_to_fstr(fname)
@@ -267,7 +257,6 @@ def strs_diff_summary(str1, str2, diffitems=5, itemlength=10, joinstr='  '):
     """
     seqcomp = difflib.SequenceMatcher(lambda x: x == " ", str1, str2)  ## run on partial files (e.g. [0:512]) for increased speed
     seqdiff = []
-    # seqlen = diffitems*(1+itemlength) + (diffitems-1)*len(joinstr)
     codes = 0
     for tag, istart, istop, jstart, jstop in seqcomp.get_opcodes():
         if itemlength > 0: ## crop overlong items
@@ -354,17 +343,14 @@ def batch_equality_by_sizegroups(filelist, verbose=1):
     samesize_groups = []
     agroup = []
     lastsize = fsizes[0][1]  ## initialize size to avoid new group on first item
-    # sizelist = set()
     for fsize in fsizes:
         if fsize[1] == lastsize:  ## mismatched size means start a new group
             agroup.append(fsize[0])
         else:
             if len(agroup) > 1:
                 samesize_groups.append(agroup)
-                # sizelist.add((len(agroup), fsize[1]))
             agroup = [fsize[0]]
         lastsize = fsize[1]
-    # logger.info('Sizes found: {}'.format(sorted(sizelist, reverse=True)))
 
     for group in samesize_groups:
         if len(group) > 1:
@@ -380,7 +366,6 @@ def batch_fnamelist_comparer(filelist, threshold, verbose=1):
     2. Measures similarity for each top file pair
     3. Returns all results as a row list (e.g. for csv.writer)
     """
-    # count_hits = 0
     resultrow_list = []
     tfidf_pairs = strlist_to_tfidf_pairarray(fnamelist_to_strgen(filelist), 1)
 
@@ -392,7 +377,6 @@ def batch_fnamelist_comparer(filelist, threshold, verbose=1):
         maxindex, maxvalue = max(enumerate(row), key=operator.itemgetter(1))  ## Get the top match (for each array row, return column index and value of max cell)
         if maxvalue > threshold:  ## Print only high-value matches -- many are low or 0, and 100,000^2 is a huge result set. Calculate additional comparisons only on high-tf-idf matches.
             resultrow_list = []
-            # count_hits += 1
             ## file contents
             str1 = fname_to_fstr(filelist[idx])
             str2 = fname_to_fstr(filelist[maxindex])
@@ -402,8 +386,8 @@ def batch_fnamelist_comparer(filelist, threshold, verbose=1):
             resultrow_list += [comp_strs_jaccard_similarity(str1, str2)]  ## Jaccard is slow to compute and sensitive; it can helpfully disagree tf-idf on false-positives but misses too much on its own.
             resultrow_list += [filelist[idx]]
             resultrow_list += [filelist[maxindex]]
-            resultrow_list += [str_sampler(str1)[0]] # [str_sampler(str1, 2, 20)[0]]
-            resultrow_list += [str_sampler(str2)[0]] # [str_sampler(str2, 2, 20)[0]]
+            resultrow_list += [str_sampler(str1)[0]]
+            resultrow_list += [str_sampler(str2)[0]]
             yield resultrow_list
 
     if verbose == 1:
@@ -413,7 +397,6 @@ def main_logging():
     """
     Configure global logger.
     """
-    # logger = logging.getLogger() ## global
     logger.setLevel(logging.DEBUG)
     file_handler = logging.FileHandler('corpus_compare.log')
     file_handler.setLevel(logging.INFO)
@@ -436,8 +419,7 @@ def main(args):
     start_time = datetime.now().replace(microsecond=0)
     logger.info('Start time: {}'.format(start_time))
 
-    csvfile = open(args.outputfile, 'w') ## a/ab = add to existing csv, w/wb = write (clobber) new csv. a/w both py2 and py3 compatible:
-                                         ## http://stackoverflow.com/questions/34283178/typeerror-a-bytes-like-object-is-required-not-str-in-python-and-csv
+    csvfile = open(args.outputfile, 'w') ## a/ab = add to existing csv, w/wb = write (clobber) new csv. a/w both py2 and py3 compatible.
     resultwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     resultwriter.writerow(['identical', 'tf-idf', 'sequence', 'jaccard', 'file1', 'file2', 'str1', 'str2', datetime.now()])
 
@@ -450,22 +432,8 @@ def main(args):
         logger.info('  {} {} files found'.format(str(len(filelist)), args.filepattern))
         logger.info('  Est. batch time: {} comparisons in {} minutes\n'.format(str(len(filelist)^2), str(round((len(filelist)**2)/float(5250000), 1))))
 
-        ## Attempted to optimize by first detecting exact duplicates with batch_equality and removing from the filelist,
-        ## then batch processing the rest with batch_fnamelist_comparer. The process works, however:
-        ## With small numbers of exact duplicates this actually doubles processing time, e.g. instead of:
-        ##   1000 tfidf + 100 eq = 1100
-        ## ...instead:
-        ##   1000 eq + 990 tfidf = 1990 (bad)
-        ## eq isn't remotely efficient enough to make it worth it, even if we had a higher duplicate rate.
-        ##
-        # for row in batch_equality(filelist):
-        #     count_hits += 1
-        #     resultwriter.writerow(row)
-        #     logger.info(row)
-        #     logger.info('    fe removing {}'.format(row[4])) ## TEMP
-        #     filelist.remove(row[4])
-
         ## check for file equality; if equal write row and remove duplicates from filelist (to avoid redundant checks in future fuctions)
+
         count_hits = 0
         for row in batch_equality_by_sizegroups(filelist):
             count_hits += 1
@@ -477,18 +445,16 @@ def main(args):
                 logger.debug('  {0:<6} {1:30} {2:<6} {3} '.format('x', os.path.basename(row[4]), 'x', os.path.basename(row[5])))
                 filelist.remove(row[4])  ##     we can delete left-hand chained duplicates if right is already deleted,
                                          ##     as we will never re-encounter the original: no AB BA, nor AB BC CA.
-            # else:  ## ignore -- nothing to write, nothing to remove
-            #     logger.info('  {0:<6} {1:30} {2:<6} {3} '.format('*', os.path.basename(row[4]), '*', os.path.basename(row[5])))
-            if (count_hits % 100) == 0:     ## http://stackoverflow.com/questions/5628055/execute-statement-every-n-iterations-in-python
-                csvfile.flush()             ## http://stackoverflow.com/questions/3976711/csvwriter-not-saving-data-to-file-why
-                os.fsync(csvfile.fileno())  ##     http://stackoverflow.com/questions/3167494/how-often-does-python-flush-to-a-file
-                                            ##     ...although it should be doing ~this anyway: print(io.DEFAULT_BUFFER_SIZE) returns 8192
+            if (count_hits % 100) == 0:
+                csvfile.flush()
+                os.fsync(csvfile.fileno()) ##   ...although it should be doing ~this anyway: print(io.DEFAULT_BUFFER_SIZE) returns 8192
                 logger.debug('  ...{} duplicates...\n'.format(count_hits))
 
         count_total_hits += count_hits
         logger.info('  {} duplicate pairs {} ( file equality )\n'.format(str(count_hits), args.filepattern))
 
         ## check remaining files for multiple similarity metrics
+
         count_hits = 0
         for row in batch_fnamelist_comparer(filelist, args.threshold):
             count_hits += 1
@@ -513,7 +479,6 @@ def main(args):
 if __name__ == '__main__':
 
     ## COMMAND LINE ARGUMENT PARSING
-    # http://stackoverflow.com/questions/27957373/python-import-and-initalize-argparse-after-if-name-main
 
     PARSER = argparse.ArgumentParser(description='Duplicate file scanner. Generates an outputfile of comparisons; optionally copies unique files to a new directory. Developed for near-match newspaper articles, for the WE1S project.\nNOTE: file comparison is pairwise (quadratic), so --mergepaths may produce large arrays and long run times.', epilog='EXAMPLE:\n  corpus_compare.py -i ./data/ -f "*.txt" -t 0.90 -o ./corpus_compare-args.csv\n \n', formatter_class=RawDescriptionHelpFormatter)
     PARSER.add_argument('-i', '--inputpaths', nargs='*', default=['./'], help='input source paths for files to compare, default is current directory')   ## e.g.  ['./'] ... or ['./data1/', './data2/']
