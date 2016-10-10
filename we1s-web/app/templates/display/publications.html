@@ -10,6 +10,8 @@
 {% endblock %}
 
 {% block headscripts %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
 <script>
 $(document).ready(function() {
     $("#delete").click(function() {
@@ -24,6 +26,14 @@ $(document).ready(function() {
             }
         });
     });
+
+    $('#publicationTable').dataTable({
+        "columnDefs" : [{
+            orderable: false,
+            targets: -1 // The last column
+        }]
+    });
+
 });
 </script>
 {% endblock %}
@@ -34,11 +44,11 @@ $(document).ready(function() {
     <div class="col-md-12">
         <h2>Publications</h2>
         <br>
-        <table class="table table-striped table-hover">
-            <theader>
+        <table id="publicationTable" class="table table-striped table-hover">
+            <thead>
                 <th>Publication</th>
                 <th>Actions</th>
-            </theader>
+            </thead>
             <tbody>
             {% for item in publicationList %}
             <tr>
@@ -58,17 +68,6 @@ $(document).ready(function() {
             {% endfor %}
             </tbody>
         </table>
-    </div>
-    </div>
-
-    <div class="row padded-row">
-    <div class="col-md-12">
-        <h4>Notes:</h4>
-        <p>The list of publications will quickly get too long for the screen, so it is 
-        probably a good idea to paginate the table. I have had good luck using 
-        <a href="https://datatables.net/" target="_blank">DataTables</a> for this in 
-        the past, although the API becomes a little complicated when you are doing 
-        server-side pagination. There may be a solution with lower overhead.</p>
     </div>
     </div>
 
