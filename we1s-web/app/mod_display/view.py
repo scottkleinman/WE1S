@@ -1,4 +1,4 @@
-import io, mimetypes
+import io, mimetypes, json
 
 from flask import render_template, send_file, abort, request, jsonify, Response
 
@@ -38,7 +38,7 @@ def export():
 	if '_id' in request.form:
 		pub_id = request.form.get('_id')
 		pub = db.Publications.find_one({'_id': pub_id})
-		return Response(str(pub),
+		return Response(json.dumps(pub),
 			 mimetype='application/json',
 			 headers={'Content-Disposition': 'attachment;filename={}.json'.format(pub_id)})
 	return ''
