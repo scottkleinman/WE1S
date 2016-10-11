@@ -14,14 +14,18 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
 <script>
 $(document).ready(function() {
-    $("#delete").click(function() {
+    $(document).on('click', '#delete', function() {
+        let that = this;
         bootbox.confirm({ 
             size: 'small',
             message: "Are you sure you wish to delete this publication?", 
             callback: function(result) {
                 if (result) {
                     // Confirmed. Delete the publication
-                    alert("The delete function has not yet been hooked up to the database.");
+                    let delete_post = {_id:$(that).closest('tr').attr('id')};
+                    $.post('/display/publications/delete', delete_post, function(){
+                        location.reload();
+                    });
                 }
             }
         });
@@ -51,8 +55,8 @@ $(document).ready(function() {
             </thead>
             <tbody>
             {% for item in publicationList %}
-            <tr>
-                <td>{{ item|safe }}</td>
+            <tr id="{{ item._id }}">
+                <td>{{ item.publication|safe }}</td>
                 <td width="150">
                     <button type="button" title="Edit" class="btn btn-default" onclick="alert('I don\'t work yet!');">
                         <span class="glyphicon glyphicon-pencil"></span>

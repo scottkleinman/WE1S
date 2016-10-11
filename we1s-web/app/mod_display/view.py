@@ -1,7 +1,6 @@
 import io, mimetypes
 
-from flask import render_template
-from flask import send_file
+from flask import render_template, send_file, abort, request
 
 from app import app, db
 
@@ -11,7 +10,7 @@ def display_publications():
 		publications = db.Publications
 		publicationList = []
 		for item in publications.find():
-			publicationList.append(item['publication'])
+			publicationList.append(item)
 		return render_template('display/publications.html', publicationList=publicationList)
 	except Exception:
 		abort(500)
@@ -23,3 +22,12 @@ def display_raw_data(name):
     if d:
         return send_file(io.BytesIO(d['content']), mimetype=mimetype)
     return render_template('404.html'), 404
+
+@app.route('/display/publications/delete', methods=['POST'])
+def delete():
+	print request.form
+	if '_id' in request.form:
+		pub_id = request.form.get('_id')
+		db.Publications.delete_one({'_id':pub_id})
+	return ''
+
