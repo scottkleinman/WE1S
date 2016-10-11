@@ -31,6 +31,14 @@ $(document).ready(function() {
         });
     });
 
+    $(document).on('click', '#export', function() {
+        // Kind of hacky, but theres no clean way to start a download from a post
+        let url = '/display/publications/export/';
+        var form = $('<form></form>').attr('action', url).attr('method', 'post');
+        form.append($("<input></input>").attr('type', 'hidden').attr('name', '_id').attr('value', $(this).closest('tr').attr('id')));
+        form.appendTo('body').submit().remove();
+    });
+
     $('#publicationTable').dataTable({
         "columnDefs" : [{
             orderable: false,
@@ -64,7 +72,7 @@ $(document).ready(function() {
                     <button type="button" title="Delete" class="btn btn-default" id="delete">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
-                    <button type="button" title="Export Manifest" class="btn btn-default" onclick="alert('I don\'t work yet!');">
+                    <button type="button" title="Export Manifest" class="btn btn-default" id="export">
                         <span class="glyphicon glyphicon-download"></span>
                     </button>
                 </td>

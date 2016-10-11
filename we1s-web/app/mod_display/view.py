@@ -1,6 +1,6 @@
 import io, mimetypes
 
-from flask import render_template, send_file, abort, request
+from flask import render_template, send_file, abort, request, jsonify, Response
 
 from app import app, db
 
@@ -31,3 +31,18 @@ def delete():
 		db.Publications.delete_one({'_id':pub_id})
 	return ''
 
+
+@app.route('/display/publications/export/', methods=['POST'])
+def export():
+	print request.form
+	if '_id' in request.form:
+		pub_id = request.form.get('_id')
+		pub = db.Publications.find_one({'_id': pub_id})
+		# pub_json = jsonify(pub)
+		# pub_json.headers['Content-Type'] = 'application/download'
+		# pub_json.headers['Content-Disposition'] = 'attachment;filename={}.json'.format(pub_id)
+		# return pub_json
+		return Response(str(pub),
+			 mimetype='application/json',
+			 headers={'Content-Disposition': 'attachment;filename={}.json'.format(pub_id)})
+	return ''
