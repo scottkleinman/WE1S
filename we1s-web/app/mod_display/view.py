@@ -1,4 +1,4 @@
-import io, mimetypes, json
+import io, mimetypes, json, traceback
 
 from flask import render_template, send_file, abort, request, jsonify, Response
 
@@ -12,7 +12,8 @@ def display_publications():
 		for item in publications.find():
 			publicationList.append(item)
 		return render_template('display/publications.html', publicationList=publicationList)
-	except Exception:
+	except Exception as e:
+		traceback.print_exc()
 		abort(500)
  
 @app.route('/display/rawdata/<name>')
