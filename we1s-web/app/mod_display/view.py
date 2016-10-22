@@ -1,5 +1,5 @@
 import io, mimetypes, json, traceback
-
+from pprint import pprint as pp
 from flask import render_template, send_file, abort, request, jsonify, Response
 
 from app import app, db
@@ -10,8 +10,15 @@ def display_publications():
 		publications = db.Publications
 		publicationList = []
 		for item in publications.find():
+			item['path'] = item['path'].replace(',','/')
 			publicationList.append(item)
-		return render_template('display/publications.html', publicationList=publicationList)
+		pp(publicationList)
+		# TODO: set defaults for each form using publicatoinList and jquery
+		return render_template('display/publications.html', publicationList=publicationList,
+							   formname='Publications Manifest Form',
+							   formfile='display/editpubform.html',
+							   use_date=True,
+							   use_files=False)
 	except Exception as e:
 		traceback.print_exc()
 		abort(500)
