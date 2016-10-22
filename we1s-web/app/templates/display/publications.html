@@ -102,12 +102,30 @@ $(document).ready(function() {
     });
 
 
-
+    // Documentation at http://www.gyrocode.com/articles/jquery-datatables-how-to-add-a-checkbox-column/
     $('#publicationTable').dataTable({
         "columnDefs" : [{
             orderable: false,
-            targets: -1 // The last column
+            searchable: false,
+            "className": "dt-body-center",
+            targets: [0, -1] // The last column
+        },
+        {
+            "targets": 0,
+            "render": function (data, type, full, meta){
+                 return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+              }            
         }]
+ /*       "columnDefs": [{
+             "targets": 0,
+             "searchable": false,
+             "orderable": false,
+             "className": "dt-body-center",
+             "render": function (data, type, full, meta){
+                 return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+              }
+        }]*/
+
     });
 
 });
@@ -155,14 +173,16 @@ $(document).ready(function() {
         <br>
         <table id="publicationTable" class="table table-striped table-hover">
             <thead>
+                <th><input name="select_all" value="1" id="example-select-all" type="checkbox"></th>
                 <th>Publication</th>
                 <th>Actions</th>
             </thead>
             <tbody>
             {% for item in publicationList %}
             <tr id="{{ item._id }}">
-                <td>{{ item.publication|safe }}</td>
-                <td width="150">
+                <td style="vertical-align:middle;"></td>
+                <td style="vertical-align:middle;">{{ item.publication|safe }}</td>
+                <td width="150" style="vertical-align:middle;">
                     <button type="button" title="Edit" class="btn btn-default" id="edit">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </button>
