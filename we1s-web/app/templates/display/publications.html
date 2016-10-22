@@ -105,27 +105,19 @@ $(document).ready(function() {
     // Documentation at http://www.gyrocode.com/articles/jquery-datatables-how-to-add-a-checkbox-column/
     $('#publicationTable').dataTable({
         "columnDefs" : [{
-            orderable: false,
-            searchable: false,
+            "orderable": false,
+            "searchable": false,
             "className": "dt-body-center",
-            targets: [0, -1] // The last column
+            "targets": -1 // The last column
         },
         {
             "targets": 0,
+            "orderable": false,
+            "searchable": false,
             "render": function (data, type, full, meta){
                  return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
               }            
         }]
- /*       "columnDefs": [{
-             "targets": 0,
-             "searchable": false,
-             "orderable": false,
-             "className": "dt-body-center",
-             "render": function (data, type, full, meta){
-                 return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
-              }
-        }]*/
-
     });
 
 });
