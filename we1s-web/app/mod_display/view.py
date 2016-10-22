@@ -46,7 +46,7 @@ def export():
 	if '_id' in request.form:
 		pub_id = request.form.get('_id')
 		pub = db.Publications.find_one({'_id': pub_id})
-		return Response(json.dumps(pub),
+		return Response(json.dumps(pub, indent=4),
 			 mimetype='application/json',
 			 headers={'Content-Disposition': 'attachment;filename={}.json'.format(pub_id)})
 	return ''
