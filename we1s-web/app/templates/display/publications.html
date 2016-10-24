@@ -117,6 +117,17 @@ $(document).ready(function() {
         //console.log('JSON: '+JSON.stringify(json));
     });
 
+    $('#batch-export').on('click', function(){
+        let selectedPubIds = table.$('input[type="checkbox"]').serialize().split("&").map(function(pub){return pub.split('=')[1]});
+        console.log(selectedPubIds)
+
+        let url = '/display/publications/multiexport/';
+        var form = $('<form></form>').attr('action', url).attr('method', 'post');
+        form.append($("<input></input>").attr('type', 'hidden').attr('name', '_ids').attr('value', JSON.stringify(selectedPubIds)));
+        form.appendTo('body').submit().remove();
+
+    });
+
 });
 </script>
      {% if use_date %}
@@ -153,6 +164,7 @@ $(document).ready(function() {
     <div class="row padded-row">
         <div class="col-md-12">
             <h2>Publications</h2>
+            <button class="btn btn-default" style="float:right;" id="batch-export">Export Selected</button>
             <br>
             <style type="text/css">
             td {vertical-align: middle !important;}

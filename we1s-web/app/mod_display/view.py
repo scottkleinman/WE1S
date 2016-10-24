@@ -29,7 +29,7 @@ def table_data():
 	loop_index = 0
 	for pub in db.Publications.find():
 		loop_index += 1
-		pub_row = [loop_index]
+		pub_row = [pub['_id']]
 		pub_row += [pub['publication']]
 		data_id = pub['_id']
 		pub_row += ['<button type="button" title="Edit" class="btn btn-default" id="edit" data-id="{0}"><span class="glyphicon glyphicon-pencil"></span></button><button type="button" title="Delete" class="btn btn-default" id="delete" data-id="{0}"><span class="glyphicon glyphicon-trash"></span></button><button type="button" title="Export Manifest" class="btn btn-default" id="export" data-id="{0}"><span class="glyphicon glyphicon-download"></span></button>'.format(data_id)]
@@ -55,11 +55,24 @@ def delete():
 
 @app.route('/display/publications/export/', methods=['POST'])
 def export():
-	print request.form
 	if '_id' in request.form:
 		pub_id = request.form.get('_id')
 		pub = db.Publications.find_one({'_id': pub_id})
 		return Response(json.dumps(pub, indent=4),
 			 mimetype='application/json',
 			 headers={'Content-Disposition': 'attachment;filename={}.json'.format(pub_id)})
+	return ''
+
+@app.route('/display/publications/multiexport/', methods=['POST'])
+def multiexport():
+	if '_ids' in request.form:
+		return_pubs = []
+		id_list = json.loads(request.form.get('_ids'))
+
+		for pub_id in id_list:
+			pub = db.Publications.find_one({'_id': pub_id})
+			return_pubs += [pub]
+		return Response(json.dumps(return_pubs, indent=4),
+			 mimetype='application/json',
+			 headers={'Content-Disposition': 'attachment;filename={}.json'.format('MultiExport')})
 	return ''
