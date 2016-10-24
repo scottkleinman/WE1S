@@ -53,9 +53,6 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.css"/>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
 <script>
-// Create the data rows -- NB. It may be preferable to do this by ajax
-var data = [{% for item in publicationList %}["{{ loop.index }}", '{{ item.publication|safe }}', '<button type="button" title="Edit" class="btn btn-default" id="edit" data-id="{{ item._id }}"><span class="glyphicon glyphicon-pencil"></span></button><button type="button" title="Delete" class="btn btn-default" id="delete" data-id="{{ item._id }}"><span class="glyphicon glyphicon-trash"></span></button><button type="button" title="Export Manifest" class="btn btn-default" id="export" data-id="{{ item._id }}"><span class="glyphicon glyphicon-download"></span></button>']{% if not loop.last %}, {% endif %}{% endfor %}];
-
 $(document).ready(function() {
     $(document).on('click', '#delete', function() {
         let that = this;
@@ -65,7 +62,7 @@ $(document).ready(function() {
             callback: function(result) {
                 if (result) {
                     // Confirmed. Delete the publication
-                    let delete_post = {_id:$(this).attr("data-id")};
+                    let delete_post = {_id:$(that).closest('tr').attr('id')};
                     $.post('/display/publications/delete', delete_post, function(){
                         location.reload();
                     });
@@ -75,21 +72,17 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '#export', function() {
-        // Kind of hacky, but there's no clean way to start a download from a post
-        // This could probably be switched to an ajax request, but I'm not sure much is gained [SK]
+        // Kind of hacky, but theres no clean way to start a download from a post
         let url = '/display/publications/export/';
         var form = $('<form></form>').attr('action', url).attr('method', 'post');
-        form.append($("<input></input>").attr('type', 'hidden').attr('name', '_id').attr('value', $(this).attr("data-id")));
+        form.append($("<input></input>").attr('type', 'hidden').attr('name', '_id').attr('value', $(this).closest('tr').attr('id')));
         form.appendTo('body').submit().remove();
     });
 
     $(document).on('click', '#edit', function() {
         // Get the modal
-        let pubId = $(this).attr("data-id");
-
-        /* We need to build the form by Ajax and create the modal dynamically */
-        
-        //console.log('myModal-'+pubId);
+        let pubId = $(this).closest('tr').attr('id');
+        console.log('myModal-'+pubId);
         var modal = document.getElementById('myModal-'+pubId);
 
         modal.style.display = "block";
@@ -108,62 +101,23 @@ $(document).ready(function() {
             modals[i].style.display = "none";
     });
 
-    config = {
-        "data": data,
-        "order": [[1, 'asc']],
-        "columnDefs": [{
+
+    // Documentation at http://www.gyrocode.com/articles/jquery-datatables-how-to-add-a-checkbox-column/
+    $('#publicationTable').dataTable({
+        "columnDefs" : [{
             "orderable": false,
             "searchable": false,
-            "className": "dt-right",
-            "targets": -1 // The last column           
+            "className": "dt-body-center",
+            "targets": -1 // The last column
         },
         {
             "targets": 0,
             "orderable": false,
             "searchable": false,
-            "className": "dt-center",
             "render": function (data, type, full, meta){
                  return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
               }            
         }]
-    }
-
-    var table = $('#publicationTable').DataTable(config);
-
-    // Documentation at http://www.gyrocode.com/articles/jquery-datatables-how-to-add-a-checkbox-column/
-   // Handle click on "Select all" control
-    $('#publicationTable-select-all').on('click', function() {
-        // Get all rows with search applied
-        var rows = table.rows({ 'search': 'applied' }).nodes();
-        // Check/uncheck checkboxes for all rows in the table
-        $('input[type="checkbox"]', rows).prop('checked', this.checked);
-        // Serialize the data in the table as a json object (client-side)
-        var data = table.$('input[type="checkbox"]').serialize().split("&");
-        var json = [];
-        for(var key in data) {
-            json.push({"id": data[key].split("=")[1]});
-        }
-        //console.log('JSON: '+JSON.stringify(json));
-    });
-
-    // Handle click on checkbox to set state of "Select all" control
-    $('#publicationTable tbody').on('change', 'input[type="checkbox"]', function(){
-        // If checkbox is not checked
-        if (!this.checked) {
-            var el = $('#publicationTable-select-all').get(0);
-            // If "Select all" control is checked and has 'indeterminate' property
-            if (el && el.checked && ('indeterminate' in el)) {
-            // Set visual state of "Select all" control as 'indeterminate'
-                el.indeterminate = true;
-            }
-        }
-        // Serialize the data in the table as a json object (client-side)
-        var data = table.$('input[type="checkbox"]').serialize().split("&");
-        var json = [];
-        for(var key in data) {
-            json.push({"id": data[key].split("=")[1]});
-        }
-        //console.log('JSON: '+JSON.stringify(json));
     });
 
 });
@@ -206,33 +160,45 @@ $(document).ready(function() {
 {% block content %}
     <div class="jumbotron" style="padding: 10px;">
     <div class="row padded-row">
-        <div class="col-md-12">
-            <h2>Publications</h2>
-            <br>
-            <style type="text/css">
-            td {vertical-align: middle !important;}
-            table {border: 1px solid #ccc !important;}
-            </style>
-            <table id="publicationTable" class="table table-striped table-hover">
-                <thead>
-                    <th width="50"><input name="select_all" value="1" id="publicationTable-select-all" type="checkbox"></th>
-                    <th>Publication</th>
-                    <th width="120">Actions</th>
-                </thead>
-            </table>
-        </div>
+    <div class="col-md-12">
+        <h2>Publications</h2>
+        <br>
+        <table id="publicationTable" class="table table-striped table-hover">
+            <thead>
+                <th><input name="select_all" value="1" id="example-select-all" type="checkbox"></th>
+                <th>Publication</th>
+                <th>Actions</th>
+            </thead>
+            <tbody>
+            {% for item in publicationList %}
+            <tr id="{{ item._id }}">
+                <td style="vertical-align:middle;"></td>
+                <td style="vertical-align:middle;">{{ item.publication|safe }}</td>
+                <td width="150" style="vertical-align:middle;">
+                    <button type="button" title="Edit" class="btn btn-default" id="edit">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <div id="myModal-{{ item._id }}" class="edit-modal">
+                        <div class="edit-modal-content">
+                          <span class="close-edit">x</span>
+                          <div class="form-{{ item._id }}"></div>
+                        </div>
+
+                    </div>
+                    <button type="button" title="Delete" class="btn btn-default" id="delete">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                    <button type="button" title="Export Manifest" class="btn btn-default" id="export">
+                        <span class="glyphicon glyphicon-download"></span>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-<!--
-// This will create a modal for every item, which is not what we want
-{% for item in publicationList %}    
-    <div id="myModal-{{ item._id }}" class="edit-modal">
-        <div class="edit-modal-content">
-          <span class="close-edit">x</span>
-          <div class="form-{{ item._id }}"></div>
-        </div>
     </div>
-{% endfor %}
--->
+
 {% endblock %}
 
 
