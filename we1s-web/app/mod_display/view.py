@@ -22,7 +22,21 @@ def display_publications():
 	except Exception as e:
 		traceback.print_exc()
 		abort(500)
- 
+
+@app.route('/display/publications/table')
+def table_data():
+	table_data = []
+	loop_index = 0
+	for pub in db.Publications.find():
+		loop_index += 1
+		pub_row = [loop_index]
+		pub_row += [pub['publication']]
+		data_id = pub['_id']
+		pub_row += ['<button type="button" title="Edit" class="btn btn-default" id="edit" data-id="{0}"><span class="glyphicon glyphicon-pencil"></span></button><button type="button" title="Delete" class="btn btn-default" id="delete" data-id="{0}"><span class="glyphicon glyphicon-trash"></span></button><button type="button" title="Export Manifest" class="btn btn-default" id="export" data-id="{0}"><span class="glyphicon glyphicon-download"></span></button>'.format(data_id)]
+		table_data += [pub_row]
+
+	return jsonify(table_data)
+
 @app.route('/display/rawdata/<name>')
 def display_raw_data(name):
     d = db.Corpus.find_one({'name': name})

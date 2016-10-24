@@ -20,13 +20,6 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.css"/>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
 <script>
-// Create the data rows -- NB. It may be preferable to do this by ajax
-var data = [{% for item in publicationList %}
-                ["{{ loop.index }}",
-                    '{{ item.publication|safe }}',
-                    '<button type="button" title="Edit" class="btn btn-default" id="edit" data-id="{{ item._id }}"><span class="glyphicon glyphicon-pencil"></span></button><button type="button" title="Delete" class="btn btn-default" id="delete" data-id="{{ item._id }}"><span class="glyphicon glyphicon-trash"></span></button><button type="button" title="Export Manifest" class="btn btn-default" id="export" data-id="{{ item._id }}"><span class="glyphicon glyphicon-download"></span></button>']
-                {% if not loop.last %}, {% endif %}
-            {% endfor %}];
 
 $(document).ready(function() {
     $(document).on('click', '#delete', function() {
@@ -65,28 +58,29 @@ $(document).ready(function() {
         }});
     });
 
-    config = {
-        "data": data,
-        "order": [[1, 'asc']],
-        "columnDefs": [{
-            "orderable": false,
-            "searchable": false,
-            "className": "dt-right",
-            "targets": -1 // The last column
-        },
-        {
-            "targets": 0,
-            "orderable": false,
-            "searchable": false,
-            "className": "dt-center",
-            "render": function (data, type, full, meta){
-                 return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
-              }
-        }]
-    }
+    $.ajax({url:'publications/table', success: function(data) {
+        config = {
+            "data": data,
+            "order": [[1, 'asc']],
+            "columnDefs": [{
+                "orderable": false,
+                "searchable": false,
+                "className": "dt-right",
+                "targets": -1 // The last column
+            },
+                {
+                    "targets": 0,
+                    "orderable": false,
+                    "searchable": false,
+                    "className": "dt-center",
+                    "render": function (data, type, full, meta) {
+                        return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                    }
+                }]
+        }
 
-    var table = $('#publicationTable').DataTable(config);
-
+        var table = $('#publicationTable').DataTable(config);
+    }});
     // Documentation at http://www.gyrocode.com/articles/jquery-datatables-how-to-add-a-checkbox-column/
    // Handle click on "Select all" control
     $('#publicationTable-select-all').on('click', function() {
