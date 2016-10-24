@@ -6,45 +6,12 @@
             padding: 5px;
             margin: 5px;
         }
-
-        /* The Modal (background) */
-        .edit-modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0,0,0); /* Fallback color */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-            z-index:99;
-        }
-
-        /* Modal Content/Box */
-        .edit-modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
-            border-radius: 8px;
-        }
-
-        /* The Close Button */
-        .close-edit {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close-edit:hover,
-        .close-edit:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+        .modal-dialog {
+            overflow-y: initial !important;
+    }
+        .modal-body {
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
         }
     </style>
 {% endblock %}
@@ -54,14 +21,19 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
 <script>
 // Create the data rows -- NB. It may be preferable to do this by ajax
-var data = [{% for item in publicationList %}["{{ loop.index }}", '{{ item.publication|safe }}', '<button type="button" title="Edit" class="btn btn-default" id="edit" data-id="{{ item._id }}"><span class="glyphicon glyphicon-pencil"></span></button><button type="button" title="Delete" class="btn btn-default" id="delete" data-id="{{ item._id }}"><span class="glyphicon glyphicon-trash"></span></button><button type="button" title="Export Manifest" class="btn btn-default" id="export" data-id="{{ item._id }}"><span class="glyphicon glyphicon-download"></span></button>']{% if not loop.last %}, {% endif %}{% endfor %}];
+var data = [{% for item in publicationList %}
+                ["{{ loop.index }}",
+                    '{{ item.publication|safe }}',
+                    '<button type="button" title="Edit" class="btn btn-default" id="edit" data-id="{{ item._id }}"><span class="glyphicon glyphicon-pencil"></span></button><button type="button" title="Delete" class="btn btn-default" id="delete" data-id="{{ item._id }}"><span class="glyphicon glyphicon-trash"></span></button><button type="button" title="Export Manifest" class="btn btn-default" id="export" data-id="{{ item._id }}"><span class="glyphicon glyphicon-download"></span></button>']
+                {% if not loop.last %}, {% endif %}
+            {% endfor %}];
 
 $(document).ready(function() {
     $(document).on('click', '#delete', function() {
         let that = this;
-        bootbox.confirm({ 
+        bootbox.confirm({
             size: 'small',
-            message: "Are you sure you wish to delete this publication?", 
+            message: "Are you sure you wish to delete this publication?",
             callback: function(result) {
                 if (result) {
                     // Confirmed. Delete the publication
@@ -84,22 +56,13 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '#edit', function() {
-        // Get the modal
+
+        $(".edit-form").empty()
         let pubId = $(this).attr("data-id");
-
-        /* We need to build the form by Ajax and create the modal dynamically */
-        
-        //console.log('myModal-'+pubId);
-        var modal = document.getElementById('myModal-'+pubId);
-
-        modal.style.display = "block";
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+        $('#editor-modal').modal('toggle');
+        $.ajax({url:"publications/export/", data:{'_id':pubId}, type:'POST', success: function(response){
+            renderEditForm(".edit-form",response);
+        }});
     });
 
     $(document).on('click', '.close-edit', function(){
@@ -115,7 +78,7 @@ $(document).ready(function() {
             "orderable": false,
             "searchable": false,
             "className": "dt-right",
-            "targets": -1 // The last column           
+            "targets": -1 // The last column
         },
         {
             "targets": 0,
@@ -124,7 +87,7 @@ $(document).ready(function() {
             "className": "dt-center",
             "render": function (data, type, full, meta){
                  return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
-              }            
+              }
         }]
     }
 
@@ -194,13 +157,7 @@ $(document).ready(function() {
             src={{ url_for('static', filename='lib/alpaca.min.js') }}></script>
 
     {% include formfile %}
-    <script>
-    $(document).ready(function() {
-    {% for pub in publicationList %}
-        renderEditForm(".form-{{ pub._id }}",{{ pub | tojson }});
-    {% endfor %}
-    });
-    </script>
+
 {% endblock %}
 
 {% block content %}
@@ -222,17 +179,16 @@ $(document).ready(function() {
             </table>
         </div>
     </div>
-<!--
-// This will create a modal for every item, which is not what we want
-{% for item in publicationList %}    
-    <div id="myModal-{{ item._id }}" class="edit-modal">
-        <div class="edit-modal-content">
-          <span class="close-edit">x</span>
-          <div class="form-{{ item._id }}"></div>
+
+    <div class="modal fade" id="editor-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="edit-form"></div>
+            </div>
         </div>
+      </div>
     </div>
-{% endfor %}
--->
 {% endblock %}
 
 

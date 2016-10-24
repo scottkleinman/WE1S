@@ -13,7 +13,7 @@ def display_publications():
 			item['path'] = item['path'].replace(',','/')
 			publicationList.append(item)
 		pp(publicationList)
-		# TODO: set defaults for each form using publicatoinList and jquery
+
 		return render_template('display/publications.html', publicationList=publicationList,
 							   formname='Publications Manifest Form',
 							   formfile='display/editpubform.html',
@@ -33,7 +33,6 @@ def display_raw_data(name):
 
 @app.route('/display/publications/delete', methods=['POST'])
 def delete():
-	print request.form
 	if '_id' in request.form:
 		pub_id = request.form.get('_id')
 		db.Publications.delete_one({'_id':pub_id})
