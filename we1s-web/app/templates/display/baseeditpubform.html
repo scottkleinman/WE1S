@@ -85,7 +85,7 @@
                                     },
                                     success: function (result) {
                                         console.log(result);
-                                        $(elem_selector).parent().parent().css('display','none');
+                                        $('#editor-modal').modal('toggle');
                                     },
                                     error: function (jqXHR, textStatus, errorThrown) {
                                         $('.modal-body').html('Error: Your action could not be completed.\n' + jqXHR.responseText);

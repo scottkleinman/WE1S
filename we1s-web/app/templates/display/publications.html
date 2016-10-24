@@ -56,19 +56,13 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '#edit', function() {
-
-        $(".edit-form").empty()
+        $(".edit-form").empty();
         let pubId = $(this).attr("data-id");
-        $('#editor-modal').modal('toggle');
+
         $.ajax({url:"publications/export/", data:{'_id':pubId}, type:'POST', success: function(response){
             renderEditForm(".edit-form",response);
+            $('#editor-modal').modal('toggle');
         }});
-    });
-
-    $(document).on('click', '.close-edit', function(){
-        let modals = document.getElementsByClassName('edit-modal');
-        for (var i=0; i < modals.length; i++)
-            modals[i].style.display = "none";
     });
 
     config = {
@@ -183,7 +177,7 @@ $(document).ready(function() {
     <div class="modal fade" id="editor-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-body">
+            <div class="modal-body" id="editor-modal-body">
                 <div class="edit-form"></div>
             </div>
         </div>
