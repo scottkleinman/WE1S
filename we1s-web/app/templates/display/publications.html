@@ -60,7 +60,7 @@ $(document).ready(function() {
 
     $.ajax({url:'publications/table', success: function(data) {
         config = {
-            "data": data,
+            "data": JSON.parse(data),
             "order": [[1, 'asc']],
             "columnDefs": [{
                 "orderable": false,
@@ -81,6 +81,7 @@ $(document).ready(function() {
 
         table = $('#publicationTable').DataTable(config);
     }});
+
     // Documentation at http://www.gyrocode.com/articles/jquery-datatables-how-to-add-a-checkbox-column/
    // Handle click on "Select all" control
     $('#publicationTable-select-all').on('click', function() {
@@ -127,6 +128,7 @@ $(document).ready(function() {
         form.appendTo('body').submit().remove();
 
     });
+    */
 
 });
 </script>
