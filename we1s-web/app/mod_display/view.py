@@ -76,3 +76,13 @@ def multiexport():
 			 mimetype='application/json',
 			 headers={'Content-Disposition': 'attachment;filename={}.json'.format('MultiExport')})
 	return ''
+
+@app.route('/display/publications/multidelete/', methods=['POST'])
+def multidelete():
+	if '_ids' in request.form:
+		return_pubs = []
+		id_list = json.loads(request.form.get('_ids'))
+
+		for pub_id in id_list:
+			db.Publications.delete_one({'_id':pub_id})
+	return ''
