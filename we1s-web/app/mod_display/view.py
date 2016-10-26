@@ -12,7 +12,7 @@ def display_publications():
 		for item in publications.find():
 			item['path'] = item['path'].replace(',','/')
 			publicationList.append(item)
-		pp(publicationList)
+		# pp(publicationList)
 
 		return render_template('display/publications.html', publicationList=publicationList,
 							   formname='Publications Manifest Form',
@@ -80,9 +80,8 @@ def multiexport():
 @app.route('/display/publications/multidelete/', methods=['POST'])
 def multidelete():
 	if '_ids' in request.form:
-		return_pubs = []
 		id_list = json.loads(request.form.get('_ids'))
-
+		print id_list
 		for pub_id in id_list:
 			db.Publications.delete_one({'_id':pub_id})
 	return ''

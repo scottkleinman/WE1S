@@ -178,13 +178,21 @@ $(document).ready(function() {
     });
 
     $('#batch-delete').on('click', function(){
-        let selectedPubIds = table.$('input[type="checkbox"]').serialize().split("&").map(function(pub){return pub.split('=')[1]});
-        //console.log(selectedPubIds)
-        let url = '/display/publications/multidelete/';
-        var form = $('<form></form>').attr('action', url).attr('method', 'post');
-        form.append($("<input></input>").attr('type', 'hidden').attr('name', '_ids').attr('value', JSON.stringify(selectedPubIds)));
-        form.appendTo('body').submit().remove();
-        location.reload(); // See note for single row delete
+        bootbox.confirm({
+            size: 'small',
+            message: "Are you sure you wish to delete these publications?",
+            callback: function(result) {
+                if (result) {
+                    // Confirmed. Delete the publication
+                    let selectedPubIds = table.$('input[type="checkbox"]').serialize().split("&").map(function(pub){return pub.split('=')[1]});
+                    let multidelete_post = {_ids:JSON.stringify(selectedPubIds)};
+                    $.post('/display/publications/multidelete/', multidelete_post, function(){
+                        /* Eventually, we should remove the row in the DOM and use DataTables draw() method */
+                        location.reload();
+                    });
+                }
+            }
+        });
     });
 
 
