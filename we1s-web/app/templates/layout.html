@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WhatEvery1Says</title>
+    <link rel="stylesheet" type="text/css"
+          href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='css/styles.css') }}"/>
+    {% block styles %}{% endblock %}
+    <script type="text/javascript"
+            src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='lib/bootbox.min.js') }}"></script>
+    {% block headscripts %}{% endblock %}
+</head>
+
+<body>
+
+{% include "navbar.html" %}
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+<footer>
+    © 2015
+    <a href="http://4humanities.org/" target="_blank">4Humanities</a>
+    <a href="http://4humanities.org/category/whatevery1says/" target="_blank">WhatEvery1Says Research Group</a>
+    ·
+    <br>
+    This site is licensed under the <a href="http://opensource.org/licenses/MIT">MIT License</a>.
+</footer>
+
+<script type="text/javascript"
+            src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h2>WhatEvery1Says Demo</h2>
+        <p align="center">This is the demo website for managing WhatEvery1Says manifests.</p>
+        <h3>To Do:</h3>
+        <ol>
+            <li>Authors and notes store sequence order implicitly as Javascript arrays (and Python lists in processing).
+                In order to enable explicit storage of sequence order, they need to be converted to objects
+                (dictionaries) for storage in the database and an option to save explicit sequencing needs to be added
+                to the form.
+            </li>
+        </ol>
+        <h3>To Do for Collections:</h3>
+        <ol>
+            <li>Although forms are available for each of the Collection node types link to forms, the forms may not
+                accurately reflect the schema (they're mostly place-holders). Only the Collection type will save
+                accurately to the database.
+            </li>
+            <li>The Record node type is for editing individual file manifests. It doesn't really make sense without an
+                accompanying file upload function in the form.
+            </li>
+        </ol>
+        <h3>Other:</h3>
+        <ol>
+            <li>There needs to be a bulk file upload function.</li>
+        </ol>
+    </div>
+{% endblock %}

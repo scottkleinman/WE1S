@@ -1,0 +1,145 @@
+{% extends "layout.html" %}
+
+
+{% block styles %}
+    <link type="text/css" rel="stylesheet"
+          href={{ url_for('static', filename='lib/alpaca.min.css') }}/>
+    <link type="text/css" rel="stylesheet"
+          href="{{ url_for('static', filename='lib/jquery_file_upload/css/jquery.fileupload.css') }}"/>
+    <link type="text/css" rel="stylesheet"
+          href="{{ url_for('static', filename='lib/jquery_file_upload/css/jquery.fileupload-ui.css') }}"/>
+{% endblock %}
+
+
+{% block content %}
+    <div class="jumbotron"><h2>WhatEvery1Says {{ formname }}</h2>
+        <p>
+            <a class="btn btn-primary btn-lg" role="button" onclick="resetForm()">Reset Form</a>
+        </p>
+        <div id="form"></div>
+    </div>
+    <!-- Modal Containing Response to Database Query -->
+    <div id="myModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title" id="myModalLabel">Data Saved to MongoDB</h3>
+                </div>
+                <div class="modal-body" style="margin-top:10px;">
+                    {{ msg }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script type="text/javascript"
+            src="//cdn.ckeditor.com/4.5.10/full/ckeditor.js"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='lib/jquery_file_upload/js/vendor/jquery.ui.widget.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='lib/jquery_file_upload/js/jquery.iframe-transport.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='lib/jquery_file_upload/js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='lib/jquery_file_upload/js/jquery.fileupload-process.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='lib/jquery_file_upload/js/jquery.fileupload-ui.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='lib/handlebars.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='lib/alpaca.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='lib/moment-with-locales.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='lib/bootstrap-datetimepicker.min.js') }}"></script>
+
+    {#    {% include formfile %}#}
+    <script>
+        $(document).ready(function () {
+            var transactionId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);});
+            // Initialise Alpaca form
+            $("#form").alpaca({
+                "view": "bootstrap-create",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "title": {
+                            "type": "string",
+                            "title": "Title",
+                            "required": false
+                        },
+                        "files": {
+                            "type": "array",
+                            "title": "Files",
+                            "required": true
+                        }
+                    }
+                },
+                "options": {
+                    "fields": {
+                        "files": {
+                            "type": "upload",
+                            "multiple": true,
+                            "maxFileSize": 25000000,
+                            "maxNumberOfFiles": 10,
+                            "showUploadPreview": false,
+                            "fileTypes": /(\.|\/)(gif|jpe?g|png)$/i,
+                            "upload": {
+                                "formData": {
+                                    "transactionId": transactionId
+                                },
+                                "dataType": "json",
+                                "url": "{{url_for('upload_file')}}"
+                            }
+                        }
+                    },
+                    "focus": true,
+                    "form": {
+                        "attributes": {
+                            "method": "POST",
+                            "action": "{{url_for('upload_file')}}",
+                            "enctype": "multipart/form-data"
+                        },
+                        "buttons": {
+                            "submit": {
+                                "value": "Submit",
+                                "click": function () {
+                                // Somewhat elaborate procedure to turn the json into a string
+                                var value = this.getValue();
+                                // Submit data by Ajax
+                                $.ajax({
+                                    type: "POST",
+                                    url: document.URL,
+                                    data: JSON.stringify(value),
+                                    contentType: 'application/json',
+                                    dataType: 'text',
+                                    beforeSend: function () {
+                                        console.log(JSON.stringify(value, null, "\t"));
+                                    },
+                                    success: function (result) {
+                                        console.log(result);
+                                        var htmlResult = toHTML(value);
+                                        $('.modal-body').html(htmlResult);
+                                        $('#myModal').modal();
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        $('.modal-body').html('Error: Your action could not be completed.');
+                                        $('#myModal').modal();
+                                        console.log("Error: " + errorThrown);
+                                    }
+                                });
+                            }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

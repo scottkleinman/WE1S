@@ -1,0 +1,76 @@
+{% extends 'create/baseform.html' %}
+{% import 'create/commonschemas.html' as schemas %}
+{% import 'create/commonoptions.html' as options %}
+
+{% block defaultData %}
+    var defaultData = {
+        "_id": "RawData",
+        "description": "bortaS <b>bIr</b> jablu’DI’ reH QaQqu’ nay’!",
+        "namespace": "WE1Sv1.0"
+    };
+{% endblock %}
+
+{% block schema %}
+    {{ schemas.description('false') }},
+    {{ schemas.title() }},
+    {{ schemas.label() }},
+    "OCR": {
+        "type":"boolean",
+        "default": false
+    },
+    "rights": {
+        "title": "Rights",
+        "type":"string"
+    },
+    "relationships": {
+        "title": "Relationships",
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "rType": {
+                    "default": "isPartOf",
+                    "schema": {
+                        "enum": ["isPartOf", "hasPart"],
+                    }
+                },
+                "rValue": {
+                    "title": "Relationship Value",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    {{ schemas.notes() }},
+    {{ schemas.files('false') }}
+{% endblock %}
+
+{% block options_fields %}
+    "relationships": {
+        "items": {
+            "fields": {
+                "rType": {
+                    "type": "select",
+                    "label": "Relationship Type",
+                    "dataSource": ["isPartOf", "hasPart"],
+                    "emptySelectFirst": true,
+                    "removeDefaultNone": true,
+                }
+            }
+        }
+    },
+    "OCR": {
+        "type": "checkbox",
+        "rightLabel": "OCR",
+        "default": false
+    },
+    {{ options.path("/Corpus/") }},
+    {{ options.description() }},
+    {{ options.date() }},
+    {{ options.notes() }},
+    {{ options.files() }}
+{% endblock %}
+
+{% block postRender %}
+
+{% endblock %}
