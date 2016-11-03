@@ -11,6 +11,8 @@ create = Blueprint('create', __name__,
 
 
 def trim_json(json):
+    if isinstance(json, unicode):
+        return json
     for key, value in json.iteritems():
         if isinstance(value, dict):
             json[key] = trim_json(value)
@@ -75,11 +77,9 @@ def create_publication():
 @create.route('/create/collection', methods=['GET', 'POST'])
 def create_collection():
     if request.method == 'POST':
-        try:
             write_to_db(request.get_json(), 'Corpus')
             return 'OK', 200
-        except Exception:
-            abort(500)
+
     return render_template('create/main.html',
                            formname='Collection Manifest Form',
                            formfile='create/collection.html',

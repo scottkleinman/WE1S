@@ -54,13 +54,13 @@
         // remove error styling
         "events": {
             "change": function () {
-                var p = $('input[name="publications"]').val();
-                p = p.replace(/The /g, "");
-                p = p.toLowerCase();
-                p = p.replace(/\s+/g, "_");
-                $('input[name="_id"]').val(p);
-                var idDiv = $("div").find('[data-alpaca-field-name="_id"]');
-                idDiv.removeClass("alpaca-required has-error alpaca-invalid");
+{#                var p = $('input[name="publications"]').val();#}
+{#                p = p.replace(/The /g, "");#}
+{#                p = p.toLowerCase();#}
+{#                p = p.replace(/\s+/g, "_");#}
+{#                $('input[name="_id"]').val(p);#}
+{#                var idDiv = $("div").find('[data-alpaca-field-name="_id"]');#}
+{#                idDiv.removeClass("alpaca-required has-error alpaca-invalid");#}
             }
         }
     },
