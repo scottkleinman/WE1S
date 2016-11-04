@@ -1,4 +1,4 @@
-import io, mimetypes, json, traceback
+import io, mimetypes, json, traceback, re
 from pprint import pprint as pp
 from flask import render_template, send_file, abort, request, jsonify, Response
 
@@ -23,14 +23,50 @@ def display_publications():
 		traceback.print_exc()
 		abort(500)
 
+
 @app.route('/display/publications/table')
-def table_data():
+def pub_table_data():
 	table_data = []
 	loop_index = 0
 	for pub in db.Publications.find():
 		loop_index += 1
 		pub_row = [pub['_id']]
 		pub_row += [pub['publication']]
+		data_id = pub['_id']
+		pub_row += ['<button type="button" title="Edit" class="btn btn-default" id="edit" data-id="{0}"><span class="glyphicon glyphicon-pencil"></span></button><button type="button" title="Delete" class="btn btn-default" id="delete" data-id="{0}"><span class="glyphicon glyphicon-trash"></span></button><button type="button" title="Export Manifest" class="btn btn-default" id="export" data-id="{0}"><span class="glyphicon glyphicon-download"></span></button>'.format(data_id)]
+		table_data += [pub_row]
+
+	return json.dumps(table_data)
+
+@app.route('/display/corpus')
+def display_corpus():
+	try:
+		corpus = db.Corpus
+		corpusList = []
+		for item in corpus.find():
+			item['path'] = item['path'].replace(',','/')
+			corpusList.append(item)
+		# pp(publicationList)
+
+		return render_template('display/abstract_display.html', publicationList=corpusList,
+							   item_name='corpus',
+							   collection_name='corpus',
+							   formname='Publications Manifest Form',
+							   formfile='display/editpubform.html',
+							   use_date=True,
+							   use_files=False)
+	except Exception as e:
+		traceback.print_exc()
+		abort(500)
+
+
+@app.route('/display/corpus/table')
+def corpus_table_data():
+	table_data = []
+	loop_index = 0
+	for pub in db.Corpus.find():
+		loop_index += 1
+		pub_row = [pub['_id'],pub['_id']]
 		data_id = pub['_id']
 		pub_row += ['<button type="button" title="Edit" class="btn btn-default" id="edit" data-id="{0}"><span class="glyphicon glyphicon-pencil"></span></button><button type="button" title="Delete" class="btn btn-default" id="delete" data-id="{0}"><span class="glyphicon glyphicon-trash"></span></button><button type="button" title="Export Manifest" class="btn btn-default" id="export" data-id="{0}"><span class="glyphicon glyphicon-download"></span></button>'.format(data_id)]
 		table_data += [pub_row]
@@ -45,43 +81,47 @@ def display_raw_data(name):
         return send_file(io.BytesIO(d['content']), mimetype=mimetype)
     return render_template('404.html'), 404
 
-@app.route('/display/publications/delete', methods=['POST'])
-def delete():
+
+@app.route('/display/<collection_name>/delete/', methods=['POST'])
+def delete(collection_name):
 	if '_id' in request.form:
-		pub_id = request.form.get('_id')
-		db.Publications.delete_one({'_id':pub_id})
+		doc_id = request.form.get('_id')
+		db[collection_name.capitalize()].delete_one({'_id':doc_id})
 	return ''
 
 
-@app.route('/display/publications/export/', methods=['POST'])
-def export():
+@app.route('/display/<collection_name>/export/', methods=['POST'])
+def export(collection_name):
 	if '_id' in request.form:
-		pub_id = request.form.get('_id')
-		pub = db.Publications.find_one({'_id': pub_id})
-		return Response(json.dumps(pub, indent=4),
+		doc_id = request.form.get('_id')
+		doc = db[collection_name.capitalize()].find_one({'_id': doc_id})
+		return Response(json.dumps(doc, indent=4),
 			 mimetype='application/json',
-			 headers={'Content-Disposition': 'attachment;filename={}.json'.format(pub_id)})
+			 headers={'Content-Disposition': 'attachment;filename={}.json'.format(doc_id)})
 	return ''
 
-@app.route('/display/publications/multiexport/', methods=['POST'])
-def multiexport():
+
+@app.route('/display/<collection_name>/multiexport/', methods=['POST'])
+def multiexport(collection_name):
 	if '_ids' in request.form:
-		return_pubs = []
+		return_docs = []
 		id_list = json.loads(request.form.get('_ids'))
 
-		for pub_id in id_list:
-			pub = db.Publications.find_one({'_id': pub_id})
-			return_pubs += [pub]
-		return Response(json.dumps(return_pubs, indent=4),
+		for doc_id in id_list:
+			doc = db[collection_name.capitalize()].find_one({'_id': doc_id})
+			return_docs += [doc]
+		return Response(json.dumps(return_docs, indent=4),
 			 mimetype='application/json',
 			 headers={'Content-Disposition': 'attachment;filename={}.json'.format('MultiExport')})
 	return ''
 
-@app.route('/display/publications/multidelete/', methods=['POST'])
-def multidelete():
+
+@app.route('/display/<collection_name>/multidelete/', methods=['POST'])
+def multidelete(collection_name):
 	if '_ids' in request.form:
 		id_list = json.loads(request.form.get('_ids'))
-		print id_list
-		for pub_id in id_list:
-			db.Publications.delete_one({'_id':pub_id})
+		for doc_id in id_list:
+			db[collection_name.capitalize()].delete_one({'_id':doc_id})
 	return ''
+
+
