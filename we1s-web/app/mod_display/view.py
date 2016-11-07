@@ -39,7 +39,7 @@ def pub_table_data():
 	return json.dumps(table_data)
 
 @app.route('/display/corpus')
-def display_corpus():
+def display_corpora():
 	try:
 		corpus = db.Corpus
 		corpusList = []
@@ -51,6 +51,7 @@ def display_corpus():
 		return render_template('display/abstract_display.html', publicationList=corpusList,
 							   item_name='corpus',
 							   collection_name='corpus',
+							   columns=['Corpus ID','Path'],
 							   formname='Publications Manifest Form',
 							   formfile='display/editpubform.html',
 							   use_date=True,
@@ -66,7 +67,7 @@ def corpus_table_data():
 	loop_index = 0
 	for pub in db.Corpus.find():
 		loop_index += 1
-		pub_row = [pub['_id'],pub['_id']]
+		pub_row = [pub['_id'],pub['_id'],pub['path']]
 		data_id = pub['_id']
 		pub_row += ['<button type="button" title="Edit" class="btn btn-default" id="edit" data-id="{0}"><span class="glyphicon glyphicon-pencil"></span></button><button type="button" title="Delete" class="btn btn-default" id="delete" data-id="{0}"><span class="glyphicon glyphicon-trash"></span></button><button type="button" title="Export Manifest" class="btn btn-default" id="export" data-id="{0}"><span class="glyphicon glyphicon-download"></span></button>'.format(data_id)]
 		table_data += [pub_row]

@@ -242,7 +242,9 @@ $(document).ready(function() {
             <table id="{{ item_name }}Table" class="table table-striped table-hover">
                 <thead>
                     <th width="50"><input name="select_all" value="1" id="{{ item_name }}Table-select-all" type="checkbox"></th>
-                    <th>{{ item_name | capitalize }}</th>
+                    {% for col in columns %}
+                        <th>{{ col }}</th>
+                    {% endfor %}
                     <th width="120">Actions</th>
                 </thead>
             </table>
