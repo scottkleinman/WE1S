@@ -99,21 +99,27 @@ $(document).ready(function() {
                 ]
             }],
             "columnDefs": [{
-                "orderable": false,
-                "searchable": false,
-                "className": "dt-right",
-                "targets": -1 // The last column
-            },
-                {
-                    "targets": 0,
-                    "orderable": false,
-                    "searchable": false,
-                    "className": "dt-center",
-                    "render": function (data, type, full, meta) {
-                        return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
-                    }
-                }]
-        }
+                                "orderable": false,
+                                "searchable": false,
+                                "className": "dt-right",
+                                "targets": -1 // The last column
+                            },
+                             {
+                                "targets": 0,
+                                "orderable": false,
+                                "searchable": false,
+                                "className": "dt-center",
+                                "render": function (data, type, full, meta) {
+                                    return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                                }
+                             },
+                            { "searchable": false, "targets": 1 },
+                            { "searchable": true, "targets": 2 } // Path column
+                            ],
+                            "search": {
+                                "regex": true
+                            }
+        };
 
         table = $('#{{ item_name }}Table').DataTable(config);
     }});
@@ -239,6 +245,7 @@ $(document).ready(function() {
             </style>
             <input type="hidden" id="batch-export">
             <input type="hidden" id="batch-delete">
+            <label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="corpusTable"></label>
             <table id="{{ item_name }}Table" class="table table-striped table-hover">
                 <thead>
                     <th width="50"><input name="select_all" value="1" id="{{ item_name }}Table-select-all" type="checkbox"></th>
