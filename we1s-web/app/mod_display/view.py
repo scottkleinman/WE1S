@@ -53,7 +53,7 @@ def display_corpora():
 							   collection_name='corpus',
 							   columns=['Corpus ID','Path'],
 							   formname='Publications Manifest Form',
-							   formfile='display/editpubform.html',
+							   formfile='display/editcollectionform.html',
 							   use_date=True,
 							   use_files=False)
 	except Exception as e:

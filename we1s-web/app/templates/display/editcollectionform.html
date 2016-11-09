@@ -1,0 +1,93 @@
+{% extends 'display/baseeditcolform.html' %}
+{% import 'create/commonschemas.html' as schemas %}
+{% import 'create/commonoptions.html' as options %}
+
+{#{% block defaultData %}#}
+{#    var today = moment().format('YYYY-MM-DD');#}
+{#    var defaultData = {#}
+{#        "description": "bortaS <b>bIr</b> jablu’DI’ reH QaQqu’ nay’!",#}
+{#        "namespace": "WE1Sv1.0",#}
+{#        "date": {#}
+{#            "start": today,#}
+{#            "end": today#}
+{#        }#}
+{#    };#}
+{#{% endblock %}#}
+
+{% block schema %}
+    {{ schemas.description('true') }},
+    {{ schemas.date() }},
+    {{ schemas.title() }},
+    {{ schemas.label() }},
+    "workstation": {
+        "type":"string",
+        "title": "Workstation"
+    },
+    "publications": {
+        "type":"array",
+        "title":"Publications",
+        "required": true
+    },
+    "collectors": {
+        "type":"array",
+        "title":"Collectors",
+        // Add "Collector Name" legend to subfields
+        "items": {
+            "title": "Collector Name",
+            "type": "string"
+        }
+    },
+    "queryTerms": {
+        "type":"array",
+        "title":"Query Terms"
+    },
+    "processes": {
+        "type":"array",
+        "title":"Processes"
+    },
+    {{ schemas.notes() }}
+{% endblock %}
+
+{% block options_fields %}
+    "publications": {
+        // On change, remove initial "The", replace whitespace with "_", send value to _id,
+        // remove error styling
+        "events": {
+            "change": function () {
+{#                var p = $('input[name="publications"]').val();#}
+{#                p = p.replace(/The /g, "");#}
+{#                p = p.toLowerCase();#}
+{#                p = p.replace(/\s+/g, "_");#}
+{#                $('input[name="_id"]').val(p);#}
+{#                var idDiv = $("div").find('[data-alpaca-field-name="_id"]');#}
+{#                idDiv.removeClass("alpaca-required has-error alpaca-invalid");#}
+            }
+        }
+    },
+    "collectors": {
+        // Change add button text to "Add Author"
+        "toolbar": {
+            "showLabels": true,
+            "actions": [
+                {"label": "Add Collector", "action": "add" }]
+        }
+    },
+    {{ options.path("/Corpus/") }},
+    {{ options.description() }},
+    {{ options.date() }},
+    {{ options.notes() }}
+{% endblock %}
+
+{% block postRender %}
+    "postRender": function (control) {
+        var start = control.childrenByPropertyId["date"].childrenByPropertyId["start"];
+        var end = control.childrenByPropertyId["date"].childrenByPropertyId["end"];
+        end.subscribe(start, function (val) {
+            var endDate = new Date($('input[name="date_end"]').val());
+            var startDate = new Date(val);
+            if (endDate < startDate) {
+                end.setValue(val);
+            }
+        });
+    }
+{% endblock %}

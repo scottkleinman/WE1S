@@ -1,0 +1,123 @@
+<script type="text/javascript">
+    function toHTML(json) {
+        var html = '<ul>';
+        for (var property in json) {
+            if (json.hasOwnProperty(property)) {
+                if (json[property] instanceof Array) {
+                    html += '<li><b>' + property + '</b>:<ul>';
+                    for (var i = 0; i < json[property].length; i++) {
+                        html += '<li>' + toHTML(json[property][i]) + '</li>';
+                    }
+                    html += '</ul></li>';
+                }
+                else if (typeof(json[property]) == 'object') {
+                    html += '<li><b>' + property + '</b>:' + toHTML(json[property]) + '</li>';
+                }
+                else if (typeof(json[property]) == 'string') {
+                    html += '<li><b>' + property + '</b>: ' + json[property].toString().trim() + '</li>';
+                }
+            }
+        }
+        return html + '</ul>';
+    }
+
+
+    function renderEditForm(elem_selector,defaultData) {
+        var today = moment().format('YYYY-MM-DD');
+        var transactionId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);});
+
+        $(elem_selector).alpaca({
+            "data": defaultData,
+            "schema": {
+                "title": "Edit Collection Manifest",
+                "type": "object",
+                "properties": {
+                    "namespace": {
+                        "enum": ["WE1Sv1.0"],
+                        "label": "namespace",
+                        "type": "string",
+                        "required": true
+                    },
+                    "_id": {
+                        "type": "string",
+                        "title": "_id",
+                        "required": true
+                    },
+                    "path": {
+                        "type": "string",
+                        "title": "Path",
+                        "required": true
+                    },
+                    {% block schema %}{% endblock %}
+                }
+            },
+            "options": {
+                "hideInitValidationError": true,
+                "form": {
+                    "attributes": {
+                        "action": "/create/collection",
+                        "method": "post"
+                    },
+                    "buttons": {
+                        "submit": {
+                            "title": "Submit",
+                            "click": function () {
+                                // Somewhat elaborate procedure to turn the json into a string
+                                var value = this.getValue();
+                                if (value.files) {
+                                    for (var i = 0; i < value.files.length; i++) {
+                                        var file = value.files[i];
+                                        delete file.deleteUrl;
+                                        delete file.deleteType;
+                                        delete file.size;
+                                        file.transactionId = transactionId;
+                                    }
+                                }
+                                // Submit data by Ajax
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/create/collection",
+                                    data: JSON.stringify(value),
+                                    contentType: 'application/json',
+                                    dataType: 'text',
+                                    beforeSend: function () {
+                                        console.log(JSON.stringify(value, null, "\t"));
+                                    },
+                                    success: function (result) {
+                                        console.log(result);
+                                        $('#editor-modal').modal('toggle');
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        $('.modal-body').html('Error: Your action could not be completed.\n' + jqXHR.responseText);
+                                        $('#myModal').modal();
+                                        console.log("Error: " + errorThrown);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                },
+                // Field configuration arrray
+                "fields": {
+                    "namespace": {
+                        "type": "select"
+                    },
+                    "_id": {
+                        // Remove initial 'The', replace space with "_"; remove error styling
+                        "onFieldKeyup": function (e) {
+                            var v = this.getValue();
+                            v = v.replace(/The /g, "");
+                            v = v.toLowerCase();
+                            v = v.replace(/\s+/g, "_");
+                            $('input[name="_id"]').val(v);
+                            var idDiv = $("div").find('[data-alpaca-field-name="_id"]');
+                            idDiv.removeClass("alpaca-required has-error alpaca-invalid");
+                        }
+                    },
+                    {% block options_fields %}{% endblock %}
+                } // End fields
+            },// End options
+            {%  block postRender %}{% endblock %}
+        });
+    }
+</script>
