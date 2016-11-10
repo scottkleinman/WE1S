@@ -222,8 +222,7 @@ $(document).ready(function() {
         <script type="text/javascript"
                 src="{{ url_for('static', filename='lib/jquery_file_upload/js/jquery.fileupload-ui.js') }}"></script>
     {% endif %}
-    <script type="text/javascript"
-            src="//cdn.ckeditor.com/4.5.10/full/ckeditor.js"></script>
+
     <script type="text/javascript"
             src={{ url_for('static', filename='lib/handlebars.min.js') }}></script>
     <script type="text/javascript"
@@ -245,7 +244,6 @@ $(document).ready(function() {
             </style>
             <input type="hidden" id="batch-export">
             <input type="hidden" id="batch-delete">
-            <label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="corpusTable"></label>
             <table id="{{ item_name }}Table" class="table table-striped table-hover">
                 <thead>
                     <th width="50"><input name="select_all" value="1" id="{{ item_name }}Table-select-all" type="checkbox"></th>
