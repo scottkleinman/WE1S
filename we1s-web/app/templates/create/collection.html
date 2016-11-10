@@ -80,6 +80,11 @@
 
 {% block postRender %}
     "postRender": function (control) {
+        // Hack to prepend the Publications label with a required star
+        var pubsDiv = $("div").find('[data-alpaca-field-name="publications"]');
+        var label = pubsDiv.children().first();
+        $('<span class="alpaca-icon-required glyphicon glyphicon-star"></span>').prependTo(label);
+
         var start = control.childrenByPropertyId["date"].childrenByPropertyId["start"];
         var end = control.childrenByPropertyId["date"].childrenByPropertyId["end"];
         end.subscribe(start, function (val) {
