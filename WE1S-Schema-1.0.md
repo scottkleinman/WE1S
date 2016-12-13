@@ -21,6 +21,7 @@ _Last Update: November 17, 2016_
 * [Processes](#processes)
 * [Step Manifests](#step-manifests)
 * [Scripts](#scripts)
+* [API](#API)
 
 
 ##Introduction
@@ -481,3 +482,538 @@ A typical tool manifest will look like this:
 ```
 
 In other words, scripts stored in the database will have paths, authors, dates of authorship, and the script code. External tools will have references and dates of access. A version number may not always be available, but a value like "unknown" can be used in such cases.
+
+##API
+
+The following is an incomplete alphabetical listing of the WE1S schema. It is a work in progress, but it may be useful for easy reference.
+ 
+###`_id`
+**Description:** The identifier of the manifest.
+**Type**: String
+**Scope:** Global (required)
+**Example:**
+```json
+{
+    "_id": "new_york_times"
+}
+```
+**Comments:**
+* `_id` values should be human readable wherever possible.
+* Although it is often desirable to have unique `_id` values, this is not required since the `_id` value is appended to the manifest's `path`. This allows for multiple manifests with the same `_id` to exist along different paths.
+**Related:**
+`path`
+
+###`altTitle`
+**Description:** Used when the publication is commonly known by a title other than the one given as the value of the `publication` property.
+**Type**: String
+**Scope:** `Publications`
+**Example:**
+```json
+{
+    "altTitle": "The Times"
+}
+```
+**Comments:**
+**Related:**
+`title`, `label`
+
+###`author`
+**Description:** An individual author of a publication.
+**Type**: Object
+**Scope:** `authors`
+**Example:**
+```json
+{
+    "authors": [
+        "author": {
+            "firstName": "Jane",
+            "lastName": "Doe"
+        }
+    ]
+}
+```
+**Comments:**
+* The `author` object contains a group of key-value pairs representing individual parts of a name for use in more precise queries. At present, the schema does not supply a controlled vocabulary to be used as keys.
+**Related:**
+`authors`, `group`
+
+###`authors`
+**Description:** A list of authors of a publication.
+**Type**: String
+**Scope:** `Publications`
+**Example:**
+```json
+{
+    "authors": ["Jane Doe", "John Smith"]
+}
+
+{
+    "authors": [
+        "author": {
+            "firstName": "Jane",
+            "lastName": "Doe"
+        }
+    ]
+}
+```
+**Comments:**
+* The list can consists of string values or objects containing the `author` or `group` properties.
+* In general, string values should be standard full representations of the name. It is expected that this information will be queried by regex. If more specific information is required for querying parts of names, an `author` object can be added.
+**Related:**
+`author`, `group`
+
+###`Collection`
+**Description:** A top-level node manifest describing a single collection.
+**Type**: Object
+**Scope:** n/a
+**Parameters:**
+| Name           | Type          | Optional |
+|----------------|---------------|----------|
+| `_id`          | String        | No       |
+| `collectors`   | Array         | No       |
+| `date`         | Array         | No       |
+| `description`  | String        | No       |
+| `namespace`    | String        | No       |
+| `path`         | String        | No       |
+| `publications` | Array         | No       |
+| `notes`        | Array         | Yes      |
+| `processes`    | Array         | Yes      |
+| `queryTerms`   | Array         | Yes      |
+| `workstation`  | String        | Yes      |
+
+**Example:**
+```json
+{
+   "_id": "new_york_times",
+   "title": "New York Times 2013 humanities query",
+   "label": "NYT_hum_2013",
+   "publications": [",Publications,new_york_times,"],
+   "path": ",Corpus,new_york_times",
+   "description": "Some content from the New York Times in 2013",
+   "collectors": ["John Smith"],
+   "date": [{"start": "2013-01-01"}, {"end": "2013-12-31"}],
+   "workstation": "Windows 8.1", 
+   "queryTerms": ["humanities"],
+   "processes": [",Processes,remove_stopwords.py"],
+   "notes": ["This was the first Collection created."]
+}
+```
+**Comments:**
+**Related:**
+
+###`collector`
+**Description:** An individual collector responsible for assembling a `Collection`.
+**Type**: Object
+**Scope:** `collectors`
+**Example:**
+```json
+{
+    "collectors": [
+        "collector": {
+            "firstName": "Jane",
+            "lastName": "Doe"
+        }
+    ]
+}
+```
+**Comments:**
+* The `collector` object contains a group of key-value pairs representing individual parts of a name for use in more precise queries. At present, the schema does not supply a controlled vocabulary to be used as keys.
+**Related:**
+`collectors`, `group`
+
+###`collectors`
+**Description:** A list of collectors responsible for assembling the `Collection`.
+**Type**: String
+**Scope:** `Collection`
+**Example:**
+```json
+{
+    "collectors": ["Jane Doe", "John Smith"]
+}
+
+{
+    "collectors": [
+        "collector": {
+            "firstName": "Jane",
+            "lastName": "Doe"
+        }
+    ]
+}
+```
+**Comments:**
+* The list can consists of string values or objects containing the `collector` or `group` properties.
+* In general, string values should be standard full representations of the name. It is expected that this information will be queried by regex. If more specific information is required for querying parts of names, an `collector` object can be added.
+**Related:**
+`collector`, `group`
+
+###`contentType`
+**Description:** A tag representing the nature or genre of the data.
+**Type**: String
+**Scope:** `Publications`
+**Example:**
+```json
+{
+    "contentType": "newspaper"
+}
+```
+**Comments:**
+* There is currently no controlled vocabulary for `contentType` values.
+**Related:**
+`Publications`
+
+###`country`
+**Description:** A string value taken from the [ISO 3166-1 ALPHA-2](https://en.wikipedia.org/wiki/ISO_3166-1) country codes.
+**Type**: String
+**Scope:** `Publications`
+**Example:**
+```json
+{
+    "country": "usa"
+}
+```
+**Comments:**
+**Related:**
+`Publications`
+
+###`date`
+**Description:** A list of date strings or objects.
+**Type**: List
+**Scope:** Global
+**Example:**
+```json
+{
+    "date": ["2013"]
+}
+
+{
+    "date": [{"startDate": "2014-01-01", "endDate": "2014-12-31"}]
+}
+```
+**Comments:**
+* Dates should be given in `DATETIME` format `YYYY-MM-DD` wherever this information is known.
+* Multiple dates can be listed as the value of `date`.
+* Date ranges can be given as the value of `date` by supplying an object with `startDate` and `endDate` properties.
+**Related:**
+`endDate`, `startDate`
+
+###`description`
+**Description:** A prose description of the manifest's content or purpose.
+**Type**: String
+**Scope:** Global, `Publications` (required)
+**Example:**
+```json
+{
+    "description": "An extract of five years of New York Times data."
+}
+```
+**Comments:**
+* The description property is generally optional but is required for `Publications` manifests.
+**Related:**
+`Publications`
+
+###`edition`
+**Description:** The edition number of a publication.
+**Type**: String
+**Scope:** `Publications`
+**Example:**
+```json
+{
+    "edition": "1st"
+}
+```
+**Comments:**
+* There is currently no controlled vocabulary for `edition` values.
+**Related:**
+`Publications`
+
+###`endDate`
+**Description:** The end date of a date range.
+**Type**: String
+**Scope:** date
+**Example:**
+```json
+{
+    "date": [{"startDate": "2014-01-01", "endDate": "2014-12-31"}]
+}
+```
+**Comments:**
+* Dates should be given in `DATETIME` format `YYYY-MM-DD` wherever this information is known.
+* An `endDate` must have an accompanying `startDate`.
+**Related:**
+`date`, `startDate`
+
+###`group`
+**Description:** An object that may replace `author` or `collector` values to indicate group responsibility.
+**Type**: Object
+**Scope:** `authors`, `collectors`
+**Example:**
+```json
+{
+    "collector": [{"group": "UCSB"}]
+}
+```
+**Comments:**
+**Related:**
+`author`, `authors`, `collector`, `collectors`
+
+###`label`
+**Description:** A short title for that may be used as a label in graphs and charts.
+**Type**: String
+**Scope:** Global
+**Example:**
+```json
+{
+    "label": "NYT"
+}
+```
+**Comments:**
+**Related:**
+`altTitle`, `title`
+
+###`language`
+**Description:** A string value taken from the the [ISO 639-2](http://www.loc.gov/standards/iso639-2/php/code_list.php) list language codes. If multiple languages are required, an array of strings can be supplied.
+**Type**: String, Array
+**Scope:** `Publications`
+**Example:**
+```json
+{
+    "language": "en"
+}
+
+{
+    "language": ["en", "fr"]
+}
+```
+**Comments:**
+**Related:**
+`Publications`
+
+###`namespace`
+**Description:** An identifier for the project schema and schema version number.
+**Type**: String
+**Scope:** Global (required)
+**Example:**
+```json
+{
+    "namespace": "WE1Sv1.0"
+}
+```
+**Comments:**
+* Currently, the default value is **WE1Sv1.0**.
+**Related:**
+
+###`note`
+**Description:** An individual note supplied by the creator or editor of the manifest.
+**Type**: Object
+**Scope:** `notes`
+**Example:**
+```json
+{
+    "notes": [
+        {"note": "This data should be double checked."}
+    ]
+}
+```
+**Comments:**
+**Related:**
+`description`, `notes`
+
+###`notes`
+**Description:** A list of notes supplied by the creator or editor of the manifest.
+**Type**: String, Object
+**Scope:** Global
+**Example:**
+```json
+{
+    "notes": [
+        "This data should be double checked."
+    ]
+}
+
+{
+    "notes": [
+        {"note": "This data should be double checked."}
+    ]
+}
+```
+**Comments:**
+* Multiple notes can be supplied as a list of strings or a list of `note` objects.
+**Related:**
+`description`, `note`
+
+###`path`
+**Description:** The unique identifier of the manifest.
+**Type**: String
+**Scope:** Global (required)
+**Example:**
+```json
+{
+    "path": ",Publications,new_york_times,"
+}
+```
+**Comments:**
+* The `path` value is effectively a human readable unique identifier of the manifest. It is formatted like a file path with the manifest's `_id` value as the terminal node.
+* The typical `/` delimiter of a file path is by default replaced with a comma to enable regex searching in MongoDB since `/` is part of the regex syntax.
+**Related:**
+`_id`
+
+###`processes`
+**Description:** List of processes applied to the data documented in the manifest. Must be a valid path to a `Processes` manifest.
+**Type**: Array
+**Scope:** `Collection`, `Processes`
+**Example:**
+```json
+{
+    "process": [",Processes,remove_stopwords.py,"]
+}
+```
+**Comments:**
+**Related:**
+`Collection`, `Processes`
+
+###`publication`
+**Description:** The full title of a publication.
+**Type**: String
+**Scope:** `Publications`
+**Example:**
+```json
+{
+    "publication": "The New York Times"
+}
+```
+**Comments:**
+**Related:**
+`altTitle`, `label`, `Publications`
+
+###`publications`
+**Description:** A list of publications used to create a `Collection`. The publications must be valid paths to `Publications` manifests.
+**Type**: String
+**Scope:** `Collection`
+**Example:**
+```json
+{
+    "publications": [",Publications,new_york_times,"]
+}
+```
+**Comments:**
+**Related:**
+`Collection`, `path`, `Publications`
+
+###`Publications`
+**Description:** A top-level node manifest describing a single publication.
+**Type**: Object
+**Scope:** n/a
+**Parameters:**
+| Name          | Type          | Optional |
+|---------------|---------------|----------|
+| `_id`         | String        | No       |
+| `date`        | Array         | No       |
+| `description` | String        | No       |
+| `namespace`   | String        | No       |
+| `path`        | String        | No       |
+| `publication` | String        | No       |
+| `publisher`   | String        | No       |
+| `authors`     | Array         | Yes      |
+| `altTitle`    | String        | Yes      |
+| `contentType` | String        | Yes      |
+| `country`     | String        | Yes      |
+| `edition`     | String        | Yes      |
+| `language`    | String, Array | Yes      |
+| `notes`       | Array         | Yes      |
+
+**Example:**
+```json
+{
+   "_id": "new_york_times",
+   "namespace": "WE1Sv.10",
+   "title": "The New York Times",
+   "publication": "The New York Times",
+   "label": "NYT",
+   "path": ",Publications,",
+   "description": "All the news that’s fit to download",
+   "publisher": "The New York Times",
+   "date": [{"start": "2013-01-01"}, {"end": "2013-01-01"}],
+   "edition": "online", 
+   "altTitle": "New York Times",
+   "contentType": "newspaper",
+   "language": "en",
+   "country": "USA",
+   "authors": ["John Smith"],
+   "notes": ["This was the first publication collected."]
+}
+```
+**Comments:**
+**Related:**
+
+###`publisher`
+**Description:** The full title of a publication.
+**Type**: String
+**Scope:** `Publications`
+**Example:**
+```json
+{
+    "publisher": "Conde Nast"
+}
+```
+**Comments:**
+**Related:**
+`Publications`
+
+###`queryTerms`
+**Description:** List of processes applied to the data documented in the manifest. Must be a valid path to a `Processes` manifest.
+**Type**: Array
+**Scope:** `Collection`, `Processes`
+**Example:**
+```json
+{
+    "queryTerms": ["humanities", "liberal arts"]
+}
+```
+**Comments:**
+**Related:**
+`Collection`, `Processes`
+
+###`startDate`
+**Description:** The start date of a date range.
+**Type**: String
+**Scope:** date
+**Example:**
+```json
+{
+    "date": [{"startDate": "2014-01-01", "endDate": "2014-12-31"}]
+}
+```
+**Comments:**
+* Dates should be given in `DATETIME` format `YYYY-MM-DD` wherever this information is known.
+* A `startDate` is not required to have an accompanying `endDate`.
+**Related:**
+`date`, `endDate`
+
+###`title`
+**Description:** The formal or natural language title of the manifest.
+**Type**: String
+**Scope:** Global
+**Example:**
+```json
+{
+    "title": "The New York Times"
+}
+```
+**Comments:**
+**Related:**
+`altTitle`, `label`
+
+###`workstation`
+**Description:** A description of the type of workstation used to collect the data documented in the manifest.
+**Type**: String
+**Scope:** `Collection`
+**Example:**
+```json
+{
+    "workstation": "Windows 10"
+}
+```
+**Comments:**
+* The `workstation` property does not currently possess a controlled vocabulary.
+**Related:**
+`Collection`
