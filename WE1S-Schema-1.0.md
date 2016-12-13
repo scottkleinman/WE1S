@@ -489,8 +489,11 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 
 ###`_id`
 **Description:** The identifier of the manifest.
+
 **Type**: String
+
 **Scope:** Global (required)
+
 **Example:**
 ```json
 {
@@ -500,6 +503,7 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 **Comments:**
 * `_id` values should be human readable wherever possible.
 * Although it is often desirable to have unique `_id` values, this is not required since the `_id` value is appended to the manifest's `path`. This allows for multiple manifests with the same `_id` to exist along different paths.
+
 **Related:**
 `path`
 
