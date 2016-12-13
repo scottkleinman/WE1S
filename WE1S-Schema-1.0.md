@@ -584,7 +584,9 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 **Type:** Object
 
 **Scope:** n/a
+
 **Parameters:**
+
 | Name           | Type          | Optional |
 |----------------|---------------|----------|
 | `_id`          | String        | No       |
@@ -997,7 +999,9 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 **Type:** Object
 
 **Scope:** n/a
+
 **Parameters:**
+
 | Name          | Type          | Optional |
 |---------------|---------------|----------|
 | `_id`         | String        | No       |
