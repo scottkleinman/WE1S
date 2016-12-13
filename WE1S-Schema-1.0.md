@@ -21,7 +21,7 @@ _Last Update: November 17, 2016_
 * [Processes](#processes)
 * [Step Manifests](#step-manifests)
 * [Scripts](#scripts)
-* [API](#API)
+* [API](#api)
 
 
 ##Introduction
@@ -486,7 +486,7 @@ In other words, scripts stored in the database will have paths, authors, dates o
 ##API
 
 The following is an incomplete alphabetical listing of the WE1S schema. It is a work in progress, but it may be useful for easy reference.
- 
+
 ###`_id`
 **Description:** The identifier of the manifest.
 **Type**: String
