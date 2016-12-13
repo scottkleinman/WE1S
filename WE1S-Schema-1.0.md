@@ -524,12 +524,12 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 **Example:**
 ```json
 {
-    "authors": [
-        "author": {
-            "firstName": "Jane",
-            "lastName": "Doe"
-        }
+  "authors": [
+    {"author": [
+      { "firstName": "Jane" }, { "lastName": "Doe" }
     ]
+    }
+  ]
 }
 ```
 **Comments:**
@@ -548,16 +548,16 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 
 {
-    "authors": [
-        "author": {
-            "firstName": "Jane",
-            "lastName": "Doe"
-        }
+  "authors": [
+    {"author": [
+      { "firstName": "Jane" }, { "lastName": "Doe" }
     ]
+    }
+  ]
 }
 ```
 **Comments:**
-* The list can consists of string values or objects containing the `author` or `group` properties.
+* The list can consist of string values or objects containing the `author` or `group` properties.
 * In general, string values should be standard full representations of the name. It is expected that this information will be queried by regex. If more specific information is required for querying parts of names, an `author` object can be added.
 **Related:**
 `author`, `group`
@@ -608,12 +608,12 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 **Example:**
 ```json
 {
-    "collectors": [
-        "collector": {
-            "firstName": "Jane",
-            "lastName": "Doe"
-        }
+  "collectors": [
+    {
+    "collector": [
+      { "firstName": "Jane" }, { "lastName": "Doe" }
     ]
+  }]
 }
 ```
 **Comments:**
@@ -632,16 +632,16 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 
 {
-    "collectors": [
-        "collector": {
-            "firstName": "Jane",
-            "lastName": "Doe"
-        }
+  "collectors": [
+    {
+    "collector": [
+      { "firstName": "Jane" }, { "lastName": "Doe" }
     ]
+  }]
 }
 ```
 **Comments:**
-* The list can consists of string values or objects containing the `collector` or `group` properties.
+* The list can consist of string values or objects containing the `collector` or `group` properties.
 * In general, string values should be standard full representations of the name. It is expected that this information will be queried by regex. If more specific information is required for querying parts of names, an `collector` object can be added.
 **Related:**
 `collector`, `group`
