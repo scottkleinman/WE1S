@@ -490,7 +490,7 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 ###`_id`
 **Description:** The identifier of the manifest.
 
-**Type**: String
+**Type:** String
 
 **Scope:** Global (required)
 
@@ -509,8 +509,11 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 
 ###`altTitle`
 **Description:** Used when the publication is commonly known by a title other than the one given as the value of the `publication` property.
-**Type**: String
+
+**Type:** String
+
 **Scope:** `Publications`
+
 **Example:**
 ```json
 {
@@ -518,13 +521,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 `title`, `label`
 
 ###`author`
 **Description:** An individual author of a publication.
-**Type**: Object
+
+**Type:** Object
+
 **Scope:** `authors`
+
 **Example:**
 ```json
 {
@@ -538,13 +545,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 ```
 **Comments:**
 * The `author` object contains a group of key-value pairs representing individual parts of a name for use in more precise queries. At present, the schema does not supply a controlled vocabulary to be used as keys.
+
 **Related:**
 `authors`, `group`
 
 ###`authors`
 **Description:** A list of authors of a publication.
-**Type**: String
+
+**Type:** String
+
 **Scope:** `Publications`
+
 **Example:**
 ```json
 {
@@ -563,12 +574,15 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 **Comments:**
 * The list can consist of string values or objects containing the `author` or `group` properties.
 * In general, string values should be standard full representations of the name. It is expected that this information will be queried by regex. If more specific information is required for querying parts of names, an `author` object can be added.
+
 **Related:**
 `author`, `group`
 
 ###`Collection`
 **Description:** A top-level node manifest describing a single collection.
-**Type**: Object
+
+**Type:** Object
+
 **Scope:** n/a
 **Parameters:**
 | Name           | Type          | Optional |
@@ -584,6 +598,7 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 | `processes`    | Array         | Yes      |
 | `queryTerms`   | Array         | Yes      |
 | `workstation`  | String        | Yes      |
+
 
 **Example:**
 ```json
@@ -603,12 +618,16 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 
 ###`collector`
 **Description:** An individual collector responsible for assembling a `Collection`.
-**Type**: Object
+
+**Type:** Object
+
 **Scope:** `collectors`
+
 **Example:**
 ```json
 {
@@ -622,13 +641,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 ```
 **Comments:**
 * The `collector` object contains a group of key-value pairs representing individual parts of a name for use in more precise queries. At present, the schema does not supply a controlled vocabulary to be used as keys.
+
 **Related:**
 `collectors`, `group`
 
 ###`collectors`
 **Description:** A list of collectors responsible for assembling the `Collection`.
-**Type**: String
+
+**Type:** String
+
 **Scope:** `Collection`
+
 **Example:**
 ```json
 {
@@ -647,13 +670,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 **Comments:**
 * The list can consist of string values or objects containing the `collector` or `group` properties.
 * In general, string values should be standard full representations of the name. It is expected that this information will be queried by regex. If more specific information is required for querying parts of names, an `collector` object can be added.
+
 **Related:**
 `collector`, `group`
 
 ###`contentType`
 **Description:** A tag representing the nature or genre of the data.
-**Type**: String
+
+**Type:** String
+
 **Scope:** `Publications`
+
 **Example:**
 ```json
 {
@@ -662,13 +689,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 ```
 **Comments:**
 * There is currently no controlled vocabulary for `contentType` values.
+
 **Related:**
 `Publications`
 
 ###`country`
 **Description:** A string value taken from the [ISO 3166-1 ALPHA-2](https://en.wikipedia.org/wiki/ISO_3166-1) country codes.
-**Type**: String
+
+**Type:** String
+
 **Scope:** `Publications`
+
 **Example:**
 ```json
 {
@@ -676,13 +707,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 `Publications`
 
 ###`date`
 **Description:** A list of date strings or objects.
-**Type**: List
+
+**Type:** List
+
 **Scope:** Global
+
 **Example:**
 ```json
 {
@@ -697,13 +732,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 * Dates should be given in `DATETIME` format `YYYY-MM-DD` wherever this information is known.
 * Multiple dates can be listed as the value of `date`.
 * Date ranges can be given as the value of `date` by supplying an object with `startDate` and `endDate` properties.
+
 **Related:**
 `endDate`, `startDate`
 
 ###`description`
 **Description:** A prose description of the manifest's content or purpose.
-**Type**: String
+
+**Type:** String
+
 **Scope:** Global, `Publications` (required)
+
 **Example:**
 ```json
 {
@@ -712,13 +751,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 ```
 **Comments:**
 * The description property is generally optional but is required for `Publications` manifests.
+
 **Related:**
 `Publications`
 
 ###`edition`
 **Description:** The edition number of a publication.
-**Type**: String
+
+**Type:** String
+
 **Scope:** `Publications`
+
 **Example:**
 ```json
 {
@@ -727,13 +770,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 ```
 **Comments:**
 * There is currently no controlled vocabulary for `edition` values.
+
 **Related:**
 `Publications`
 
 ###`endDate`
 **Description:** The end date of a date range.
-**Type**: String
+
+**Type:** String
+
 **Scope:** date
+
 **Example:**
 ```json
 {
@@ -743,13 +790,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 **Comments:**
 * Dates should be given in `DATETIME` format `YYYY-MM-DD` wherever this information is known.
 * An `endDate` must have an accompanying `startDate`.
+
 **Related:**
 `date`, `startDate`
 
 ###`group`
 **Description:** An object that may replace `author` or `collector` values to indicate group responsibility.
-**Type**: Object
+
+**Type:** Object
+
 **Scope:** `authors`, `collectors`
+
 **Example:**
 ```json
 {
@@ -757,13 +808,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 `author`, `authors`, `collector`, `collectors`
 
 ###`label`
 **Description:** A short title for that may be used as a label in graphs and charts.
-**Type**: String
+
+**Type:** String
+
 **Scope:** Global
+
 **Example:**
 ```json
 {
@@ -771,13 +826,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 `altTitle`, `title`
 
 ###`language`
 **Description:** A string value taken from the the [ISO 639-2](http://www.loc.gov/standards/iso639-2/php/code_list.php) list language codes. If multiple languages are required, an array of strings can be supplied.
-**Type**: String, Array
+
+**Type:** String, Array
+
 **Scope:** `Publications`
+
 **Example:**
 ```json
 {
@@ -789,13 +848,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 `Publications`
 
 ###`namespace`
 **Description:** An identifier for the project schema and schema version number.
-**Type**: String
+
+**Type:** String
+
 **Scope:** Global (required)
+
 **Example:**
 ```json
 {
@@ -804,12 +867,16 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 ```
 **Comments:**
 * Currently, the default value is **WE1Sv1.0**.
+
 **Related:**
 
 ###`note`
 **Description:** An individual note supplied by the creator or editor of the manifest.
-**Type**: Object
+
+**Type:** Object
+
 **Scope:** `notes`
+
 **Example:**
 ```json
 {
@@ -819,13 +886,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 `description`, `notes`
 
 ###`notes`
 **Description:** A list of notes supplied by the creator or editor of the manifest.
-**Type**: String, Object
+
+**Type:** String, Object
+
 **Scope:** Global
+
 **Example:**
 ```json
 {
@@ -842,13 +913,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 ```
 **Comments:**
 * Multiple notes can be supplied as a list of strings or a list of `note` objects.
+
 **Related:**
 `description`, `note`
 
 ###`path`
 **Description:** The unique identifier of the manifest.
-**Type**: String
+
+**Type:** String
+
 **Scope:** Global (required)
+
 **Example:**
 ```json
 {
@@ -858,13 +933,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 **Comments:**
 * The `path` value is effectively a human readable unique identifier of the manifest. It is formatted like a file path with the manifest's `_id` value as the terminal node.
 * The typical `/` delimiter of a file path is by default replaced with a comma to enable regex searching in MongoDB since `/` is part of the regex syntax.
+
 **Related:**
 `_id`
 
 ###`processes`
 **Description:** List of processes applied to the data documented in the manifest. Must be a valid path to a `Processes` manifest.
-**Type**: Array
+
+**Type:** Array
+
 **Scope:** `Collection`, `Processes`
+
 **Example:**
 ```json
 {
@@ -872,13 +951,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 `Collection`, `Processes`
 
 ###`publication`
 **Description:** The full title of a publication.
-**Type**: String
+
+**Type:** String
+
 **Scope:** `Publications`
+
 **Example:**
 ```json
 {
@@ -886,13 +969,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 `altTitle`, `label`, `Publications`
 
 ###`publications`
 **Description:** A list of publications used to create a `Collection`. The publications must be valid paths to `Publications` manifests.
-**Type**: String
+
+**Type:** String
+
 **Scope:** `Collection`
+
 **Example:**
 ```json
 {
@@ -900,12 +987,15 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 `Collection`, `path`, `Publications`
 
 ###`Publications`
 **Description:** A top-level node manifest describing a single publication.
-**Type**: Object
+
+**Type:** Object
+
 **Scope:** n/a
 **Parameters:**
 | Name          | Type          | Optional |
@@ -924,6 +1014,7 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 | `edition`     | String        | Yes      |
 | `language`    | String, Array | Yes      |
 | `notes`       | Array         | Yes      |
+
 
 **Example:**
 ```json
@@ -947,12 +1038,16 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 
 ###`publisher`
 **Description:** The full title of a publication.
-**Type**: String
+
+**Type:** String
+
 **Scope:** `Publications`
+
 **Example:**
 ```json
 {
@@ -960,13 +1055,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 `Publications`
 
 ###`queryTerms`
 **Description:** List of processes applied to the data documented in the manifest. Must be a valid path to a `Processes` manifest.
-**Type**: Array
+
+**Type:** Array
+
 **Scope:** `Collection`, `Processes`
+
 **Example:**
 ```json
 {
@@ -974,13 +1073,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 `Collection`, `Processes`
 
 ###`startDate`
 **Description:** The start date of a date range.
-**Type**: String
+
+**Type:** String
+
 **Scope:** date
+
 **Example:**
 ```json
 {
@@ -990,13 +1093,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 **Comments:**
 * Dates should be given in `DATETIME` format `YYYY-MM-DD` wherever this information is known.
 * A `startDate` is not required to have an accompanying `endDate`.
+
 **Related:**
 `date`, `endDate`
 
 ###`title`
 **Description:** The formal or natural language title of the manifest.
-**Type**: String
+
+**Type:** String
+
 **Scope:** Global
+
 **Example:**
 ```json
 {
@@ -1004,13 +1111,17 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 }
 ```
 **Comments:**
+
 **Related:**
 `altTitle`, `label`
 
 ###`workstation`
 **Description:** A description of the type of workstation used to collect the data documented in the manifest.
-**Type**: String
+
+**Type:** String
+
 **Scope:** `Collection`
+
 **Example:**
 ```json
 {
@@ -1019,5 +1130,6 @@ The following is an incomplete alphabetical listing of the WE1S schema. It is a 
 ```
 **Comments:**
 * The `workstation` property does not currently possess a controlled vocabulary.
+
 **Related:**
 `Collection`
