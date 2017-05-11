@@ -128,7 +128,7 @@ In some cases, it may be necessary to designate group responsibility for authors
 {"editors": [ {"group": "UCSB"} ]}
 ```
 
-##_Ad Hoc_ Properties
+## _Ad Hoc_ Properties
 WE1S manifests can contain any number of _ad hoc_ properties, as long as they are formatted in valid JSON format and do not have names that conflict with keywords in the WE1S namespace. For instance, an entire Jupyter notebook could be stored in a WE1S manifest simply by adding a `notebook` property and giving it the entire Jupyter notebook JSON object as its value. However, because such properties are not part of the WE1S schema, they will only be acessible to tools and scripts designed to exploit their presence in the manifest.
 
 ## Root-Level Manifests
