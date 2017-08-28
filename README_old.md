@@ -1,6 +1,6 @@
-#Report on MongoDB
+# Report on MongoDB
 
-##Introduction
+## Introduction
 
 This document serves as something of a report on MongoDB, a thought experiment, and a proposal for modeling our data. 
 It assumes that our requirements are:
@@ -11,10 +11,10 @@ It assumes that our requirements are:
 
 Here are some further considerations. The data storage system should ideally be a database, rather than a file storage system so that we do not have to maintain a complex hierarchy of directory structures and file paths. If we need to maintain files in a physical location outside the database, we should point to a GitHub repository form a manifest. It is also ideal for each database record to function as a manifest In other words, each database record is a node in which either data or metadata, or both, can be embedded. Lastly, it would be best if the system were compatible with the YAML schema or its JSON subset in order to facilitate human readability, parsing, and interoperability with a variety of tools.
 
-##Data Modelling with MongoDB
+## Data Modelling with MongoDB
 MongoDB is very well suited to these considerations. A MongoDB record is a single JSON object called a “collection”. Each collection consists of a set of keyword-value pairs called “documents”. These terms are confusing in the context of WE1S, so, in the discussion below, I will use the term “record” for MongoDB’s “collection”, and I will refer to keywords and their values, or sometimes “fields”, rather than “documents”. A MongoDB record looks like the following:
 
-###Example 1:
+### Example 1:
 
 ```Javascript
 { "_id": "10-ways-to-explore-and-express-what-makes-your-community-unique",
@@ -28,7 +28,7 @@ MongoDB is very well suited to these considerations. A MongoDB record is a singl
 
 In the above example, the `_id` field’s value is derived from the file name of a *New York Times* article. The article itself (of which only the beginning is shown above) is the value of the data field. Hence there is no separate file storage. Data and metadata are treated exactly the same. Here is the same record displayed in the more readable YAML indented style (further examples below will be given in YAML format for easy reading):
 
-###Example 2:
+### Example 2:
 
 ```YAML
 Manifest:
@@ -49,7 +49,7 @@ In practice, records can be modeled using a combination of denormalized data and
 MongoDB also seems to have an elegant solution to our need for manifest information to work seamlessly with a human-intuitive file storage system. A keyword can contain the string value of a path, which can then be matched by regex in a query. The path does not store the physical location of the item but instead provides a human-readable way of matching its container object, from which we can get the object’s `_id`, if necessary. This effectively allows us to implement a hierarchical tree structure similar to that normally used to store files. MongoDB provides several methods of doing this; the one I think best suited to our purposes is the tree structures with materialized paths. Here is the above record according to this system:
  
 
-###Example 3:
+### Example 3:
 ```YAML
 Manifest:
   _id: 10-ways-to-explore-and-express-what-makes-your-community-unique
@@ -63,16 +63,16 @@ Manifest:
 		  
 The path field contains a sequence of nodes indicating that this record belongs in the *New York Times* section of the entire Corpus, that it is a subset involving a Humanities query (the exact nature of which will be in the manifest information, and that this record belongs to the raw data from that subset. Commas are used instead of the traditional slashes for a file path because slashes are often used as delimiters in regex pattern matching and would therefore need to be escaped. With the above information, a query can be limited only to those objects matching this path value. Since it is a string, there are no formatting restrictions (other than the issue with slashes) as there would be for a file path.
 
-##A WhatEvery1Says Data Model in MongoDB
+## A WhatEvery1Says Data Model in MongoDB
 With this in mind, the following tree structure represents the organization of nodes for the Corpus portion of the database:
 
-###Figure 1:
+### Figure 1:
 
 ![Figure 1](https://github.com/scottkleinman/WE1S/blob/master/figure1.JPG?raw=true "Figure 1")
 
 Each node is a manifest giving parent/child relationships at a bare minimum. The Corpus is simply the root node of the tree structure containing (it has path: null) primary and secondary data. It does not contain any other information. Typically, a Publication record would consist only of an _id (from which the path is constructed), a path to the root, and a reference to another manifest containing information about the publication. Here is an example:
 
-###Example 4:
+### Example 4:
 
 ```YAML
 Manifest:
@@ -88,7 +88,7 @@ A collection refers to a section or slice of the data present in the Corpus. Sin
 
 Manifest information about Publications and Processes can be embedded in nodes on the Corpus path, but, in most cases, it will be best to normalize this data by placing it on a separate path and using that as a reference. Figure 2: represents a model Publications hierarchy.
 
-###Figure 2:
+### Figure 2:
 
 ![Figure 2](https://github.com/scottkleinman/WE1S/blob/master/figure2.JPG?raw=true "Figure 2")
 
@@ -96,20 +96,20 @@ This is a fairly simple structure. In most cases, there will only be a manifesto
 
 Hence it is likely that only Scripts will require a more elaborate tree structure, for which the following diagram provides a model.
 
-###Figure 3:
+### Figure 3:
 
 ![Figure 3](https://github.com/scottkleinman/WE1S/blob/master/figure3.JPG?raw=true "Figure 3")
 
 The Analysis and Visualization nodes will have children like the Collecting and Preprocessing nodes. The Script nodes are individual script manifests in which the script file itself is embedded as a JSON object. I am assuming that encoding as JSON/BSON will not break the scripts.
 
-##Further Comments about MongoDB
+## Further Comments about MongoDB
 MongoDB does present some challenges. Most of the examples in the documentation are geared towards using the built-in Javascript shell, which quickly grows tiresome. Running MongoDB in an iPython notebook involves importing Pymongo. That itself is easy, but issuing database queries can be tricky at first. Many of the examples in the documentation don’t work properly if you cut and paste since Pymongo, unlike the MongoDB shell, seems to require strict JSON formatting (keywords must be in quotation marks). The documentation of these sorts of differences is not very good, and I had to do a lot of Googling to discover, for instance, that the Pymongo equivalent of null is “none”. 
 
 But I did get there in the end, so, presumably, using Pymongo will get easier once you become familiar with the procedures and presumably define some functions to automate common procedures. As a test, I stuck my code in a function in Lexos, which runs of the Python Flask framework. It read my manifest data and piped it into the Lexos interface without a hitch. Since Django is very similar to Flask, I don’t anticipate any difficulties. Note that I am not talking about running a CMS off of MongoDB, just having the CMS query information from the MongoDB database for display.
 
 I am primarily thinking of the proposed system as a means of keeping track of data and workflow for research purposes, not as a means of making data and provenance queryable by the public. In general, MongoDB is not the best system for complex data queries because it lacks the database joins of which most relational databases are capable. How much of a problem this would be depends on the data and the type of queries you expect to run. Aggregating data in the application’s code, rather than in the database query, can have an impact on performance, but in most cases it is possible to achieve the same result. There is a body of thought that a document storage system like MongoDB can be a stepping stone to eventually move the data into a relational database with a more rigid schema.
 
-##Recording WhatEvery1Says Manifests in MongoDB
+## Recording WhatEvery1Says Manifests in MongoDB
 
 Since MongoDB is effectively schema-less, any manifest field can be inserted in any record. In practice, we have a need to restrict fields to certain types of records and to prompt WhatEvery1Says editors with what type of information is required or optional in a given record. Hence, although our database does not need a schema (other than the general model outlined above), our manifests do. Since YAML does not have a schema language, and MongoDB stores data as JSON objects, it makes sense to use JSON Schema.
 
