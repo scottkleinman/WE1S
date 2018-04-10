@@ -4,10 +4,12 @@ Serendip includes both a command-line tool and a browser interface, each of whic
 
 The following instructions have not been extensively tested and, at this stage, have been tried only in Windows.
 
-##Requirements
+## Requirements
+
 Both Python 2.7 (preferably Ananconda) and Mallet should be already installed on your system. For help, see [Setting up and Testing a WE1S Local Workspace](https://github.com/scottkleinman/WE1S/blob/master/we1s-test/README.md).
 
-##Installation
+## Installation
+
 Following the instructions given on the [Serendip website](), which are repeated here for convenience.
 
 1. Download [this file](https://bootstrap.pypa.io/ez_setup.py). From a command prompt, `cd` to the folder containing the file and then type `python ez_setup.py`. This will install the necessary installation scripts.
@@ -32,14 +34,16 @@ This will install Serendip in the `Anaconda\Lib\site-packages\VEP_Core-1.01-py2.
 
 This should make Serendip mostly functional. A few features probably need additional tweaking, but I haven't looked into this yet.
 
-##Using Serendip
+## Using Serendip
+
 To use Serendip, you must first run the command line tool to topic model your data. Start by preparing your data as described below:
 
 1. Place your text files in a folder (called `example` here) and then place the folder in  `C:\Users\Scott\Anaconda2\Lib\site-packages\VEP_Core-1.01-py2.7.egg\vep_core\Data\Corpora`. Although it is possible to provide Serendip's command-line tool with a path to input data, I found that it did not work unless I placed my data in the Corpora folder.
 
 2. Create a stop words file, if desired. It can be located anywhere, as the command-line tool does will accept the file path you specify.
 
-###Building the Topic Model from the Command Line
+### Building the Topic Model from the Command Line
+
 You are now ready to perform the topic modelling routine. From the command line type something like the following:
 
 `vep_tmbuilder --corpus_name WorksOfShakespeare --corpus_path C:\Users\Scott\Anaconda2\Lib\site-packages\VEP_Core-1.01-py2.7.egg\vep_core\Data\Corpora\example\ --model_name Shakespeare_50 -mS -eS C:\Users\Scott\WE1S\shakespeareanStops.txt --chunkSize 1000 -n 50 -i 1000 --outputAll`
@@ -48,7 +52,8 @@ The precise command will vary depending on the options you desire. A complete li
 
 The process of building the topic model takes less time than the process of creating the html files for Serendip's browser interface. In a test with approximately 3300 documents, the topic modelling took 5 minutes and the rest of the process took 25 minutes.
 
-###Using the Browser Interface
+### Using the Browser Interface
+
 To start the browser interface, type `serendip` at the command prompt. You should see the following:
 
 ```
